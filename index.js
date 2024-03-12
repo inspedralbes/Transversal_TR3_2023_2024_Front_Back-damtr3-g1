@@ -47,6 +47,8 @@ const mysql = require("mysql2");
 const { error } = require("console");
 const { SourceTextModule } = require("vm");
 
+//*************************************************************BASE DE DADES************************************************************ */
+//Definir parametres per a la connexió a la base de dades
 var conn = mysql.createPool({
     host: "dam.inspedralbes.cat",
     user: "a22pabjimpri_user",
@@ -57,6 +59,7 @@ var conn = mysql.createPool({
     waitForConnections: true,
 });
 
+//COnnexió a la base de dades
 conn.getConnection((err, connection) => {
     if (err) {
         console.error(err);
@@ -65,6 +68,10 @@ conn.getConnection((err, connection) => {
     }
 });
 
+
+
+//**********************************************************OPERACIONS GET*************************************************************** */
+//comprovar login
 app.get("/login", async (req, res) => {
     var user = req.body.user;
     var pwd = req.body.pwd;
@@ -88,6 +95,27 @@ app.get("/login", async (req, res) => {
     }
 });
 
+//Agafar les estadístiques d'un usuari
+app.get("/estadisticas/:id", async (req,res) =>{
+    var id = req.params.id
+    var sql = 'SELECT * FROM Estadisticas WHERE idUser = ' + id;
+    var resultat = new Promise((resolve, reject) =>{
+        conn.query(sql, (err, result) =>{
+            if(err){
+                reject(err)
+            }else{
+                resolve(result)
+            }
+        });
+    })
+    res.send(await resultat);
+})
+
+
+
+
+/**********************************************************************OPERACIONS POST**************************************************************** */
+//registrar un usuari
 app.post("/register", async (req, res) => {
     try {
         var user = req.body.user;
@@ -128,6 +156,9 @@ app.post("/register", async (req, res) => {
 
 
 
+
+
+
 //Funció per a encriptar passwords i strings
 function Encriptar(string) {
     return new Promise((resolve, reject) => {
@@ -141,6 +172,7 @@ function Encriptar(string) {
     });
   }
 
+  //Funció per a comparar un string normal i un ecnriptat
   function Comparar(plainTextPassword, hashedPassword) {
     return new Promise((resolve, reject) => {
         bcrypt.compare(plainTextPassword, hashedPassword, (err, result) => {
@@ -153,3 +185,31 @@ function Encriptar(string) {
     });
 }
 
+
+
+
+//*************************************************************SOCKETS********************************************************************* */
+io.on('connection', (socket)=>{
+console.log('userconnected')
+
+
+/*
+{
+    "user": user3,
+    "x": 10,
+    "y": 10,
+}
+*/
+socket.on('posicio', (pos)=>{
+    pos = JSON.parse(pos);
+    //Etc
+})
+
+
+
+socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+
+
+})
