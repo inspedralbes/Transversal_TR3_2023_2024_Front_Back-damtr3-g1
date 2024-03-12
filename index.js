@@ -71,30 +71,6 @@ conn.getConnection((err, connection) => {
 
 
 //**********************************************************OPERACIONS GET*************************************************************** */
-//comprovar login
-app.get("/login", async (req, res) => {
-    var user = req.body.user;
-    var pwd = req.body.pwd;
-    var sql = 'SELECT username, password FROM Usuario WHERE Username = "' + user + '"';
-
-    var comandaSql = new Promise((resolve, reject) => {
-        conn.query(sql, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result)
-            }
-        });
-    })
-    var resultat = await comandaSql;
-
-    if (resultat.length === 0) {
-        res.send("LOGIN INCORRECTE 0")
-    } else {
-        res.send(await Comparar(pwd, resultat[0].password))
-    }
-});
-
 //Agafar les estadístiques d'un usuari
 app.get("/estadisticas/:id", async (req,res) =>{
     var id = req.params.id
@@ -154,7 +130,29 @@ app.post("/register", async (req, res) => {
     }
 });
 
+//comprovar login
+app.post("/login", async (req, res) => {
+    var user = req.body.user;
+    var pwd = req.body.pwd;
+    var sql = 'SELECT username, password FROM Usuario WHERE Username = "' + user + '"';
 
+    var comandaSql = new Promise((resolve, reject) => {
+        conn.query(sql, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result)
+            }
+        });
+    })
+    var resultat = await comandaSql;
+
+    if (resultat.length === 0) {
+        res.send("LOGIN INCORRECTE 0")
+    } else {
+        res.send(await Comparar(pwd, resultat[0].password))
+    }
+});
 
 
 
