@@ -15,6 +15,8 @@ const io = new Server(server, {
         methods: ["GET", "POST"],
     },
 });
+const staticFieldMiddleware = express.static("public");
+var history = require("connect-history-api-fallback");
 
 
 //Definim la sessió i encenem el servidor
@@ -154,7 +156,33 @@ app.post("/login", async (req, res) => {
     }
 });
 
+//comprovar login
+app.post("/loginWeb", async (req, res) => {
+    var user = req.body.user;
+    var pwd = req.body.pwd;
+    var sql = 'SELECT username, password, admin FROM Usuario WHERE username = "' + user + '"';
 
+    var comandaSql = new Promise((resolve, reject) => {
+        conn.query(sql, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result)
+            }
+        });
+    })
+    var resultat = await comandaSql;
+    if (resultat.length === 0) {
+        res.send(false);
+        console.log("NO LOGIN")
+    } else if(await Comparar(pwd, resultat[0].password) && resultat[0].admin) {
+        res.send(true)
+        console.log("ADMIN LOGIN")
+    }else{
+        res.send(false);
+        console.log("no Admin")
+    }
+});
 
 
 //Funció per a encriptar passwords i strings
@@ -211,3 +239,22 @@ socket.on('disconnect', () => {
 
 
 })
+
+
+
+
+
+/***********************************************REENVIAR DADES****************************************** */
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/public/index.html");
+  });
+  
+  app.use(staticFieldMiddleware);
+  app.use(
+    history({
+      disableDotRules: true,
+      verbose: true,
+    })
+  );
+  app.use(staticFieldMiddleware);
