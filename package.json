@@ -17,6 +17,8 @@
     "express-session": "^1.18.0",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
+    "mongo": "^0.1.0",
+    "mongodb": "^6.5.0",
     "mysql2": "^3.9.2",
     "socket.io": "^4.7.4",
     "uuid": "^9.0.1"

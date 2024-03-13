@@ -1,4 +1,6 @@
 var session = require("express-session");
+const { MongoClient } = require("mongodb");
+const { ObjectId } = require('mongodb');
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
@@ -48,6 +50,12 @@ app.use(express.json());
 const mysql = require("mysql2");
 const { error } = require("console");
 const { SourceTextModule } = require("vm");
+
+const url = "mongodb://127.0.0.1:27017";
+//const url = "mongodb+srv://a22pabjimpri:3T1rkBzBxlETr8gO@juego.lgl13za.mongodb.net/";
+const client = new MongoClient(url);
+client.connect();
+
 
 //*************************************************************BASE DE DADES************************************************************ */
 //Definir parametres per a la connexió a la base de dades
@@ -210,6 +218,63 @@ function Encriptar(string) {
         });
     });
 }
+
+// Método POST para crear un nuevo mapa
+app.post('/mapa', async (req, res) => {
+    try {
+        const mapa = req.body;
+        const database = client.db('Juego');
+        const mapaCollection = database.collection('mapas');
+        const result = await mapaCollection.insertOne(mapa);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al crear el mapa' });
+    }
+});
+
+// Método POST para crear un nuevo personaje
+app.post('/personaje', async (req, res) => {
+    try {
+        const personaje = req.body;
+        const database = client.db('Juego');
+        const personajesCollection = database.collection('personajes');
+        const result = await personajesCollection.insertOne(personaje);
+        res.status(200).json(result)
+        } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al crear el personaje' });
+    }
+});
+
+// Método POST para crear una nueva habilidad
+app.post('/habilidad', async (req, res) => {
+    try {
+        const habilidad = req.body;
+        const database = client.db('Juego');
+        const habilidadesCollection = database.collection('habilidades');
+        const result = await habilidadesCollection.insertOne(habilidad);
+        res.status(200).json(result)
+        } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al crear la habilidad' });
+    }
+});
+
+// Método POST para crear un nuevo arma
+app.post('/arma', async (req, res) => {
+    try {
+        const arma = req.body;
+        const database = client.db('Juego');
+        const armasCollection = database.collection('armas');
+        const result = await armasCollection.insertOne(arma);
+        res.status(200).json(result)
+        } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al crear el arma' });
+    }
+});
+
 
 
 
