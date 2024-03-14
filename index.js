@@ -97,8 +97,53 @@ app.get("/estadisticas/:id", async (req,res) =>{
     res.send(await resultat);
 })
 
+app.get("/getMapa", async (req, res) => {
+    try {
+        const database = client.db('Juego');
+        const collection = database.collection('mapas');
+        const result = await collection.find().toArray();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener el contenido de la colección' });
+    }
+});
 
+app.get("/getPersonaje", async (req, res) => {
+    try {
+        const database = client.db('Juego');
+        const collection = database.collection('personajes');
+        const result = await collection.find().toArray();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener el contenido de la colección' });
+    }
+});
 
+app.get("/getHabilidad", async (req, res) => {
+    try {
+        const database = client.db('Juego');
+        const collection = database.collection('habilidades');
+        const result = await collection.find().toArray();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener el contenido de la colección' });
+    }
+});
+
+app.get("/getArma", async (req, res) => {
+    try {
+        const database = client.db('Juego');
+        const collection = database.collection('armas');
+        const result = await collection.find().toArray();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener el contenido de la colección' });
+    }
+});
 
 /**********************************************************************OPERACIONS POST**************************************************************** */
 //registrar un usuari
@@ -305,6 +350,123 @@ app.post('/arma', async (req, res) => {
     }
 });
 
+// Método POST para actualizar un mapa por su ID
+app.post('/updatemapa/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedMapa = req.body;
+        const database = client.db('Juego');
+        const mapaCollection = database.collection('mapas');
+        const result = await mapaCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedMapa });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al actualizar el mapa' });
+    }
+});
+
+// Método POST para actualizar un personaje por su ID
+app.post('/updatepersonaje/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedPersonaje = req.body;
+        const database = client.db('Juego');
+        const personajesCollection = database.collection('personajes');
+        const result = await personajesCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedPersonaje });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al actualizar el personaje' });
+    }
+});
+
+// Método POST para actualizar una habilidad por su ID
+app.post('/updatehabilidad/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedHabilidad = req.body;
+        const database = client.db('Juego');
+        const habilidadesCollection = database.collection('habilidades');
+        const result = await habilidadesCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedHabilidad });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al actualizar la habilidad' });
+    }
+});
+
+// Método POST para actualizar un arma por su ID
+app.post('/updatearma/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedArma = req.body;
+        const database = client.db('Juego');
+        const armasCollection = database.collection('armas');
+        const result = await armasCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedArma });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al actualizar el arma' });
+    }
+});
+
+/**********************************************************************OPERACIONS DELETE**************************************************************** */
+
+// Método DELETE para borrar un mapa por su ID
+app.delete('/deletemapa/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const database = client.db('Juego');
+        const mapaCollection = database.collection('mapas');
+        const result = await mapaCollection.deleteOne({ _id: new ObjectId(id) });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al borrar el mapa' });
+    }
+});
+
+// Método DELETE para borrar un personaje por su ID
+app.delete('/deletepersonaje/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const database = client.db('Juego');
+        const personajesCollection = database.collection('personajes');
+        const result = await personajesCollection.deleteOne({ _id: new ObjectId(id) });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al borrar el personaje' });
+    }
+});
+
+// Método DELETE para borrar una habilidad por su ID
+app.delete('/deletehabilidad/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const database = client.db('Juego');
+        const habilidadesCollection = database.collection('habilidades');
+        const result = await habilidadesCollection.deleteOne({ _id: new ObjectId(id) });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al borrar la habilidad' });
+    }
+});
+
+// Método DELETE para borrar un arma por su ID
+app.delete('/deletearma/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const database = client.db('Juego');
+        const armasCollection = database.collection('armas');
+        const result = await armasCollection.deleteOne({ _id: new ObjectId(id) });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al borrar el arma' });
+    }
+});
 
 
 
