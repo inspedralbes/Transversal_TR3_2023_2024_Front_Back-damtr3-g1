@@ -1,0 +1,20 @@
+[
+  {
+    "name": "inspire",
+    "path": "/inspire",
+    "component": "D:\\\\Biel\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\tr3Nuxt\\\\pages\\\\inspire.vue",
+    "chunkName": "pages/inspire"
+  },
+  {
+    "name": "prueba",
+    "path": "/prueba",
+    "component": "D:\\\\Biel\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\tr3Nuxt\\\\pages\\\\prueba.vue",
+    "chunkName": "pages/prueba"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "D:\\\\Biel\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\tr3Nuxt\\\\pages\\\\index.vue",
+    "chunkName": "pages/index"
+  }
+]
