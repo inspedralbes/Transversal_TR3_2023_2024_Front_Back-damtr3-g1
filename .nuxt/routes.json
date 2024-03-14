@@ -1,20 +1,37 @@
 [
   {
-    "name": "inspire",
-    "path": "/inspire",
-    "component": "D:\\\\Biel\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\tr3Nuxt\\\\pages\\\\inspire.vue",
-    "chunkName": "pages/inspire"
+    "name": "dashboard",
+    "path": "/dashboard",
+    "component": "D:\\\\Azabal\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\dashboard.vue",
+    "chunkName": "pages/dashboard",
+    "_name": "_cef62300"
   },
   {
-    "name": "prueba",
-    "path": "/prueba",
-    "component": "D:\\\\Biel\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\tr3Nuxt\\\\pages\\\\prueba.vue",
-    "chunkName": "pages/prueba"
+    "name": "home",
+    "path": "/home",
+    "component": "D:\\\\Azabal\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\home.vue",
+    "chunkName": "pages/home",
+    "_name": "_0556a023"
+  },
+  {
+    "name": "odooConfig",
+    "path": "/odooConfig",
+    "component": "D:\\\\Azabal\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\odooConfig.vue",
+    "chunkName": "pages/odooConfig",
+    "_name": "_2dee7c5b"
+  },
+  {
+    "name": "procesos",
+    "path": "/procesos",
+    "component": "D:\\\\Azabal\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\procesos.vue",
+    "chunkName": "pages/procesos",
+    "_name": "_bef40fa8"
   },
   {
     "name": "index",
     "path": "/",
-    "component": "D:\\\\Biel\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\tr3Nuxt\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "component": "D:\\\\Azabal\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_0c8ab084"
   }
 ]

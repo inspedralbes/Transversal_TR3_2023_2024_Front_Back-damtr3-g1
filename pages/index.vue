@@ -1,34 +1,29 @@
 <template>
-  <v-container class="container">
+  <v-app>
+  <div class="containerLogin mx-auto" style="margin: 25px; align-items: center; width: auto; height: auto; max-width: 550px; max-height: 300px;">
     <form action="POST">
       <label for="username">Nom d'usuari: </label>
       <input type="text" id="username" v-model="user">
-
-      <br><br>
-
-      <label for="pwd">Contrasenya: </label>
-      <input type="password" id="password" v-model="pwd">
-
-      <br><br>
-
-
-      <v-button @click="ferLogin(user, pwd)">LOGIN</v-button>
-    
+      <br>
+      <label for="pwd" style="margin-top: 20px;">Contrasenya: </label>
+      <input type="password" id="password"  style="margin-top: 20px;"v-model="pwd">
+      <br><br>     
+    <v-btn class="btn" @click="ferLogin(user, pwd)">LOGIN </v-btn>
     
     </form>
 
-  </v-container>
+  </div>
+</v-app>
 </template>
 
-
 <style>
-.container{
+.containerLogin{
   text-align: center;
   align-items: center;
   padding: 5%;
   height: 400px;
   width: 500px;
-  border: 1px solid black;
+  border: 1px solid rgb(255, 0, 200);
   border-radius: 20px;
 }
 
@@ -36,18 +31,16 @@ input{
   border: 1px solid rgb(255, 0, 200);
 }
 
-button{
+.btn{
 border: 1px solid rgb(255, 0, 200);
 border-radius: 20px;
 padding: 10px;
 }
-button:hover{
-  background-color: rgb(255, 0, 200);
-}
 
 </style>
+
 <script>  
-import { login } from '@/communicaationsManager.js'
+import { login } from '@/communicationsManager.js'
 export default {
   name: 'IndexPage',
   data() {
@@ -61,9 +54,11 @@ export default {
     async ferLogin(usuari, pass){
       var logged = await login(usuari, pass);
       if(logged){
-        alert("SI");
+        alert("Usuario "+usuari +" valido");
+          // Navegar a la página de inicio (home)
+          this.$router.push('/home');
       }else{
-        alert("NO")
+        alert("Usuario o contraseña incorrectos")
       }
     }
     

@@ -4,9 +4,11 @@ import { normalizeURL, decode } from 'ufo'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _221e9936 = () => interopDefault(import('..\\pages\\inspire.vue' /* webpackChunkName: "pages/inspire" */))
-const _62a52096 = () => interopDefault(import('..\\pages\\prueba.vue' /* webpackChunkName: "pages/prueba" */))
-const _4f7fce1d = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
+const _cef62300 = () => interopDefault(import('..\\pages\\dashboard.vue' /* webpackChunkName: "pages/dashboard" */))
+const _0556a023 = () => interopDefault(import('..\\pages\\home.vue' /* webpackChunkName: "pages/home" */))
+const _2dee7c5b = () => interopDefault(import('..\\pages\\odooConfig.vue' /* webpackChunkName: "pages/odooConfig" */))
+const _bef40fa8 = () => interopDefault(import('..\\pages\\procesos.vue' /* webpackChunkName: "pages/procesos" */))
+const _0c8ab084 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
 
@@ -20,16 +22,24 @@ export const routerOptions = {
   scrollBehavior,
 
   routes: [{
-    path: "/inspire",
-    component: _221e9936,
-    name: "inspire"
+    path: "/dashboard",
+    component: _cef62300,
+    name: "dashboard"
   }, {
-    path: "/prueba",
-    component: _62a52096,
-    name: "prueba"
+    path: "/home",
+    component: _0556a023,
+    name: "home"
+  }, {
+    path: "/odooConfig",
+    component: _2dee7c5b,
+    name: "odooConfig"
+  }, {
+    path: "/procesos",
+    component: _bef40fa8,
+    name: "procesos"
   }, {
     path: "/",
-    component: _4f7fce1d,
+    component: _0c8ab084,
     name: "index"
   }],
 

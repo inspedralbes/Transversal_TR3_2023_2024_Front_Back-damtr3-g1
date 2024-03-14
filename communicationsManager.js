@@ -4,7 +4,6 @@ export async function login(user, pwd) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ "user": user, "pwd": pwd }), 
     });
-    const resultat = await response.text(); 
-    const boolValue = resultat === "true";
-    return boolValue;
+    const resultat = await response.json(); 
+    return resultat.auth;
 }
