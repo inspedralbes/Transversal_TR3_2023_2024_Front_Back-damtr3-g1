@@ -51,8 +51,8 @@ const mysql = require("mysql2");
 const { error } = require("console");
 const { SourceTextModule } = require("vm");
 
-const url = "mongodb://127.0.0.1:27017";
-//const url = "mongodb+srv://a22pabjimpri:3T1rkBzBxlETr8gO@juego.lgl13za.mongodb.net/";
+//const url = "mongodb://127.0.0.1:27017";
+const url = "mongodb://a22pabjimpri:3T1rkBzBxlETr8gO@ac-qsbdd98-shard-00-00.lgl13za.mongodb.net:27017,ac-qsbdd98-shard-00-01.lgl13za.mongodb.net:27017,ac-qsbdd98-shard-00-02.lgl13za.mongodb.net:27017/?replicaSet=atlas-fqazj8-shard-0&ssl=true&authSource=admin";
 const client = new MongoClient(url);
 client.connect();
 
