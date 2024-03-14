@@ -51,8 +51,8 @@ const mysql = require("mysql2");
 const { error } = require("console");
 const { SourceTextModule } = require("vm");
 
-const url = "mongodb://127.0.0.1:27017";
-//const url = "mongodb+srv://a22pabjimpri:3T1rkBzBxlETr8gO@juego.lgl13za.mongodb.net/";
+//const url = "mongodb://127.0.0.1:27017";
+const url = "mongodb+srv://a22pabjimpri:3T1rkBzBxlETr8gO@juego.lgl13za.mongodb.net/";
 const client = new MongoClient(url);
 client.connect();
 
@@ -158,9 +158,10 @@ app.post("/login", async (req, res) => {
     var resultat = await comandaSql;
 
     if (resultat.length === 0) {
-        res.send("LOGIN INCORRECTE 0")
+        res.send({auth: false})
     } else {
-        res.send(await Comparar(pwd, resultat[0].password))
+        console.log("CORRECTO")
+        res.send({auth: await Comparar(pwd, resultat[0].password)});
     }
 });
 
@@ -184,10 +185,10 @@ app.post("/loginWeb", async (req, res) => {
         res.send(false);
         console.log("NO LOGIN")
     } else if(await Comparar(pwd, resultat[0].password) && resultat[0].admin) {
-        res.send(true)
+        res.send({auth: true})
         console.log("ADMIN LOGIN")
     }else{
-        res.send(false);
+        res.send({auth: false});
         console.log("no Admin")
     }
 });
@@ -218,6 +219,27 @@ function Encriptar(string) {
         });
     });
 }
+
+//Funció per a afegir estadístiques
+app.post("/addStats", async (req, res)=>{
+    var id = req.body.id
+    var sql = 'SELECT * FROM Estadisticas WHERE idUser = ' + id;
+    var resultat = new Promise((resolve, reject) =>{
+        conn.query(sql, (err, result) =>{
+            if(err){
+                reject(err)
+            }else{
+                resolve(result)
+            }
+        });
+    })
+    var resultat2 = resultat;
+    var sql2 = 'UPDATE Estadisticas SET PartidasJugadas = ' + (resultat2.PartidasJugadas+1) + ', TiempoPartida = ' + (resultat2.TiempoPartida + req.body.tiempoJugado + ', KDA')
+
+
+})
+
+
 
 // Método POST para crear un nuevo mapa
 app.post('/mapa', async (req, res) => {
@@ -309,7 +331,7 @@ socket.on('disconnect', () => {
 
 
 
-/***********************************************REENVIAR DADES****************************************** */
+/***********************************************REENVIAR ACCÉS****************************************** */
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
