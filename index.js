@@ -234,9 +234,17 @@ app.post("/addStats", async (req, res)=>{
         });
     })
     var resultat2 = resultat;
-    var sql2 = 'UPDATE Estadisticas SET PartidasJugadas = ' + (resultat2.PartidasJugadas+1) + ', TiempoPartida = ' + (resultat2.TiempoPartida + req.body.tiempoJugado + ', KDA')
-
-
+    var sql2 = 'UPDATE Estadisticas SET PartidasJugadas = ' + (resultat2.PartidasJugadas+1) + ', TiempoPartida = ' + (resultat2.TiempoPartida + req.body.tiempoJugado + ', kills = ' + (resultat2.kills + req.body.kills) + ', deaths = ' + (resultat2.deaths + req.body.deaths) + ', assists = ' + (resultat2.assists + req.body.assists) + ', wins = ' + (resultat2.wins + req.body.wins))
+    var resultat3 =  new Promise((resolve, reject) =>{
+        conn.query(sql2, (err, result) =>{
+            if(err){
+                reject(err)
+            }else{
+                resolve(result)
+            }
+        });
+    })
+    resultat3 = resultat3;
 })
 
 
@@ -303,19 +311,21 @@ app.post('/arma', async (req, res) => {
 
 //*************************************************************SOCKETS********************************************************************* */
 io.on('connection', (socket)=>{
-console.log('userconnected')
+console.log('user connected')
 
 
 /*
 {
-    "user": user3,
-    "x": 10,
-    "y": 10,
+    "user": "user3",
+    "tecla": "UP",
 }
 */
-socket.on('posicio', (pos)=>{
-    pos = JSON.parse(pos);
-    //Etc
+socket.on('teclaPremuda', (dades)=>{
+    io.emit('teclaPremuda', dades);
+})
+
+socket.on('teclaDeixada', (tecla)=>{
+
 })
 
 
