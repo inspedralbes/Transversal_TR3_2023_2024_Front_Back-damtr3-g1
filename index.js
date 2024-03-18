@@ -19,6 +19,7 @@ const io = new Server(server, {
 });
 const staticFieldMiddleware = express.static("public");
 var history = require("connect-history-api-fallback");
+let sales = [];
 
 
 //Definim la sessió i encenem el servidor
@@ -81,10 +82,38 @@ conn.getConnection((err, connection) => {
 
 
 //**********************************************************OPERACIONS GET*************************************************************** */
+//CrearSala
+app.get("/crearSala", (req, res) => {
+    var usuari = req.query.user;
+    console.log(usuari);
+    var sala = {
+        salaId: generateRandomString(6),
+        users: [usuari]
+    };
+    sales.push(sala);
+    res.send(JSON.stringify(sala));
+});
+
 //Agafar les estadístiques d'un usuari
-app.get("/estadisticas/:id", async (req,res) =>{
+app.get("/getEstadisticas/:id", async (req,res) =>{
     var id = req.params.id
     var sql = 'SELECT * FROM Estadisticas WHERE idUser = ' + id;
+    var resultat = new Promise((resolve, reject) =>{
+        conn.query(sql, (err, result) =>{
+            if(err){
+                reject(err)
+            }else{
+                console.log(result)
+                resolve(result)
+            }
+        });
+    })
+    console.log(await resultat);
+    res.send(await resultat);
+})
+
+app.get("/getUsuarios/", async (req,res) =>{
+    var sql = 'SELECT * FROM Usuario WHERE admin != 1';
     var resultat = new Promise((resolve, reject) =>{
         conn.query(sql, (err, result) =>{
             if(err){
@@ -96,6 +125,7 @@ app.get("/estadisticas/:id", async (req,res) =>{
     })
     res.send(await resultat);
 })
+
 
 app.get("/getMapa", async (req, res) => {
     try {
@@ -145,6 +175,10 @@ app.get("/getArma", async (req, res) => {
     }
 });
 
+app.get("/getSales", (req,res)=>{
+    res.send(sales)
+})
+
 /**********************************************************************OPERACIONS POST**************************************************************** */
 //registrar un usuari
 app.post("/register", async (req, res) => {
@@ -159,29 +193,35 @@ app.post("/register", async (req, res) => {
         pwd = await Encriptar(pwd);
 
         const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, gemas) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas +', ' + gemas + ')';
-        
+        console.log(sql)
         const resultat = await new Promise((resolve, reject) => {
             conn.query(sql, (err, result) => {
                 if (err) {
                     // Check the error code
                     if (err.code === 'ER_DUP_ENTRY') {
                         // Handle duplicate entry error
-                        reject('Duplicate entry');
+                        reject("DUPLICADO");
                     } else {
                         // Handle other errors
-                        reject(err);
+                        reject("ERROR EN INSERT");
+                        console.log(err.message)
                     }
                 } else {
-                    resolve(result);
+                    resolve(true);
                 }
             });
         });
-
-        // Send a successful response only when the promise is resolved
-        res.send("OK");
+        console.log(await resultat)
+        if(resultat){
+            console.log("Usuario Registrado")
+            res.send({auth: true});
+        }else{
+            console.log("Error registrando")
+            res.send({auth:false})
+        }
     } catch (error) {
         // Handle errors gracefully
-        res.send(error);
+        res.send({auth:false});
     }
 });
 
@@ -237,6 +277,62 @@ app.post("/loginWeb", async (req, res) => {
         console.log("no Admin")
     }
 });
+
+app.post("/unirSala", (req,res)=>{
+    var user = req.body.user;
+    var salaUnir = req.body.sala;
+    var trobat = false;
+    console.log(req.body)
+
+    sales.forEach( sala => {
+        if(sala.salaId === salaUnir){
+            console.log("SALA EXISTE")
+            sala.users.push(user);
+            res.send({auth: true})
+            trobat = true;
+            io.emit("newUser", req.body);
+        }
+        
+    });
+    if(!trobat){
+        res.send({auth: false})
+    }
+})
+
+
+/****************************************************************************PUT*********************************************************************** */
+app.put("/updateCliente/:id", async (req,res)=>{
+    var id = req.query.id;
+    var sql = 'UPDATE Usuarios SET mail =' + req.body.mail + ', password = ' + req.body.password +', vetado = ' + req.body.activo +', username = ' + req.body.username +' WHERE idUser = ' + id;
+    var comandaSql = new Promise((resolve, reject) => {
+        conn.query(sql, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result)
+            }
+        });
+    })
+
+    await comandaSql.catch((err)=>{
+        res.send(err)
+    });
+    res.send("OK");
+
+})
+
+
+/*************************************************************FUNCIONS********************************************************************************* */
+//Funcio Generar random string
+function generateRandomString(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
 
 
 //Funció per a encriptar passwords i strings
@@ -475,7 +571,11 @@ app.delete('/deletearma/:id', async (req, res) => {
 io.on('connection', (socket)=>{
 console.log('user connected')
 
-
+socket.on('userNuevo', (dades)=>{
+    dadesJson = JSON.parse(dades);
+    console.log("Usuario Conectado: " + dadesJson.user)
+    io.emit('userNuevo', (dades));
+})
 /*
 {
     "user": "user3",
