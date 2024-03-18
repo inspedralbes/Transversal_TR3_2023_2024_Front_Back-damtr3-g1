@@ -6,7 +6,6 @@ import scrollBehavior from './router.scrollBehavior.js'
 
 const _cef62300 = () => interopDefault(import('..\\pages\\dashboard.vue' /* webpackChunkName: "pages/dashboard" */))
 const _0556a023 = () => interopDefault(import('..\\pages\\home.vue' /* webpackChunkName: "pages/home" */))
-const _2dee7c5b = () => interopDefault(import('..\\pages\\odooConfig.vue' /* webpackChunkName: "pages/odooConfig" */))
 const _bef40fa8 = () => interopDefault(import('..\\pages\\procesos.vue' /* webpackChunkName: "pages/procesos" */))
 const _0c8ab084 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
@@ -29,10 +28,6 @@ export const routerOptions = {
     path: "/home",
     component: _0556a023,
     name: "home"
-  }, {
-    path: "/odooConfig",
-    component: _2dee7c5b,
-    name: "odooConfig"
   }, {
     path: "/procesos",
     component: _bef40fa8,
