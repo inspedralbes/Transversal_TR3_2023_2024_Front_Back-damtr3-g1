@@ -14,13 +14,6 @@
     "_name": "_0556a023"
   },
   {
-    "name": "odooConfig",
-    "path": "/odooConfig",
-    "component": "D:\\\\Azabal\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\odooConfig.vue",
-    "chunkName": "pages/odooConfig",
-    "_name": "_2dee7c5b"
-  },
-  {
     "name": "procesos",
     "path": "/procesos",
     "component": "D:\\\\Azabal\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\procesos.vue",

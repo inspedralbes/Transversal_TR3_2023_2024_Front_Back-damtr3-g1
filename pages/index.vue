@@ -40,7 +40,7 @@ padding: 10px;
 </style>
 
 <script>  
-import { login } from '@/communicationsManager.js'
+import { login } from '@/services/communicationsManager.js'
 export default {
   name: 'IndexPage',
   data() {
