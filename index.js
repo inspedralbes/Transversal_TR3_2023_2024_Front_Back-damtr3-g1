@@ -368,7 +368,7 @@ app.post("/unirSala", (req, res) => {
 
 app.post("/updateCliente", async (req,res)=>{
     var id = req.query.id;
-    var sql = 'UPDATE Usuarios SET mail =' + req.body.mail + ', password = ' + req.body.password + ', vetado = ' + req.body.activo + ', username = ' + req.body.username + ' WHERE idUser = ' + id;
+    var sql = 'UPDATE Usuarios SET mail ="' + req.body.gmail + '", vetado = ' + req.body.activo + ', username = "' + req.body.nombre_usuario + '",fechaNacimiento = "' + req.body.fecha_nacimiento +  '" WHERE idUser = ' + req.body.idUser;
     var comandaSql = new Promise((resolve, reject) => {
         conn.query(sql, (err, result) => {
             if (err) {
