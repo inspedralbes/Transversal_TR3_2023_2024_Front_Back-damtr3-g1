@@ -9,7 +9,7 @@
     <v-btn text @click="goToDashboard">Dashboard</v-btn>
   </v-app-bar>
 
-  <!--  -->
+  <!-- PANEL CONTROL SERVERS -->
   <v-container fluid style="margin-top: 75px;">
     <!-- SERVIDORES Y PRODUCTOS -->
     <v-row justify="center">
@@ -52,7 +52,7 @@
     </v-row>
   </v-container>
 
-  <!-- Diálogo de PRODUCTOS -->
+  <!-- PANEL DE PRODUCTOS -->
   <v-dialog v-model="productosDialog" max-width="1900" max-height="1900" style="height: auto; width: auto;">
 <template v-slot:activator="{ on }"></template>
 <v-card>
@@ -102,7 +102,7 @@
 
   </v-dialog>
 
-  <!-- Diálogo de CLIENTES -->
+  <!-- PANEL DE CLIENTES -->
   <v-dialog v-model="clientesDialog" max-width="1900" max-height="1900" style="height: auto; width: auto;">
 <template v-slot:activator="{ on }"></template>
 <v-card>
@@ -254,7 +254,7 @@ methods: {
     const odooStatus = await getOdooStatus();
     if (odooStatus) {
       this.odooServerRunning = odooStatus;
-      console.log(this.odooServerRunning);
+      //console.log(this.odooServerRunning);
     }
   },
 
@@ -425,7 +425,7 @@ methods: {
       // Asignar la fecha formateada al clienteEditado
       this.clienteEditado.fecha_nacimiento = fechaFormateada;
 
-      //console.log(this.clienteEditado);
+      console.log(this.clienteEditado);
       // Realizar la petición de actualización del cliente en la base de datos
       await updateCliente(this.clienteEditado); // Asume que el ID del cliente está presente en clienteEditado
 
@@ -446,6 +446,13 @@ methods: {
   // GUARDAR ESTADO DE BAN DE CLIENTES
   async updateClienteActivo() {
     try {
+      // Convertir la fecha al formato deseado (año primero y separado por guiones)
+      const fecha = this.clienteEditado.fecha_nacimiento;
+      const fechaFormateada = fecha ? fecha.split('/').reverse().join('-') : '';
+
+      // Asignar la fecha formateada al clienteEditado
+      this.clienteEditado.fecha_nacimiento = fechaFormateada;
+
       // Realizar la petición de actualización del estado del cliente en el servidor
       await updateCliente(this.clienteEditado);
 
