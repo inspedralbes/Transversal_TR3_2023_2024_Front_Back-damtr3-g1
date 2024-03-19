@@ -154,17 +154,22 @@ app.get("/getAssets", async (req, res) => {
         const personajesCollection = database.collection('personajes');
         const habilidadesCollection = database.collection('habilidades');
         const armasCollection = database.collection('armas');
+        const skinsCollection = database.collection('skins');
+
 
         const mapas = await mapasCollection.find().toArray();
         const personajes = await personajesCollection.find().toArray();
         const habilidades = await habilidadesCollection.find().toArray();
         const armas = await armasCollection.find().toArray();
+        const skins = await skinsCollection.find().toArray();
+
 
         const result = {
             mapas,
             personajes,
             habilidades,
             armas,
+            skins
         };
 
         res.status(200).json(result);
@@ -214,6 +219,18 @@ app.get("/getArma", async (req, res) => {
     try {
         const database = client.db('Juego');
         const collection = database.collection('armas');
+        const result = await collection.find().toArray();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener el contenido de la colección' });
+    }
+});
+
+app.get("/getSkin", async (req, res) => {
+    try {
+        const database = client.db('Juego');
+        const collection = database.collection('skins');
         const result = await collection.find().toArray();
         res.status(200).json(result);
     } catch (error) {
@@ -508,6 +525,19 @@ app.post('/arma', async (req, res) => {
     }
 });
 
+app.post('/skin', async (req, res) => {
+    try {
+        const skin = req.body;
+        const database = client.db('Juego');
+        const skinCollection = database.collection('skins');
+        const result = await skinCollection.insertOne(skin);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al crear el skin' });
+    }
+});
+
 // Método POST para actualizar un mapa por su ID
 app.post('/updatemapa/:id', async (req, res) => {
     try {
@@ -561,6 +591,20 @@ app.post('/updatearma/:id', async (req, res) => {
         const database = client.db('Juego');
         const armasCollection = database.collection('armas');
         const result = await armasCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedArma });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al actualizar el arma' });
+    }
+});
+
+app.post('/updateskin/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedSkin = req.body;
+        const database = client.db('Juego');
+        const skinsCollection = database.collection('skins');
+        const result = await skinsCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedSkin });
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -626,7 +670,18 @@ app.delete('/deletearma/:id', async (req, res) => {
     }
 });
 
-
+app.delete('/deleteskin/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const database = client.db('Juego');
+        const skinsCollection = database.collection('skins');
+        const result = await skinsCollection.deleteOne({ _id: new ObjectId(id) });
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al borrar el arma' });
+    }
+});
 
 
 //*************************************************************SOCKETS********************************************************************* */
