@@ -30,7 +30,7 @@ export async function createPersonaje(personaje){
     return boolValue;
 }
 
-export async function createHabilidad(habilidad){
+export async function habilidad(habilidad){
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/habilidad`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -41,11 +41,22 @@ export async function createHabilidad(habilidad){
     return boolValue;
 }
 
-export async function createArma(arma){
+export async function arma(arma){
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/arma`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( arma ), 
+    });
+    const resultat = await response.text(); 
+    const boolValue = resultat === "true";
+    return boolValue;
+}
+
+export async function crearSkin(skin){
+    const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/skin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify( skin ), 
     });
     const resultat = await response.text(); 
     const boolValue = resultat === "true";
@@ -105,6 +116,20 @@ export async function deleteArma(id) {
     } catch (error) {
         console.error(error);
         throw new Error('Error al borrar la arma');
+    }
+}
+
+export async function deleteSkin(id) {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/deleteskin/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al borrar la skin');
     }
 }
 
@@ -168,6 +193,21 @@ export async function updateArma(id, arma) {
     }
 }
 
+export async function updateSkin(id, skin) {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updateskin/${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify( skin ),
+        });
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al actualizar la skin');
+    }
+}
+
 export async function getMapa() {
     try {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getMapa`);
@@ -212,6 +252,18 @@ export async function getArma() {
     }
 }
 
+export async function getSkin() {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getSkin`);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al obtener la skin');
+    }
+}
+
+// SELECT LOS USUARIOS
 export async function getUsuarios() {
     try {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getUsuarios`);
@@ -223,6 +275,7 @@ export async function getUsuarios() {
     }
 }
 
+// SELECT A LAS ESTADISTICAS DE LOS USUARIOS
 export async function getEstadisticas(id) {
     try {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getEstadisticas/${id}`, {
@@ -237,10 +290,11 @@ export async function getEstadisticas(id) {
     }
 }
 
-export async function updateCliente(id, datosActualizadosCliente) {
+// UPDATE CLIENTES
+export async function updateCliente(datosActualizadosCliente) {
     try {
-        const response = await fetch(`http://tu-servidor.com/api/updateCliente/${id}`, {
-            method: 'PUT',
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updateCliente`, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datosActualizadosCliente)
         });
@@ -249,5 +303,54 @@ export async function updateCliente(id, datosActualizadosCliente) {
     } catch (error) {
         console.error(error);
         throw new Error('Error al actualizar el cliente');
+    }
+}
+
+// DETENER SERVER ODOO
+export async function detenerOdoo() {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/detenerOdoo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        if (!response.ok) {
+            throw new Error('Error al detener Odoo');
+        }
+        alert('Odoo y db detenidas correctamente.');
+    } catch (error) {
+        console.error('Error al detener Odoo:', error);
+        alert('Error al detener Odoo.');
+    }
+}
+
+// ARRANCAR SERVER ODOO
+export async function arrancarOdoo() {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/arrancarOdoo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        if (!response.ok) {
+            throw new Error('Error al arrancar Odoo');
+        }
+        alert('Odoo y db arrancar correctamente.');
+    } catch (error) {
+        console.error('Error al arrancar Odoo:', error);
+        alert('Error al arrancar Odoo.');
+    }
+}
+
+// VER ESTADO ODOO
+export async function getOdooStatus() {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/checkarOdoo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al obtener el estado de Odoo');
     }
 }
