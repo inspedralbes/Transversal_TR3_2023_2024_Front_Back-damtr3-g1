@@ -30,7 +30,7 @@ export async function createPersonaje(personaje){
     return boolValue;
 }
 
-export async function habilidad(habilidad){
+export async function createHabilidad(habilidad){
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/habilidad`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -41,7 +41,7 @@ export async function habilidad(habilidad){
     return boolValue;
 }
 
-export async function arma(arma){
+export async function createArma(arma){
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/arma`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
