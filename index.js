@@ -9,6 +9,7 @@ var spawn = require("child_process").spawn;
 const app = express();
 const { v4: uuidv4 } = require('uuid');
 const server = createServer(app);
+const { Client } = require('ssh2');
 const fs = require("fs");
 const path = require('path');
 const bcrypt = require('bcrypt');
@@ -38,6 +39,8 @@ var sess = {
         motor_ences: false,
     },
 };
+
+
 
 
 
@@ -115,12 +118,12 @@ app.get("/crearSala", (req, res) => {
 });
 
 //Agafar les estadístiques d'un usuari
-app.get("/getEstadisticas/:id", async (req,res) =>{
+app.get("/getEstadisticas/:id", async (req, res) => {
     var id = req.params.id
     var sql = 'SELECT * FROM Estadisticas WHERE idUser = ' + id;
-    var resultat = new Promise((resolve, reject) =>{
-        conn.query(sql, (err, result) =>{
-            if(err){
+    var resultat = new Promise((resolve, reject) => {
+        conn.query(sql, (err, result) => {
+            if (err) {
                 reject(err)
             }else{
                 resolve(result)
@@ -130,13 +133,13 @@ app.get("/getEstadisticas/:id", async (req,res) =>{
     res.send(await resultat);
 })
 
-app.get("/getUsuarios/", async (req,res) =>{
+app.get("/getUsuarios/", async (req, res) => {
     var sql = 'SELECT * FROM Usuario WHERE admin != 1';
-    var resultat = new Promise((resolve, reject) =>{
-        conn.query(sql, (err, result) =>{
-            if(err){
+    var resultat = new Promise((resolve, reject) => {
+        conn.query(sql, (err, result) => {
+            if (err) {
                 reject(err)
-            }else{
+            } else {
                 resolve(result)
             }
         });
@@ -144,6 +147,32 @@ app.get("/getUsuarios/", async (req,res) =>{
     res.send(await resultat);
 })
 
+app.get("/getAssets", async (req, res) => {
+    try {
+        const database = client.db('Juego');
+        const mapasCollection = database.collection('mapas');
+        const personajesCollection = database.collection('personajes');
+        const habilidadesCollection = database.collection('habilidades');
+        const armasCollection = database.collection('armas');
+
+        const mapas = await mapasCollection.find().toArray();
+        const personajes = await personajesCollection.find().toArray();
+        const habilidades = await habilidadesCollection.find().toArray();
+        const armas = await armasCollection.find().toArray();
+
+        const result = {
+            mapas,
+            personajes,
+            habilidades,
+            armas,
+        };
+
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener el contenido de las colecciones' });
+    }
+});
 
 app.get("/getMapa", async (req, res) => {
     try {
@@ -193,7 +222,7 @@ app.get("/getArma", async (req, res) => {
     }
 });
 
-app.get("/getSales", (req,res)=>{
+app.get("/getSales", (req, res) => {
     res.send(sales)
 })
 
@@ -219,7 +248,7 @@ app.post("/register", async (req, res) => {
 
         pwd = await Encriptar(pwd);
 
-        const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, gemas) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas +', ' + gemas + ')';
+        const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, gemas) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas + ', ' + gemas + ')';
         console.log(sql)
         const resultat = await new Promise((resolve, reject) => {
             conn.query(sql, (err, result) => {
@@ -239,16 +268,16 @@ app.post("/register", async (req, res) => {
             });
         });
         console.log(await resultat)
-        if(resultat){
+        if (resultat) {
             console.log("Usuario Registrado")
-            res.send({auth: true});
-        }else{
+            res.send({ auth: true });
+        } else {
             console.log("Error registrando")
-            res.send({auth:false})
+            res.send({ auth: false })
         }
     } catch (error) {
         // Handle errors gracefully
-        res.send({auth:false});
+        res.send({ auth: false });
     }
 });
 
@@ -270,10 +299,10 @@ app.post("/login", async (req, res) => {
     var resultat = await comandaSql;
 
     if (resultat.length === 0) {
-        res.send({auth: false})
+        res.send({ auth: false })
     } else {
         console.log("CORRECTO")
-        res.send({auth: await Comparar(pwd, resultat[0].password)});
+        res.send({ auth: await Comparar(pwd, resultat[0].password) });
     }
 });
 
@@ -296,16 +325,16 @@ app.post("/loginWeb", async (req, res) => {
     if (resultat.length === 0) {
         res.send(false);
         console.log("NO LOGIN")
-    } else if(await Comparar(pwd, resultat[0].password) && resultat[0].admin) {
-        res.send({auth: true})
+    } else if (await Comparar(pwd, resultat[0].password) && resultat[0].admin) {
+        res.send({ auth: true })
         console.log("ADMIN LOGIN")
-    }else{
-        res.send({auth: false});
+    } else {
+        res.send({ auth: false });
         console.log("no Admin")
     }
 });
 
-app.post("/unirSala", (req,res)=>{
+app.post("/unirSala", (req, res) => {
     var user = req.body.user;
     var salaUnir = req.body.sala;
     var trobat = false;
@@ -328,7 +357,7 @@ app.post("/unirSala", (req,res)=>{
             trobat = true;
             res.send({auth: true})
         }
-        
+
     });
     if(!trobat){
         console.log("CODIGO INCORRECTO DE: " + user + ", CODIGO: " + salaUnir)
@@ -339,8 +368,7 @@ app.post("/unirSala", (req,res)=>{
 
 app.post("/updateCliente", async (req,res)=>{
     var id = req.query.id;
-    console.log(req.query);
-    var sql = 'UPDATE Usuario SET fechaNacimiento = "' + req.body.fecha_nacimiento + '", mail = "' + req.body.gmail + '", vetado = ' + req.body.activo +', username = "' + req.body.nombre_usuario +'" WHERE idUser = ' + req.body.idUser;
+    var sql = 'UPDATE Usuarios SET mail =' + req.body.mail + ', password = ' + req.body.password + ', vetado = ' + req.body.activo + ', username = ' + req.body.username + ' WHERE idUser = ' + id;
     var comandaSql = new Promise((resolve, reject) => {
         conn.query(sql, (err, result) => {
             if (err) {
@@ -372,18 +400,18 @@ function generateRandomString(length) {
 //Funció per a encriptar passwords i strings
 function Encriptar(string) {
     return new Promise((resolve, reject) => {
-      bcrypt.hash(string, 10, (err, hashedPassword) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(hashedPassword);
-      });
+        bcrypt.hash(string, 10, (err, hashedPassword) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(hashedPassword);
+        });
     });
-  }
+}
 
-  //Funció per a comparar un string normal i un ecnriptat
-  function Comparar(plainTextPassword, hashedPassword) {
+//Funció per a comparar un string normal i un ecnriptat
+function Comparar(plainTextPassword, hashedPassword) {
     return new Promise((resolve, reject) => {
         bcrypt.compare(plainTextPassword, hashedPassword, (err, result) => {
             if (err) {
@@ -396,25 +424,25 @@ function Encriptar(string) {
 }
 
 //Funció per a afegir estadístiques
-app.post("/addStats", async (req, res)=>{
+app.post("/addStats", async (req, res) => {
     var id = req.body.id
     var sql = 'SELECT * FROM Estadisticas WHERE idUser = ' + id;
-    var resultat = new Promise((resolve, reject) =>{
-        conn.query(sql, (err, result) =>{
-            if(err){
+    var resultat = new Promise((resolve, reject) => {
+        conn.query(sql, (err, result) => {
+            if (err) {
                 reject(err)
-            }else{
+            } else {
                 resolve(result)
             }
         });
     })
     var resultat2 = resultat;
-    var sql2 = 'UPDATE Estadisticas SET PartidasJugadas = ' + (resultat2.PartidasJugadas+1) + ', TiempoPartida = ' + (resultat2.TiempoPartida + req.body.tiempoJugado + ', kills = ' + (resultat2.kills + req.body.kills) + ', deaths = ' + (resultat2.deaths + req.body.deaths) + ', assists = ' + (resultat2.assists + req.body.assists) + ', wins = ' + (resultat2.wins + req.body.wins))
-    var resultat3 =  new Promise((resolve, reject) =>{
-        conn.query(sql2, (err, result) =>{
-            if(err){
+    var sql2 = 'UPDATE Estadisticas SET PartidasJugadas = ' + (resultat2.PartidasJugadas + 1) + ', TiempoPartida = ' + (resultat2.TiempoPartida + req.body.tiempoJugado + ', kills = ' + (resultat2.kills + req.body.kills) + ', deaths = ' + (resultat2.deaths + req.body.deaths) + ', assists = ' + (resultat2.assists + req.body.assists) + ', wins = ' + (resultat2.wins + req.body.wins))
+    var resultat3 = new Promise((resolve, reject) => {
+        conn.query(sql2, (err, result) => {
+            if (err) {
                 reject(err)
-            }else{
+            } else {
                 resolve(result)
             }
         });
@@ -446,7 +474,7 @@ app.post('/personaje', async (req, res) => {
         const personajesCollection = database.collection('personajes');
         const result = await personajesCollection.insertOne(personaje);
         res.status(200).json(result)
-        } catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al crear el personaje' });
     }
@@ -460,7 +488,7 @@ app.post('/habilidad', async (req, res) => {
         const habilidadesCollection = database.collection('habilidades');
         const result = await habilidadesCollection.insertOne(habilidad);
         res.status(200).json(result)
-        } catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al crear la habilidad' });
     }
@@ -474,7 +502,7 @@ app.post('/arma', async (req, res) => {
         const armasCollection = database.collection('armas');
         const result = await armasCollection.insertOne(arma);
         res.status(200).json(result)
-        } catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al crear el arma' });
     }
@@ -604,49 +632,214 @@ app.delete('/deletearma/:id', async (req, res) => {
 //*************************************************************SOCKETS********************************************************************* */
 io.on('connection', (socket)=>{
 
-socket.on('userNuevo', (dades)=>{
-    dadesJson = JSON.parse(dades);
-    console.log("Usuario Conectado: " + dadesJson.user)
-    io.emit('userNuevo', (dades));
+    socket.on('userNuevo', (dades) => {
+        dadesJson = JSON.parse(dades);
+        console.log("Usuario Conectado: " + dadesJson.user)
+        io.emit('userNuevo', (dades));
+    })
+    /*
+    {
+        "user": "user3",
+        "tecla": "UP",
+    }
+    */
+    socket.on('teclaPremuda', (dades) => {
+        io.emit('teclaPremuda', dades);
+    })
+
+    socket.on('teclaDeixada', (tecla) => {
+
+    })
+
+
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+
+
 })
-/*
-{
-    "user": "user3",
-    "tecla": "UP",
+
+/***********************************************OPERACIONS ODOO****************************************** */
+
+function DetenerOdoo() {
+    const con = new Client();
+    const sshConfig = {
+        host: '89.168.118.150',
+        port: 22,
+        username: 'ubuntu',
+        privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
+    };
+
+    con.on('ready', function () {
+        console.log('Conexión establecida. Ejecutando comando...');
+        // Detener primero el contenedor de la base de datos
+        con.exec('sudo docker stop db', function (err, stream) {
+            if (err) throw err;
+            stream
+                .on('close', function (code, signal) {
+                    console.log('Comando sudo docker stop db ejecutado.');
+                    // Luego detener el contenedor de Odoo
+                    con.exec('sudo docker stop odoo', function (err, stream) {
+                        if (err) throw err;
+                        stream
+                            .on('close', function (code, signal) {
+                                console.log('Comando sudo docker stop odoo ejecutado.');
+                                con.end();
+                            })
+                            .on('data', function (data) {
+                                console.log('STDOUT: ' + data);
+                            })
+                            .stderr.on('data', function (data) {
+                                console.log('STDERR: ' + data);
+                            });
+                    });
+                })
+                .on('data', function (data) {
+                    console.log('STDOUT: ' + data);
+                })
+                .stderr.on('data', function (data) {
+                    console.log('STDERR: ' + data);
+                });
+        });
+    }).connect(sshConfig);
+
+    con.on('error', function (err) {
+        console.error('Error de conexión:', err);
+    });
 }
-*/
-socket.on('teclaPremuda', (dades)=>{
-    io.emit('teclaPremuda', dades);
-})
 
-socket.on('teclaDeixada', (tecla)=>{
+function ArrancarOdoo() {
+    const con = new Client();
+    const sshConfig = {
+        host: '89.168.118.150',
+        port: 22,
+        username: 'ubuntu',
+        privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
+    };
 
-})
+    con.on('ready', function () {
+        console.log('Conexión establecida. Ejecutando comando...');
+        // Detener primero el contenedor de la base de datos
+        con.exec('sudo docker start db', function (err, stream) {
+            if (err) throw err;
+            stream
+                .on('close', function (code, signal) {
+                    console.log('Comando sudo docker start db ejecutado.');
+                    // Luego detener el contenedor de Odoo
+                    con.exec('sudo docker start odoo', function (err, stream) { 
+                        if (err) throw err;
+                        stream
+                            .on('close', function (code, signal) {
+                                console.log('Comando sudo docker start odoo ejecutado.');
+                                con.end();
+                            })
+                            .on('data', function (data) {
+                                console.log('STDOUT: ' + data);
+                            })
+                            .stderr.on('data', function (data) {
+                                console.log('STDERR: ' + data);
+                            });
+                    });
+                })
+                .on('data', function (data) {
+                    console.log('STDOUT: ' + data);
+                })
+                .stderr.on('data', function (data) {
+                    console.log('STDERR: ' + data);
+                });
+        });
+    }).connect(sshConfig);
+
+    con.on('error', function (err) {
+        console.error('Error de conexión:', err);
+    });
+}
+
+function checkOdoo() {
+    return new Promise((resolve, reject) => {
+        const con = new Client();
+        const sshConfig = {
+            host: '89.168.118.150',
+            port: 22,
+            username: 'ubuntu',
+            privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
+        };
+
+        con.on('ready', function () {
+            console.log('Conexión SSH establecida. Ejecutando comando...');
+            con.exec("sudo docker inspect --format='{{.State.Status}}' odoo", function (err, stream) {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                stream
+                    .on('close', function (code, signal) {
+                        console.log('Comando docker inspect ejecutado.');
+                        con.end();
+                    })
+                    .on('data', function (data) {
+                        const estadoOdoo = data.toString().trim(); // Convertir los datos a cadena y eliminar espacios en blanco
+                        resolve(estadoOdoo); // Resolver la promesa con el estado obtenido
+                    })
+                    .stderr.on('data', function (data) {
+                        console.error('Error al ejecutar docker inspect:', data.toString());
+                        reject(data.toString()); // Rechazar la promesa si hay un error
+                    });
+            });
+        }).connect(sshConfig);
+
+        con.on('error', function (err) {
+            console.error('Error de conexión SSH:', err);
+            reject(err); // Rechazar la promesa en caso de error de conexión
+        });
+    });
+}
 
 
-
-socket.on('disconnect', () => {
-    console.log('User disconnected');
+app.post('/detenerOdoo', async (req, res) => {
+    try {
+      await DetenerOdoo(); // Esperar a que la función DetenerOdoo() se complete
+      res.send('Odoo y db detenidas correctamente.');
+    } catch (error) {
+      console.error('Error al detener Odoo:', error);
+      res.status(500).send('Error al detener Odoo.');
+    }
   });
 
-
+app.post('/arrancarOdoo', async (req, res)=>{
+    try {
+        await ArrancarOdoo(); // Esperar a que la función DetenerOdoo() se complete
+        res.send('Odoo y db arrancadas correctamente.');
+      } catch (error) {
+        console.error('Error al arrancar Odoo:', error);
+        res.status(500).send('Error al arrancar Odoo.');
+      }
 })
 
-
-
-
+app.post('/checkarOdoo', async (req, res) => {
+    try {
+        const estadoOdoo = await checkOdoo(); // Esperar a que la función checkOdoo() se complete
+        const isRunning = estadoOdoo === 'running'; // Devuelve true si el estado es 'running', false en caso contrario
+        console.log(isRunning);
+        res.send(isRunning);
+    } catch (error) {
+        console.error('Error al comprobar el estado de Odoo:', error);
+        res.status(500).send('Error al comprobar el estado de Odoo.');
+    }
+});
 
 /***********************************************REENVIAR ACCÉS****************************************** */
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
-  });
-  
-  app.use(staticFieldMiddleware);
-  app.use(
+});
+
+app.use(staticFieldMiddleware);
+app.use(
     history({
-      disableDotRules: true,
-      verbose: true,
+        disableDotRules: true,
+        verbose: true,
     })
-  );
-  app.use(staticFieldMiddleware);
+);
+app.use(staticFieldMiddleware);
