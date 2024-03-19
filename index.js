@@ -10,6 +10,7 @@ const app = express();
 const { v4: uuidv4 } = require('uuid');
 const server = createServer(app);
 const fs = require("fs");
+const path = require('path');
 const bcrypt = require('bcrypt');
 const io = new Server(server, {
     cors: {
@@ -82,6 +83,25 @@ conn.getConnection((err, connection) => {
 
 
 //**********************************************************OPERACIONS GET*************************************************************** */
+app.get("/getMapes", async (req,res)=>{
+    try {
+        const directoryPath = "assets/mapas"; // Specify the path to the directory
+
+        // Read the contents of the directory
+        const files = fs.readdirSync(directoryPath);
+
+        // Filter out directories
+        const directories = files.filter(file => {
+            return fs.statSync(path.join(directoryPath, file)).isDirectory();
+        });
+        res.send(directories);
+    } catch (err) {
+        console.error("Error reading directory:", err);
+        res.status(500).send("Internal Server Error");
+    }
+
+})
+
 //CrearSala
 app.get("/crearSala", (req, res) => {
     var usuari = req.query.user;
@@ -103,12 +123,10 @@ app.get("/getEstadisticas/:id", async (req,res) =>{
             if(err){
                 reject(err)
             }else{
-                console.log(result)
                 resolve(result)
             }
         });
     })
-    console.log(await resultat);
     res.send(await resultat);
 })
 
@@ -177,6 +195,15 @@ app.get("/getArma", async (req, res) => {
 
 app.get("/getSales", (req,res)=>{
     res.send(sales)
+})
+
+app.get("/getSala", (req,res)=>{
+    sales.forEach(sala => {
+        if(sala.salaId === req.query.idSala){
+            res.send(sala);
+        }
+    });
+    res.send("MARICON")
 })
 
 /**********************************************************************OPERACIONS POST**************************************************************** */
@@ -282,28 +309,38 @@ app.post("/unirSala", (req,res)=>{
     var user = req.body.user;
     var salaUnir = req.body.sala;
     var trobat = false;
-    console.log(req.body)
-
     sales.forEach( sala => {
         if(sala.salaId === salaUnir){
-            console.log("SALA EXISTE")
-            sala.users.push(user);
-            res.send({auth: true})
+            var existe = false;
+            sala.users.forEach(usuari => {
+                if(usuari===user){
+                    existe = true;
+                }
+            });
+            if(!existe){
+                console.log("USUARIO NO EXISTE")
+                sala.users.push(user);
+                io.emit("newUser", req.body);
+            }else{
+                console.log("USUARIO EXISTE")
+            }
+            console.log("TODO OK")
             trobat = true;
-            io.emit("newUser", req.body);
+            res.send({auth: true})
         }
         
     });
     if(!trobat){
+        console.log("CODIGO INCORRECTO DE: " + user + ", CODIGO: " + salaUnir)
         res.send({auth: false})
     }
 })
 
 
-/****************************************************************************PUT*********************************************************************** */
-app.put("/updateCliente/:id", async (req,res)=>{
+app.post("/updateCliente", async (req,res)=>{
     var id = req.query.id;
-    var sql = 'UPDATE Usuarios SET mail =' + req.body.mail + ', password = ' + req.body.password +', vetado = ' + req.body.activo +', username = ' + req.body.username +' WHERE idUser = ' + id;
+    console.log(req.query);
+    var sql = 'UPDATE Usuario SET fechaNacimiento = "' + req.body.fecha_nacimiento + '", mail = "' + req.body.gmail + '", vetado = ' + req.body.activo +', username = "' + req.body.nombre_usuario +'" WHERE idUser = ' + req.body.idUser;
     var comandaSql = new Promise((resolve, reject) => {
         conn.query(sql, (err, result) => {
             if (err) {
@@ -313,11 +350,8 @@ app.put("/updateCliente/:id", async (req,res)=>{
             }
         });
     })
-
-    await comandaSql.catch((err)=>{
-        res.send(err)
-    });
-    res.send("OK");
+    var resultat = await comandaSql
+    res.send({updated: true});
 
 })
 
@@ -569,7 +603,6 @@ app.delete('/deletearma/:id', async (req, res) => {
 
 //*************************************************************SOCKETS********************************************************************* */
 io.on('connection', (socket)=>{
-console.log('user connected')
 
 socket.on('userNuevo', (dades)=>{
     dadesJson = JSON.parse(dades);
