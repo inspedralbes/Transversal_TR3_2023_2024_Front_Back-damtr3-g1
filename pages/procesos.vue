@@ -533,6 +533,8 @@ export default {
         delete personajeEditadoSinId._id;
 
         await updatePersonaje(this.idEditada, personajeEditadoSinId);
+        this.getProductos();
+
       }
       this.cancelarEdicionPersonaje();
     },

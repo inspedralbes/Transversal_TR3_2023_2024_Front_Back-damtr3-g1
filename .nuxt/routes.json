@@ -3,24 +3,28 @@
     "name": "dashboard",
     "path": "/dashboard",
     "component": "D:\\\\Usuaris\\\\alum-01\\\\Documents\\\\Pablo\\\\TR3\\\\vue\\\\pages\\\\dashboard.vue",
-    "chunkName": "pages/dashboard"
+    "chunkName": "pages/dashboard",
+    "_name": "_0f979f5a"
   },
   {
     "name": "home",
     "path": "/home",
     "component": "D:\\\\Usuaris\\\\alum-01\\\\Documents\\\\Pablo\\\\TR3\\\\vue\\\\pages\\\\home.vue",
-    "chunkName": "pages/home"
+    "chunkName": "pages/home",
+    "_name": "_587b4f09"
   },
   {
     "name": "procesos",
     "path": "/procesos",
     "component": "D:\\\\Usuaris\\\\alum-01\\\\Documents\\\\Pablo\\\\TR3\\\\vue\\\\pages\\\\procesos.vue",
-    "chunkName": "pages/procesos"
+    "chunkName": "pages/procesos",
+    "_name": "_624cc412"
   },
   {
     "name": "index",
     "path": "/",
     "component": "D:\\\\Usuaris\\\\alum-01\\\\Documents\\\\Pablo\\\\TR3\\\\vue\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_0b2bd598"
   }
 ]
