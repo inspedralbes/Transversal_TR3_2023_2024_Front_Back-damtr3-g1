@@ -263,6 +263,18 @@ export async function getSkin() {
     }
 }
 
+export async function getAssets(){
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getAssets`);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al obtener los assets');
+    }
+}
+
+
 // SELECT LOS USUARIOS
 export async function getUsuarios() {
     try {
