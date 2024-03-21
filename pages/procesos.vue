@@ -77,6 +77,11 @@
             <!-- Columna de Personajes -->
             <v-col cols="12" md="6">
               <v-card-title style="color: white">Personajes</v-card-title>
+              <v-spacer></v-spacer>
+              <!-- Esto empuja el botón a la derecha -->
+              <v-btn color="primary" @click="dialogPersonaje = true"
+                >Crear Personaje</v-btn
+              >
               <v-row>
                 <v-col
                   v-for="(personaje, index) in productos.personajes"
@@ -117,6 +122,11 @@
             <!-- Columna de Skins -->
             <v-col cols="12" md="5">
               <v-card-title style="color: white">Skins</v-card-title>
+              <v-spacer></v-spacer>
+              <!-- Esto empuja el botón a la derecha -->
+              <v-btn color="primary" @click="dialogSkin = true"
+                >Crear Pack Skin</v-btn
+              >
               <v-row>
                 <v-col
                   v-for="(skin, index) in productos.skins"
@@ -169,6 +179,25 @@
               v-model="personajeEditado.descripcion"
               label="Descripción"
             ></v-text-field>
+            <v-row>
+              <v-col
+                v-for="skin in productos.skins"
+                :key="skin._id"
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-checkbox
+                  v-model="personajeEditado.packSkins"
+                  :label="skin.nombre"
+                  :value="skin._id"
+                  :input-value="
+                    personajeEditado.packSkins &&
+                    personajeEditado.packSkins.includes(skin._id)
+                  "
+                ></v-checkbox>
+              </v-col>
+            </v-row>
           </v-card-text>
           <v-card-actions>
             <v-btn color="primary" text @click="guardarCambiosPersonaje"
@@ -214,6 +243,108 @@
             <v-btn color="primary" text @click="cancelarEdicionSkin"
               >Cancelar</v-btn
             >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="dialogPersonaje" persistent max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Nuevo Personaje</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-form ref="formPersonaje" v-model="valid">
+                <v-text-field
+                  v-model="personajeNuevo.nombre"
+                  label="Nombre"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="personajeNuevo.lvlDesbloqueo"
+                  label="Nivel de Desbloqueo"
+                  type="number"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="personajeNuevo.descripcion"
+                  label="Descripción"
+                  required
+                ></v-text-field>
+                <v-row>
+                  <v-col
+                    v-for="skin in productos.skins"
+                    :key="skin._id"
+                    cols="12"
+                    sm="6"
+                    md="4"
+                  >
+                    <v-checkbox
+                      v-model="personajeNuevo.packSkins"
+                      :label="skin.nombre"
+                      :value="skin._id"
+                    ></v-checkbox>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="dialogPersonaje = false"
+              >Cancelar</v-btn
+            >
+            <v-btn color="blue darken-1" text @click="crearPersonaje"
+              >Guardar</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <!-- Dialog para crear skin -->
+      <v-dialog v-model="dialogSkin" persistent max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Nueva Skin</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-form ref="formSkin" v-model="valid">
+                <v-text-field
+                  v-model="skinNuevo.nombre"
+                  label="Nombre"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="skinNuevo.descripcion"
+                  label="Descripción"
+                  required
+                ></v-text-field>
+                <v-file-input
+                  v-model="skinNuevo.pngSkin"
+                  label="Archivo PNG"
+                  accept="image/png"
+                ></v-file-input>
+                <v-text-field
+                  v-model="skinNuevo.valorMonedas"
+                  label="Valor en Monedas"
+                  type="number"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="skinNuevo.valorGemas"
+                  label="Valor en Gemas"
+                  type="number"
+                  required
+                ></v-text-field>
+              </v-form>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="dialogSkin = false"
+              >Cancelar</v-btn
+            >
+            <v-btn color="blue darken-1" text @click="crearSkin">Guardar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -314,11 +445,16 @@ import {
   deletePersonaje,
   updatePersonaje,
   updateSkin,
+  createPersonaje,
+  crearSkin,
 } from "@/services/communicationsManager.js";
 
 export default {
   data() {
     return {
+      dialogPersonaje: false,
+      dialogSkin: false,
+      valid: true,
       odooServerRunning: false,
       gameServersRunning: false,
       productosDialog: false,
@@ -331,6 +467,7 @@ export default {
         nombre: "",
         lvlDesbloqueo: 0,
         descripcion: "",
+        packSkins: [],
       },
       skinEditado: {
         nombre: "",
@@ -338,6 +475,19 @@ export default {
         valorGemas: 0,
         pngSkin: null,
         descripcion: "",
+      },
+      personajeNuevo: {
+        nombre: "",
+        lvlDesbloqueo: 0,
+        descripcion: "",
+        packSkins: [],
+      },
+      skinNuevo: {
+        nombre: "",
+        descripcion: "",
+        pngSkin: null,
+        valorMonedas: 0,
+        valorGemas: 0,
       },
       idEditada: null,
       clientes: [],
@@ -534,7 +684,6 @@ export default {
 
         await updatePersonaje(this.idEditada, personajeEditadoSinId);
         this.getProductos();
-
       }
       this.cancelarEdicionPersonaje();
     },
@@ -549,7 +698,6 @@ export default {
 
         await updateSkin(this.idEditada, skinEditadoSinId);
         this.getProductos();
-
       }
       this.cancelarEdicionSkin();
     },
@@ -593,6 +741,29 @@ export default {
       }
     },
 
+    async crearPersonaje() {
+      await createPersonaje(this.personajeNuevo);
+      this.personajeNuevo = {
+        nombre: "",
+        lvlDesbloqueo: 0,
+        descripcion: "",
+        packSkins: [],
+      };
+      this.dialogPersonaje = false;
+      this.getProductos();
+    },
+    async crearSkin() {
+      await crearSkin(this.skinNuevo);
+      this.skinNuevo = {
+        nombre: "",
+        valorMonedas: 0,
+        valorGemas: 0,
+        pngSkin: null,
+        descripcion: "",
+      };
+      this.dialogSkin = false;
+      this.getProductos();
+    },
     // EDITAR CLIENTE
     editarCliente(cliente) {
       // Abrir diálogo de edición

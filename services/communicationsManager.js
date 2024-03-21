@@ -1,5 +1,5 @@
 export async function login(user, pwd) {
-    const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/loginWeb`, {
+    const response = await fetch(`http://localhost:3169/loginWeb`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ "user": user, "pwd": pwd }), 
@@ -9,7 +9,7 @@ export async function login(user, pwd) {
 }
 
 export async function createMap(map){
-    const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/mapa`, {
+    const response = await fetch(`http://localhost:3169/mapa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( map ), 
@@ -20,7 +20,7 @@ export async function createMap(map){
 }
 
 export async function createPersonaje(personaje){
-    const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/personaje`, {
+    const response = await fetch(`http://localhost:3169/personaje`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( personaje ), 
@@ -31,7 +31,7 @@ export async function createPersonaje(personaje){
 }
 
 export async function habilidad(habilidad){
-    const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/habilidad`, {
+    const response = await fetch(`http://localhost:3169/habilidad`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( habilidad ), 
@@ -42,7 +42,7 @@ export async function habilidad(habilidad){
 }
 
 export async function arma(arma){
-    const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/arma`, {
+    const response = await fetch(`http://localhost:3169/arma`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( arma ), 
@@ -53,7 +53,7 @@ export async function arma(arma){
 }
 
 export async function crearSkin(skin){
-    const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/skin`, {
+    const response = await fetch(`http://localhost:3169/skin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify( skin ), 
@@ -65,7 +65,7 @@ export async function crearSkin(skin){
 
 export async function deleteMap(id) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/deletemapa/${id}`, {
+        const response = await fetch(`http://localhost:3169/deletemapa/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -79,7 +79,7 @@ export async function deleteMap(id) {
 
 export async function deletePersonaje(id) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/deletepersonaje/${id}`, {
+        const response = await fetch(`http://localhost:3169/deletepersonaje/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -93,7 +93,7 @@ export async function deletePersonaje(id) {
 
 export async function deleteHabilidad(id) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/deletehabilidad/${id}`, {
+        const response = await fetch(`http://localhost:3169/deletehabilidad/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -107,7 +107,7 @@ export async function deleteHabilidad(id) {
 
 export async function deleteArma(id) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/deletearma/${id}`, {
+        const response = await fetch(`http://localhost:3169/deletearma/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -121,7 +121,7 @@ export async function deleteArma(id) {
 
 export async function deleteSkin(id) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/deleteskin/${id}`, {
+        const response = await fetch(`http://localhost:3169/deleteskin/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -135,7 +135,7 @@ export async function deleteSkin(id) {
 
 export async function updateMap(id, map) {
 try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updatemapa/${id}`, {
+        const response = await fetch(`http://localhost:3169/updatemapa/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( map ),
@@ -150,7 +150,7 @@ try {
 
 export async function updatePersonaje(id, personaje) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updatepersonaje/${id}`, {
+        const response = await fetch(`http://localhost:3169/updatepersonaje/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( personaje ),
@@ -165,7 +165,7 @@ export async function updatePersonaje(id, personaje) {
 
 export async function updateHabilidad(id, habilidad) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updatehabilidad/${id}`, {
+        const response = await fetch(`http://localhost:3169/updatehabilidad/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( habilidad ),
@@ -180,7 +180,7 @@ export async function updateHabilidad(id, habilidad) {
 
 export async function updateArma(id, arma) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updatearma/${id}`, {
+        const response = await fetch(`http://localhost:3169/updatearma/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( arma ),
@@ -195,7 +195,7 @@ export async function updateArma(id, arma) {
 
 export async function updateSkin(id, skin) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updateskin/${id}`, {
+        const response = await fetch(`http://localhost:3169/updateskin/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify( skin ),
@@ -210,7 +210,7 @@ export async function updateSkin(id, skin) {
 
 export async function getMapa() {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getMapa`);
+        const response = await fetch(`http://localhost:3169/getMapa`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -221,7 +221,7 @@ export async function getMapa() {
 
 export async function getPersonaje() {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getPersonaje`);
+        const response = await fetch(`http://localhost:3169/getPersonaje`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -232,7 +232,7 @@ export async function getPersonaje() {
 
 export async function getHabilidad() {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getHabilidad`);
+        const response = await fetch(`http://localhost:3169/getHabilidad`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -243,7 +243,7 @@ export async function getHabilidad() {
 
 export async function getArma() {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getArma`);
+        const response = await fetch(`http://localhost:3169/getArma`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -254,7 +254,7 @@ export async function getArma() {
 
 export async function getSkin() {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getSkin`);
+        const response = await fetch(`http://localhost:3169/getSkin`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -265,7 +265,7 @@ export async function getSkin() {
 
 export async function getAssets(){
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getAssets`);
+        const response = await fetch(`http://localhost:3169/getAssets`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -278,7 +278,7 @@ export async function getAssets(){
 // SELECT LOS USUARIOS
 export async function getUsuarios() {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getUsuarios`);
+        const response = await fetch(`http://localhost:3169/getUsuarios`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -290,7 +290,7 @@ export async function getUsuarios() {
 // SELECT A LAS ESTADISTICAS DE LOS USUARIOS
 export async function getEstadisticas(id) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getEstadisticas/${id}`, {
+        const response = await fetch(`http://localhost:3169/getEstadisticas/${id}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -305,7 +305,7 @@ export async function getEstadisticas(id) {
 // UPDATE CLIENTES
 export async function updateCliente(datosActualizadosCliente) {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updateCliente`, {
+        const response = await fetch(`http://localhost:3169/updateCliente`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datosActualizadosCliente)
@@ -321,7 +321,7 @@ export async function updateCliente(datosActualizadosCliente) {
 // DETENER SERVER ODOO
 export async function detenerOdoo() {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/detenerOdoo`, {
+        const response = await fetch(`http://localhost:3169/detenerOdoo`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -338,7 +338,7 @@ export async function detenerOdoo() {
 // ARRANCAR SERVER ODOO
 export async function arrancarOdoo() {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/arrancarOdoo`, {
+        const response = await fetch(`http://localhost:3169/arrancarOdoo`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -355,7 +355,7 @@ export async function arrancarOdoo() {
 // VER ESTADO ODOO
 export async function getOdooStatus() {
     try {
-        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/checkarOdoo`, {
+        const response = await fetch(`http://localhost:3169/checkarOdoo`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
