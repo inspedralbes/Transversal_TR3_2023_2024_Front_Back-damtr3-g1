@@ -279,7 +279,7 @@ export async function uploadMap(imageFile) {
         let formData = new FormData();
         formData.append('image', imageFile);
 
-        const response = await fetch(`http://localhost:3169/uploadMap`, {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/uploadMap`, {
             method: 'POST',
             body: formData
         });
@@ -297,7 +297,7 @@ export async function uploadSkin(imageFile) {
         let formData = new FormData();
         formData.append('image', imageFile);
 
-        const response = await fetch(`http://localhost:3169/uploadSkin`, {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/uploadSkin`, {
             method: 'POST',
             body: formData
         });
@@ -316,7 +316,7 @@ export async function editMap(imageFile, oldImageName) {
         formData.append('image', imageFile);
         formData.append('oldImageName', oldImageName);
 
-        const response = await fetch(`http://localhost:3169/editMap`, {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/editMap`, {
             method: 'POST',
             body: formData
         });
@@ -335,7 +335,7 @@ export async function editSkin(imageFile, oldImageName) {
         formData.append('image', imageFile);
         formData.append('oldImageName', oldImageName);
 
-        const response = await fetch(`http://localhost:3169/editSkin`, {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/editSkin`, {
             method: 'POST',
             body: formData
         });

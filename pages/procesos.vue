@@ -99,8 +99,7 @@
                   v-for="(personaje, index) in productos.personajes"
                   :key="index"
                   cols="12"
-                  md="6"
-                >
+                  md="6">
                   <v-card>
                     <v-card-title>{{ personaje.nombre }}</v-card-title>
                     <v-card-text>
@@ -223,6 +222,7 @@
         </v-card>
       </v-dialog>
 
+      <!-- EDITAR SKIN -->
       <v-dialog v-model="editarSkinDialog" max-width="500">
         <v-card>
           <v-card-title>Editar Skin</v-card-title>
@@ -240,7 +240,7 @@
               v-model="skinEditado.pngSkin"
               label="Archivo PNG"
               accept="image/png"
-            ></v-file-input>
+            />
             <v-text-field
               v-model="skinEditado.valorMonedas"
               label="Precio Monedas"
@@ -260,7 +260,8 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      
+
+      <!-- Dialog para CREAR PERSONAJE  -->
       <v-dialog v-model="dialogPersonaje" persistent max-width="600px">
         <v-card>
           <v-card-title>
@@ -337,7 +338,7 @@
                   v-model="skinNuevo.pngSkin"
                   label="Archivo PNG"
                   accept="image/png"
-                ></v-file-input>
+                />
                 <v-text-field
                   v-model.number="skinNuevo.valorMonedas"
                   label="Valor en Monedas"
