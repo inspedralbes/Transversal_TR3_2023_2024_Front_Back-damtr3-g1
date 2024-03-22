@@ -447,6 +447,8 @@ import {
   updateSkin,
   createPersonaje,
   crearSkin,
+  uploadMap,
+  uploadSkin,
 } from "@/services/communicationsManager.js";
 
 export default {
@@ -753,7 +755,11 @@ export default {
       this.getProductos();
     },
     async crearSkin() {
-      await crearSkin(this.skinNuevo);
+      let skinNuevoCopy = { ...this.skinNuevo };
+      skinNuevoCopy.pngSkin = skinNuevoCopy.pngSkin.name;
+      await crearSkin(skinNuevoCopy);
+      
+      await uploadSkin(this.skinNuevo.pngSkin);
       this.skinNuevo = {
         nombre: "",
         valorMonedas: 0,
