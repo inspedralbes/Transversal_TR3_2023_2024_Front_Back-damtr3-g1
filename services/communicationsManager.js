@@ -2,9 +2,9 @@ export async function login(user, pwd) {
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/loginWeb`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "user": user, "pwd": pwd }), 
+        body: JSON.stringify({ "user": user, "pwd": pwd }),
     });
-    const resultat = await response.json(); 
+    const resultat = await response.json();
     return resultat.auth;
 }
 
@@ -12,9 +12,9 @@ export async function createMap(map){
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/mapa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify( map ), 
+        body: JSON.stringify(map),
     });
-    const resultat = await response.text(); 
+    const resultat = await response.text();
     const boolValue = resultat === "true";
     return boolValue;
 }
@@ -23,9 +23,9 @@ export async function createPersonaje(personaje){
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/personaje`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify( personaje ), 
+        body: JSON.stringify(personaje),
     });
-    const resultat = await response.text(); 
+    const resultat = await response.text();
     const boolValue = resultat === "true";
     return boolValue;
 }
@@ -34,9 +34,9 @@ export async function habilidad(habilidad){
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/habilidad`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify( habilidad ), 
+        body: JSON.stringify(habilidad),
     });
-    const resultat = await response.text(); 
+    const resultat = await response.text();
     const boolValue = resultat === "true";
     return boolValue;
 }
@@ -45,9 +45,9 @@ export async function arma(arma){
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/arma`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify( arma ), 
+        body: JSON.stringify(arma),
     });
-    const resultat = await response.text(); 
+    const resultat = await response.text();
     const boolValue = resultat === "true";
     return boolValue;
 }
@@ -56,9 +56,9 @@ export async function crearSkin(skin){
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/skin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify( skin ), 
+        body: JSON.stringify(skin),
     });
-    const resultat = await response.text(); 
+    const resultat = await response.text();
     const boolValue = resultat === "true";
     return boolValue;
 }
@@ -138,7 +138,7 @@ try {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updatemapa/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( map ),
+            body: JSON.stringify(map),
         });
         const result = await response.json();
         return result;
@@ -153,7 +153,7 @@ export async function updatePersonaje(id, personaje) {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updatepersonaje/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( personaje ),
+            body: JSON.stringify(personaje),
         });
         const result = await response.json();
         return result;
@@ -168,7 +168,7 @@ export async function updateHabilidad(id, habilidad) {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updatehabilidad/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( habilidad ),
+            body: JSON.stringify(habilidad),
         });
         const result = await response.json();
         return result;
@@ -183,7 +183,7 @@ export async function updateArma(id, arma) {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updatearma/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( arma ),
+            body: JSON.stringify(arma),
         });
         const result = await response.json();
         return result;
@@ -198,7 +198,7 @@ export async function updateSkin(id, skin) {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updateskin/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify( skin ),
+            body: JSON.stringify(skin),
         });
         const result = await response.json();
         return result;
@@ -263,7 +263,7 @@ export async function getSkin() {
     }
 }
 
-export async function getAssets(){
+export async function getAssets() {
     try {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getAssets`);
         const result = await response.json();
