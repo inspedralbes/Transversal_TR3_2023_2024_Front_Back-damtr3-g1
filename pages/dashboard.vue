@@ -39,9 +39,10 @@
                 <v-list-item-subtitle>{{ mapa.probabilidadSpawn }}</v-list-item-subtitle>
                 <v-list-item-subtitle>{{ mapa.descripcion }}</v-list-item-subtitle>
               </v-list-item-content>
-              <v-btn color="primary" @click="openEditarMapaDialog(mapa, index)">
+              <v-btn color="blue" @click="openEditarMapaDialog(mapa, index)">
                   Editar Mapa
                 </v-btn>
+                <v-btn style="margin-left: 15px;" color="red" @click="eliminarMapa(mapa)">Eliminar Mapa</v-btn>
             </v-list-item>
           </v-list>
         </v-card-text>
@@ -96,7 +97,8 @@ import { getMapa,
   createMap,
   updateMap, 
   getUsuarios,
-  getEstadisticas, } from '@/services/communicationsManager.js'
+  getEstadisticas,
+  deleteMap } from '@/services/communicationsManager.js'
 
 export default {
 data() {
@@ -205,6 +207,18 @@ updated() {
 
  // AGREGAR MAPA
  async guardarMapa() {
+    // Verificar si algún campo está vacío
+  if (
+    this.nuevoMapa.nombre.trim() === '' ||
+    this.nuevoMapa.pngMapa.trim() === '' ||
+    this.nuevoMapa.probabilidadSpawn < 0.1 ||
+    this.nuevoMapa.descripcion.trim() === ''
+  ) {
+    alert('Por favor, complete todos los campos antes de guardar el mapa.');
+    return;
+  }
+
+  // Crear el mapa si todos los campos están llenos
  await createMap(this.nuevoMapa);
 
       // cerrar el diálogo
@@ -235,6 +249,17 @@ async updateMapas(){
 
 // GUARDAR LOS DATOS EDITADOS
 async guardarEdicionMapa(){
+  // Verificar si algún campo está vacío
+  if (
+    this.mapaEditado.nombre.trim() === '' ||
+    this.mapaEditado.pngMapa.trim() === '' ||
+    this.mapaEditado.probabilidadSpawn < 0.1 ||
+    this.mapaEditado.descripcion.trim() === ''
+  ) {
+    alert('Por favor, complete todos los campos antes de guardar la edición del mapa.');
+    return;
+  }
+
   try {
     // Eliminar el campo 'id' del objeto mapaEditado
     delete this.mapaEditado.id;
@@ -292,6 +317,7 @@ openEditarMapaDialog(mapa, index) {
   this.mapaEditandoId = mapa.id;
 },
 
+// CANCELAR EDICION MAPA
 cancelarEdicionMapa(){
   this.editarMapaDialog = false;
  this.mapaEditado= {
@@ -301,6 +327,15 @@ cancelarEdicionMapa(){
         descripcion: ''
     };
 },
+
+// ELIMINAR MAPA
+async eliminarMapa(mapa) {
+      if (confirm("¿Estás seguro de que deseas eliminar este mapa?")) {
+        await deleteMap(mapa.id);
+        this.limpiarMapas();
+        this.selectMapas();
+      }
+    },
   goToProcesos() {
         this.$router.push('/procesos');
     },
