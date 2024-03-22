@@ -101,7 +101,7 @@ const uploadMap = multer({ storage: storageMap });
 
 const storageSkin = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './assets/mapas');
+        cb(null, './assets/skins');
     },
     filename: function(req, file, cb) {
         cb(null, file.originalname);
@@ -128,7 +128,33 @@ app.post('/uploadSkin', uploadSkin.single('image'), (req, res) => {
     }
 });
 
+app.post('/editMap', uploadMap.single('image'), (req, res) => {
+    try {
+        const oldImageName = req.body.oldImageName;
+        fs.unlink(path.join(__dirname, './assets/mapas', oldImageName), err => {
+            if (err) throw err;
+            console.log('Imagen antigua eliminada con éxito');
+        });
+        res.status(200).json({ message: 'Imagen subida y antigua imagen eliminada con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al subir la nueva imagen o eliminar la antigua' });
+    }
+});
 
+app.post('/editSkin', uploadSkin.single('image'), (req, res) => {
+    try {
+        const oldImageName = req.body.oldImageName;
+        fs.unlink(path.join(__dirname, './assets/skins', oldImageName), err => {
+            if (err) throw err;
+            console.log('Imagen antigua eliminada con éxito');
+        });
+        res.status(200).json({ message: 'Imagen subida y antigua imagen eliminada con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al subir la nueva imagen o eliminar la antigua' });
+    }
+});
 
 //**********************************************************OPERACIONS GET*************************************************************** */
 app.get("/getMapes", async (req,res)=>{
