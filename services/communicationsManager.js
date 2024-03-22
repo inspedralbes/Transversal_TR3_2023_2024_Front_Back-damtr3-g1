@@ -274,6 +274,79 @@ export async function getAssets() {
     }
 }
 
+export async function uploadMap(imageFile) {
+    try {
+        let formData = new FormData();
+        formData.append('image', imageFile);
+
+        const response = await fetch(`http://localhost:3169/uploadMap`, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al subir la imagen al mapa');
+    }
+}
+
+export async function uploadSkin(imageFile) {
+    try {
+        let formData = new FormData();
+        formData.append('image', imageFile);
+
+        const response = await fetch(`http://localhost:3169/uploadSkin`, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al subir la imagen de la skin');
+    }
+}
+
+export async function editMap(imageFile, oldImageName) {
+    try {
+        let formData = new FormData();
+        formData.append('image', imageFile);
+        formData.append('oldImageName', oldImageName);
+
+        const response = await fetch(`http://localhost:3169/editMap`, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al subir la nueva imagen o eliminar la antigua');
+    }
+}
+
+export async function editSkin(imageFile, oldImageName) {
+    try {
+        let formData = new FormData();
+        formData.append('image', imageFile);
+        formData.append('oldImageName', oldImageName);
+
+        const response = await fetch(`http://localhost:3169/editSkin`, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al subir la nueva imagen o eliminar la antigua');
+    }
+}
 
 // SELECT LOS USUARIOS
 export async function getUsuarios() {

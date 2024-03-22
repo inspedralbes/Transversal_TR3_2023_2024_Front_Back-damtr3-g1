@@ -260,6 +260,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      
       <v-dialog v-model="dialogPersonaje" persistent max-width="600px">
         <v-card>
           <v-card-title>
@@ -274,9 +275,8 @@
                   required
                 ></v-text-field>
                 <v-text-field
-                  v-model="personajeNuevo.lvlDesbloqueo"
+                  v-model.number="personajeNuevo.lvlDesbloqueo"
                   label="Nivel de Desbloqueo"
-                  type="number"
                   required
                 ></v-text-field>
                 <v-text-field
@@ -339,9 +339,8 @@
                   accept="image/png"
                 ></v-file-input>
                 <v-text-field
-                  v-model="skinNuevo.valorMonedas"
+                  v-model.number="skinNuevo.valorMonedas"
                   label="Valor en Monedas"
-                  type="number"
                   required
                 ></v-text-field>
                 <v-text-field
@@ -474,7 +473,7 @@
       </v-card>
     </v-dialog>
 
-     <!-- Dialog para agregar producto -->
+     <!-- Dialog para agregar Mapa -->
      <v-dialog v-model="agregarMapaDialog" max-width="600">
       <v-card>
         <v-card-title>Añadir Mapa</v-card-title>
