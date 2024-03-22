@@ -9,7 +9,7 @@
       <v-btn text @click="goToDashboard">Dashboard</v-btn>
     </v-app-bar>
 
-    <!-- PANEL CONTROL SERVERS -->
+    <!-- PANEL CONTROL -->
     <v-container fluid style="margin-top: 75px">
       <!-- SERVIDORES Y PRODUCTOS -->
       <v-row justify="center">
@@ -56,6 +56,18 @@
               <v-btn @click="openClientesDialog" block style="margin-top: 20px"
                 >Ver Clientes</v-btn
               >
+            </v-card-text>
+          </v-card>
+        </v-col>
+
+        <!-- PANEL DE CONTROL MAPAS -->
+        <v-col cols="12" sm="6">
+          <v-card class="mx-auto" max-width="400">
+            <v-card-title>Panel de Control Mapas</v-card-title>
+            <v-card-text>
+              <v-btn @click="sincroMapas" block>Sincronizar Mapas</v-btn>
+              <v-btn @click="openMapaDialog" block style="margin-top: 20px">
+                Ver Mapas</v-btn>
             </v-card-text>
           </v-card>
         </v-col>
@@ -431,6 +443,70 @@
         </v-card>
       </v-dialog>
     </v-dialog>
+
+       <!-- Dialog para mostrar los mapas -->
+   <v-dialog v-model="mapaDialog" max-width="800">
+      <v-card>
+        <v-card-title>Mapas</v-card-title>
+        <v-card-text>
+          <!-- Mostrar los mapas aquí -->
+          <v-list>
+            <v-list-item v-for="(mapa, index) in mapas" :key="index">
+              <v-list-item-content>
+                <v-list-item-title>{{ mapa.nombre }}</v-list-item-title>
+                <v-list-item-subtitle>{{ mapa.pngMapa }}</v-list-item-subtitle>
+                <v-list-item-subtitle>{{ mapa.probabilidadSpawn }}</v-list-item-subtitle>
+                <v-list-item-subtitle>{{ mapa.descripcion }}</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-btn color="blue" @click="openEditarMapaDialog(mapa, index)">
+                  Editar Mapa
+                </v-btn>
+                <v-btn style="margin-left: 15px;" color="red" @click="eliminarMapa(mapa)">Eliminar Mapa</v-btn>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" @click="openAgregarMapaDialog">
+                  Añadir Mapa
+          </v-btn>
+          <v-btn color="red" text @click="mapaDialog = false">Cerrar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+     <!-- Dialog para agregar producto -->
+     <v-dialog v-model="agregarMapaDialog" max-width="600">
+      <v-card>
+        <v-card-title>Añadir Mapa</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="nuevoMapa.nombre" label="Nombre"></v-text-field>
+          <v-text-field v-model="nuevoMapa.pngMapa" label="pngMapa"></v-text-field>
+          <v-text-field v-model.number="nuevoMapa.probabilidadSpawn" label="Probabilidad de Spawn"></v-text-field>
+          <v-text-field v-model="nuevoMapa.descripcion" label="Descripción"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="blue darken-1" text @click="guardarMapa">Guardar</v-btn>
+          <v-btn color="red" text @click="agregarMapaDialog = false">Cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Dialog para editar mapa -->
+<v-dialog v-model="editarMapaDialog" max-width="600">
+  <v-card>
+    <v-card-title>Editar Mapa</v-card-title>
+    <v-card-text>
+      <v-text-field v-model="mapaEditado.nombre" label="Nombre"></v-text-field>
+      <v-text-field v-model="mapaEditado.pngMapa" label="pngMapa"></v-text-field>
+      <v-text-field v-model.number="mapaEditado.probabilidadSpawn" label="Probabilidad de Spawn"></v-text-field>
+      <v-text-field v-model="mapaEditado.descripcion" label="Descripción"></v-text-field>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="blue darken-1" text @click="guardarEdicionMapa">Guardar</v-btn>
+      <v-btn color="red" text @click="cancelarEdicionMapa">Cancelar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
   </v-app>
 </template>
 
@@ -449,10 +525,12 @@ import {
   updateSkin,
   createPersonaje,
   crearSkin,
-  uploadMap,
   uploadSkin,
-  editMap,
-  editSkin
+  editSkin,
+  getMapa, 
+  createMap,
+  updateMap, 
+  deleteMap
 } from "@/services/communicationsManager.js";
 
 export default {
@@ -505,6 +583,25 @@ export default {
       },
       clienteEditandoIndex: null,
       estadisticas: [],
+      mapas: [],
+    mapaDialog: false,
+    agregarMapaDialog: false,
+    editarMapaDialog: false,
+    nuevoMapa: {
+        nombre: '',
+        pngMapa: '',
+        probabilidadSpawn: 0,
+        descripcion: ''
+    },
+    mapaEditandoIndex: null,
+    mapaEditado: {
+      mapaEditandoId:null,
+        nombre: '',
+        pngMapa: '',
+        probabilidadSpawn: 0,
+        descripcion: ''
+    },
+
     };
   },
   created() {
@@ -516,6 +613,7 @@ export default {
     this.selectClientesLabs();
     this.odooEstado();
     this.getProductos();
+    this.selectMapas();
     console.log("productasos", this.productos);
   },
 
@@ -864,6 +962,163 @@ export default {
         vetado: null,
       };
       this.clienteEditandoIndex = null;
+    },
+
+    // SELECT MAPAS
+ async selectMapas(){      
+      try {
+      // Obtener mapas utilizando el método getUsuarios
+      const mapas= await getMapa();
+  
+      // Iterar sobre cada mapa
+      for (const mapa of mapas) {
+        
+        // Asignar valores a del mapa
+        const maps = {
+          id: mapa._id,
+          nombre: mapa.nombre,
+          pngMapa: mapa.pngMapa,
+          probabilidadSpawn: mapa.probabilidadSpawn,
+          descripcion: mapa.descripcion
+        };
+
+        this.mapas.push(maps);
+        }
+      } catch (error) {
+        console.error('Error al obtener mapas:', error);
+      }
+ },
+
+ // AGREGAR MAPA
+ async guardarMapa() {
+    // Verificar si algún campo está vacío
+  if (
+    this.nuevoMapa.nombre.trim() === '' ||
+    this.nuevoMapa.pngMapa.trim() === '' ||
+    this.nuevoMapa.probabilidadSpawn < 0.1 ||
+    this.nuevoMapa.descripcion.trim() === ''
+  ) {
+    alert('Por favor, complete todos los campos antes de guardar el mapa.');
+    return;
+  }
+
+  // Crear el mapa si todos los campos están llenos
+ await createMap(this.nuevoMapa);
+
+      // cerrar el diálogo
+      this.agregarMapaDialog = false;
+
+      this.limpiarMapas();
+      this.selectMapas();
+ },
+
+ // GUARDAR CAMBIOS MAPAS
+async updateMapas(){
+      try {
+      
+        this.guardarEdicionMapa();
+
+        // LMPIAR MAPAS
+        this.limpiarMapas();
+
+        // Actualizar la lista de mapas
+        this.selectMapas();
+
+        // Cerrar el diálogo de edición
+        this.cancelarEdicionMapa();
+      } catch (error) {
+        console.error("Error al actualizar el mapa:", error);
+      }
+},
+
+// GUARDAR LOS DATOS EDITADOS
+async guardarEdicionMapa(){
+  // Verificar si algún campo está vacío
+  if (
+    this.mapaEditado.nombre.trim() === '' ||
+    this.mapaEditado.pngMapa.trim() === '' ||
+    this.mapaEditado.probabilidadSpawn < 0.1 ||
+    this.mapaEditado.descripcion.trim() === ''
+  ) {
+    alert('Por favor, complete todos los campos antes de guardar la edición del mapa.');
+    return;
+  }
+
+  try {
+    // Eliminar el campo 'id' del objeto mapaEditado
+    delete this.mapaEditado.id;
+
+    // Utiliza la ID del mapa editando para actualizar los datos
+    await updateMap(this.mapaEditandoId, this.mapaEditado);
+
+    // Actualiza los datos en el array de mapas local si es necesario
+    if (this.mapaEditandoIndex !== null) {
+      this.$set(this.mapas, this.mapaEditandoIndex, this.mapaEditado);
+    }
+
+    // Cierra el diálogo de edición
+    this.cancelarEdicionMapa();
+  } catch (error) {
+    console.error("Error al actualizar el mapa:", error);
+  }
+},
+
+ // SINCRO MAPAS CON ODOO
+ async sincroMapas(){
+
+ },
+
+ limpiarMapas(){
+// resetear los campos del nuevo mapa
+this.nuevoMapa = {
+        nombre: '',
+        pngMapa: '',
+        probabilidadSpawn: 0,
+        descripcion: ''
+      };
+      this.mapas=[];
+ },
+
+ // VDIALOG VER MAPAS
+ openMapaDialog() {
+      this.mapaDialog = true; 
+ },
+
+ // VDIALOG INSERTAR MAPAS 
+ openAgregarMapaDialog() {
+  this.agregarMapaDialog = true;
+ },
+
+// VDIALOG EDITAR MAPAS
+openEditarMapaDialog(mapa, index) {
+ this.editarMapaDialog = true;
+
+  // Establecer datos del mapa seleccionado en mapaEditado
+  this.mapaEditado = { ...mapa };
+     
+  // Guardar el índice y la ID del mapa editando
+  this.mapaEditandoIndex = index;
+  this.mapaEditandoId = mapa.id;
+},
+
+// CANCELAR EDICION MAPA
+cancelarEdicionMapa(){
+  this.editarMapaDialog = false;
+ this.mapaEditado= {
+        nombre: '',
+        pngMapa: '',
+        probabilidadSpawn: 0,
+        descripcion: ''
+    };
+},
+
+// ELIMINAR MAPA
+async eliminarMapa(mapa) {
+      if (confirm("¿Estás seguro de que deseas eliminar este mapa?")) {
+        await deleteMap(mapa.id);
+        this.limpiarMapas();
+        this.selectMapas();
+      }
     },
   },
 };
