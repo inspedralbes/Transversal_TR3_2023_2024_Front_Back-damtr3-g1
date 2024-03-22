@@ -139,6 +139,7 @@
                     <v-card-text>
                       <div>Valor en Monedas: {{ skin.valorMonedas }}</div>
                       <div>Valor en Gemas: {{ skin.valorGemas }}</div>
+                      <div>Imagen: {{ skin.pngSkin }}</div>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="primary" text @click="editarSkin(skin)"
@@ -223,10 +224,11 @@
               v-model="skinEditado.descripcion"
               label="Descripción"
             ></v-text-field>
-            <v-text-field
+            <v-file-input
               v-model="skinEditado.pngSkin"
-              label="Png Skin"
-            ></v-text-field>
+              label="Archivo PNG"
+              accept="image/png"
+            ></v-file-input>
             <v-text-field
               v-model="skinEditado.valorMonedas"
               label="Precio Monedas"
@@ -449,11 +451,14 @@ import {
   crearSkin,
   uploadMap,
   uploadSkin,
+  editMap,
+  editSkin
 } from "@/services/communicationsManager.js";
 
 export default {
   data() {
     return {
+      imagenSkinEdit: null,
       dialogPersonaje: false,
       dialogSkin: false,
       valid: true,
@@ -511,7 +516,7 @@ export default {
     this.selectClientesLabs();
     this.odooEstado();
     this.getProductos();
-    console.log(this.productos);
+    console.log("productasos", this.productos);
   },
 
   updated() {
@@ -667,12 +672,16 @@ export default {
       this.personajeEditado = { ...producto };
       this.idEditada = producto._id;
       this.editarPersonajeDialog = true;
+
     },
     editarSkin(producto) {
-      // Cargar los datos del producto seleccionado en el diálogo de edición
+      this.imagenSkinEditado = producto.pngSkin;
+
       this.skinEditado = { ...producto };
       this.idEditada = producto._id;
       this.editarSkinDialog = true;
+      console.log("fotaca", this.imagenSkinEditado);
+
     },
 
     // GUARDAR CAMBIOS DEL PRODUCTO
@@ -696,7 +705,12 @@ export default {
         this.$set(this.productos, this.idEditada, this.skinEditado);
 
         let skinEditadoSinId = { ...this.skinEditado };
+        skinEditadoSinId.pngSkin = this.skinEditado.pngSkin.name;
         delete skinEditadoSinId._id;
+
+        console.log("foto a subir", this.skinEditado.pngSkin);
+        console.log("foto nompre para eliminar", this.imagenSkinEditado);
+        await editSkin(this.skinEditado.pngSkin, this.imagenSkinEditado);
 
         await updateSkin(this.idEditada, skinEditadoSinId);
         this.getProductos();
@@ -758,7 +772,7 @@ export default {
       let skinNuevoCopy = { ...this.skinNuevo };
       skinNuevoCopy.pngSkin = skinNuevoCopy.pngSkin.name;
       await crearSkin(skinNuevoCopy);
-      
+
       await uploadSkin(this.skinNuevo.pngSkin);
       this.skinNuevo = {
         nombre: "",
