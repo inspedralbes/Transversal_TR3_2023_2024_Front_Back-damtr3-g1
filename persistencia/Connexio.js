@@ -1,7 +1,7 @@
-
 const mysql = require("mysql2");
 
-var conn = mysql.createPool({
+// Crear el pool de conexiones
+const pool = mysql.createPool({
     host: "dam.inspedralbes.cat",
     user: "a22pabjimpri_user",
     password: "Dam2024+++",
@@ -10,29 +10,6 @@ var conn = mysql.createPool({
     queueLimit: 5,
     waitForConnections: true,
 });
-module.exports = {
-    conn: conn, // Export the connection pool
-    connect: function () {
-        return new Promise((resolve, reject) => {
-            conn.connect((err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        })
 
-    },
-
-    close: function () {
-        return new Promise((resolve, reject) => {
-            conn.end((err) => {
-                if (err) {
-                    reject(err)
-                } else { resolve() }
-            })
-        })
-    }
-
-}
+// Exportar el pool de conexiones
+module.exports = pool;

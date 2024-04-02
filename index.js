@@ -26,10 +26,9 @@ let sales = [];
 
 
 /*****************ACCES A DADES AMB PERSISTENCIA********************* */
-const bdConnexio = require('./persitencia/Connexio.js');
-bdConnexio.connect();
-const bdEstadistiques = require('./persitencia/Estadistiques.js');
-const bdUsuaris = require('./persitencia/Usuaris.js');
+const conn = require('./persistencia/Connexio.js');
+const bdEstadistiques = require('./persistencia/Estadistiques.js');
+const bdUsuaris = require('./persistencia/Usuaris.js');
 
 const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin } = require('./funcionesmongo/personajeskin');
 const client = require('./funcionesmongo/conexion');
