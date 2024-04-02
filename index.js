@@ -34,7 +34,8 @@ const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSki
 const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
-const insertDataIntoOdoo = require ('./odoo');
+const insertDataIntoOdoo = require ('./odoo/odooproduct.js');
+const insertClientOdoo = require ('./odoo/odooclient.js');
 
 
 //Definim la sessió i encenem el servidor
@@ -833,6 +834,16 @@ app.post('/syncOdoo', async (req, res) => {
     }
 })
 
+app.post('/syncClientOdoo', async (req, res) => {
+    try {
+        const clients = await bdUsuaris.getUsuaris();
+        const result = await insertClientOdoo(clients);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error al sincronizar el estado de Odoo:', error);
+        res.status(500).send('Error al sincronizar el estado de Odoo.');
+    }
+})
 /***********************************************REENVIAR ACCÉS****************************************** */
 
 app.get("/", (req, res) => {
