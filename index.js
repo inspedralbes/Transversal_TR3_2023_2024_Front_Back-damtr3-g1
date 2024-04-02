@@ -31,6 +31,13 @@ bdConnexio.connect();
 const bdEstadistiques = require('./persitencia/Estadistiques.js');
 const bdUsuaris = require('./persitencia/Usuaris.js');
 
+const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin } = require('./funcionesmongo/personajeskin');
+const client = require('./funcionesmongo/conexion');
+const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
+const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
+const insertDataIntoOdoo = require ('./odoo');
+
+
 //Definim la sessió i encenem el servidor
 const PORT = 3169;
 server.listen(PORT, () => {
@@ -66,15 +73,6 @@ const { SourceTextModule } = require("vm");
 //const url = "mongodb://127.0.0.1:27017";
 //const url = "mongodb://a22pabjimpri:3T1rkBzBxlETr8gO@ac-qsbdd98-shard-00-00.lgl13za.mongodb.net:27017,ac-qsbdd98-shard-00-01.lgl13za.mongodb.net:27017,ac-qsbdd98-shard-00-02.lgl13za.mongodb.net:27017/?replicaSet=atlas-fqazj8-shard-0&ssl=true&authSource=admin";
 //const client = new MongoClient(url);
-
-const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin } = require('./funcionesmongo/personajeskin');
-const client = require('./funcionesmongo/conexion');
-const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
-const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
-const insertDataIntoOdoo = require ('./odoo');
-
-
-
 
 //*************************************************************DESAR IMATGES************************************************************ */
 
