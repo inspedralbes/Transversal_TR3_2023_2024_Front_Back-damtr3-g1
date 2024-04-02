@@ -57,10 +57,17 @@ const mysql = require("mysql2");
 const { error } = require("console");
 const { SourceTextModule } = require("vm");
 
+
+
 //const url = "mongodb://127.0.0.1:27017";
-const url = "mongodb://a22pabjimpri:3T1rkBzBxlETr8gO@ac-qsbdd98-shard-00-00.lgl13za.mongodb.net:27017,ac-qsbdd98-shard-00-01.lgl13za.mongodb.net:27017,ac-qsbdd98-shard-00-02.lgl13za.mongodb.net:27017/?replicaSet=atlas-fqazj8-shard-0&ssl=true&authSource=admin";
-const client = new MongoClient(url);
-client.connect();
+//const url = "mongodb://a22pabjimpri:3T1rkBzBxlETr8gO@ac-qsbdd98-shard-00-00.lgl13za.mongodb.net:27017,ac-qsbdd98-shard-00-01.lgl13za.mongodb.net:27017,ac-qsbdd98-shard-00-02.lgl13za.mongodb.net:27017/?replicaSet=atlas-fqazj8-shard-0&ssl=true&authSource=admin";
+//const client = new MongoClient(url);
+
+const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin } = require('./funcionesmongo/personajeskin');
+const client = require('./funcionesmongo/conexion');
+const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
+const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
+
 
 
 //*************************************************************BASE DE DADES************************************************************ */
@@ -220,29 +227,7 @@ app.get("/getUsuarios/", async (req, res) => {
 
 app.get("/getAssets", async (req, res) => {
     try {
-        const database = client.db('Juego');
-        const mapasCollection = database.collection('mapas');
-        const personajesCollection = database.collection('personajes');
-        const habilidadesCollection = database.collection('habilidades');
-        const armasCollection = database.collection('armas');
-        const skinsCollection = database.collection('skins');
-
-
-        const mapas = await mapasCollection.find().toArray();
-        const personajes = await personajesCollection.find().toArray();
-        const habilidades = await habilidadesCollection.find().toArray();
-        const armas = await armasCollection.find().toArray();
-        const skins = await skinsCollection.find().toArray();
-
-
-        const result = {
-            mapas,
-            personajes,
-            habilidades,
-            armas,
-            skins
-        };
-
+        const result = await getAssets(client);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -252,9 +237,7 @@ app.get("/getAssets", async (req, res) => {
 
 app.get("/getMapa", async (req, res) => {
     try {
-        const database = client.db('Juego');
-        const collection = database.collection('mapas');
-        const result = await collection.find().toArray();
+        const result = await getMapas(client);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -264,13 +247,11 @@ app.get("/getMapa", async (req, res) => {
 
 app.get("/getPersonaje", async (req, res) => {
     try {
-        const database = client.db('Juego');
-        const collection = database.collection('personajes');
-        const result = await collection.find().toArray();
+        const result = await getPersonajes(client);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error al obtener el contenido de la colección' });
+        res.status(500).json({ message: 'Error al obtener los personajes' });
     }
 });
 
@@ -298,17 +279,17 @@ app.get("/getArma", async (req, res) => {
     }
 });
 
+// Rutas para operaciones con skins
 app.get("/getSkin", async (req, res) => {
     try {
-        const database = client.db('Juego');
-        const collection = database.collection('skins');
-        const result = await collection.find().toArray();
+        const result = await getSkins(client);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error al obtener el contenido de la colección' });
+        res.status(500).json({ message: 'Error al obtener las skins' });
     }
 });
+
 
 app.get("/getSales", (req, res) => {
     res.send(sales)
@@ -544,9 +525,7 @@ app.post("/addStats", async (req, res) => {
 app.post('/mapa', async (req, res) => {
     try {
         const mapa = req.body;
-        const database = client.db('Juego');
-        const mapaCollection = database.collection('mapas');
-        const result = await mapaCollection.insertOne(mapa);
+        const result = await createMapa(client, mapa);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -554,14 +533,11 @@ app.post('/mapa', async (req, res) => {
     }
 });
 
-// Método POST para crear un nuevo personaje
 app.post('/personaje', async (req, res) => {
     try {
         const personaje = req.body;
-        const database = client.db('Juego');
-        const personajesCollection = database.collection('personajes');
-        const result = await personajesCollection.insertOne(personaje);
-        res.status(200).json(result)
+        const result = await createPersonaje(client, personaje);
+        res.status(200).json(result);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al crear el personaje' });
@@ -599,24 +575,19 @@ app.post('/arma', async (req, res) => {
 app.post('/skin', async (req, res) => {
     try {
         const skin = req.body;
-        const database = client.db('Juego');
-        const skinCollection = database.collection('skins');
-        const result = await skinCollection.insertOne(skin);
+        const result = await createSkin(client, skin);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error al crear el skin' });
+        res.status(500).json({ message: 'Error al crear la skin' });
     }
 });
 
-// Método POST para actualizar un mapa por su ID
 app.post('/updatemapa/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const updatedMapa = req.body;
-        const database = client.db('Juego');
-        const mapaCollection = database.collection('mapas');
-        const result = await mapaCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedMapa });
+        const result = await updateMapa(client, id, updatedMapa);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -624,14 +595,11 @@ app.post('/updatemapa/:id', async (req, res) => {
     }
 });
 
-// Método POST para actualizar un personaje por su ID
 app.post('/updatepersonaje/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const updatedPersonaje = req.body;
-        const database = client.db('Juego');
-        const personajesCollection = database.collection('personajes');
-        const result = await personajesCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedPersonaje });
+        const result = await updatePersonaje(client, id, updatedPersonaje);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -673,13 +641,11 @@ app.post('/updateskin/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const updatedSkin = req.body;
-        const database = client.db('Juego');
-        const skinsCollection = database.collection('skins');
-        const result = await skinsCollection.updateOne({ _id: new ObjectId(id) }, { $set: updatedSkin });
+        const result = await updateSkin(client, id, updatedSkin);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error al actualizar el arma' });
+        res.status(500).json({ message: 'Error al actualizar la skin' });
     }
 });
 
@@ -689,9 +655,7 @@ app.post('/updateskin/:id', async (req, res) => {
 app.delete('/deletemapa/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const database = client.db('Juego');
-        const mapaCollection = database.collection('mapas');
-        const result = await mapaCollection.deleteOne({ _id: new ObjectId(id) });
+        const result = await deleteMapa(client, id);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -699,13 +663,10 @@ app.delete('/deletemapa/:id', async (req, res) => {
     }
 });
 
-// Método DELETE para borrar un personaje por su ID
 app.delete('/deletepersonaje/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const database = client.db('Juego');
-        const personajesCollection = database.collection('personajes');
-        const result = await personajesCollection.deleteOne({ _id: new ObjectId(id) });
+        const result = await deletePersonaje(client, id);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -744,13 +705,11 @@ app.delete('/deletearma/:id', async (req, res) => {
 app.delete('/deleteskin/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const database = client.db('Juego');
-        const skinsCollection = database.collection('skins');
-        const result = await skinsCollection.deleteOne({ _id: new ObjectId(id) });
+        const result = await deleteSkin(client, id);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error al borrar el arma' });
+        res.status(500).json({ message: 'Error al borrar la skin' });
     }
 });
 
