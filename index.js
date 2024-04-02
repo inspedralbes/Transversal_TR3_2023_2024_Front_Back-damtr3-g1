@@ -295,14 +295,24 @@ app.get("/getSales", (req, res) => {
     res.send(sales)
 })
 
-app.get("/getSala", (req,res)=>{
+app.get("/getSala", (req, res) => {
+    let salaFound = false; // Flag to indicate if the sala is found
+    
     sales.forEach(sala => {
-        if(sala.salaId === req.query.idSala){
+        if (sala.salaId === req.query.idSala) {
+            console.log("Sala trobada");
+            console.log(sala);
             res.send(sala);
+            salaFound = true; // Set the flag to true if sala is found
         }
     });
-    res.send("MARICON")
-})
+
+    // If sala is not found, send a response indicating so
+    if (!salaFound) {
+        res.send("Sala not found");
+    }
+});
+
 
 /**********************************************************************OPERACIONS POST**************************************************************** */
 //registrar un usuari
@@ -728,16 +738,17 @@ io.on('connection', (socket)=>{
         "tecla": "UP",
     }
     */
-    socket.on('teclaPremuda', (dades) => {
-        io.emit('teclaPremuda', dades);
+    socket.on('touchDragged', (dades) => {
+        console.log("Touchdragged")
+        io.emit('touchDragged', dades);
     })
 
-    socket.on('teclaDeixada', (tecla) => {
-
+    socket.on('posicioCorrecio', (dades) =>{
+        io.emit('posicioCorrecio', dades);
     })
+
 
     socket.on('startGame', (dades) =>{
-        var json = JSON.parse(dades);
         io.emit('startGame', dades);
     })
 
