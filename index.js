@@ -2,6 +2,7 @@ var session = require("express-session");
 const { MongoClient } = require("mongodb");
 const { ObjectId } = require('mongodb');
 const express = require("express");
+const multer = require("multer");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
@@ -83,7 +84,77 @@ conn.getConnection((err, connection) => {
     }
 });
 
+//*************************************************************DESAR IMATGES************************************************************ */
 
+// Configura multer para almacenar archivos en la carpeta 'assets'
+const storageMap = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './assets/mapas');
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const uploadMap = multer({ storage: storageMap });
+
+
+const storageSkin = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './assets/skins');
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const uploadSkin = multer({ storage: storageSkin });
+
+app.post('/uploadMap', uploadMap.single('image'), (req, res) => {
+    try {
+        res.status(200).json({ message: 'Imagen subida con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al subir la imagen' });
+    }
+});
+
+app.post('/uploadSkin', uploadSkin.single('image'), (req, res) => {
+    try {
+        res.status(200).json({ message: 'Imagen subida con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al subir la imagen' });
+    }
+});
+
+app.post('/editMap', uploadMap.single('image'), (req, res) => {
+    try {
+        const oldImageName = req.body.oldImageName;
+        fs.unlink(path.join(__dirname, './assets/mapas', oldImageName), err => {
+            if (err) throw err;
+            console.log('Imagen antigua eliminada con éxito');
+        });
+        res.status(200).json({ message: 'Imagen subida y antigua imagen eliminada con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al subir la nueva imagen o eliminar la antigua' });
+    }
+});
+
+app.post('/editSkin', uploadSkin.single('image'), (req, res) => {
+    try {
+        const oldImageName = req.body.oldImageName;
+        fs.unlink(path.join(__dirname, './assets/skins', oldImageName), err => {
+            if (err) throw err;
+            console.log('Imagen antigua eliminada con éxito');
+        });
+        res.status(200).json({ message: 'Imagen subida y antigua imagen eliminada con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al subir la nueva imagen o eliminar la antigua' });
+    }
+});
 
 //**********************************************************OPERACIONS GET*************************************************************** */
 app.get("/getMapes", async (req,res)=>{
