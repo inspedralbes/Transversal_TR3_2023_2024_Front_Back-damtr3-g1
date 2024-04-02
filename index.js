@@ -67,6 +67,7 @@ const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSki
 const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
+const insertDataIntoOdoo = require ('./odoo');
 
 
 
@@ -95,10 +96,10 @@ conn.getConnection((err, connection) => {
 
 // Configura multer para almacenar archivos en la carpeta 'assets'
 const storageMap = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, './assets/mapas');
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         cb(null, file.originalname);
     }
 });
@@ -107,10 +108,10 @@ const uploadMap = multer({ storage: storageMap });
 
 
 const storageSkin = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, './assets/skins');
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         cb(null, file.originalname);
     }
 });
@@ -164,7 +165,7 @@ app.post('/editSkin', uploadSkin.single('image'), (req, res) => {
 });
 
 //**********************************************************OPERACIONS GET*************************************************************** */
-app.get("/getMapes", async (req,res)=>{
+app.get("/getMapes", async (req, res) => {
     try {
         const directoryPath = "assets/mapas"; // Specify the path to the directory
 
@@ -203,7 +204,7 @@ app.get("/getEstadisticas/:id", async (req, res) => {
         conn.query(sql, (err, result) => {
             if (err) {
                 reject(err)
-            }else{
+            } else {
                 resolve(result)
             }
         });
@@ -297,7 +298,7 @@ app.get("/getSales", (req, res) => {
 
 app.get("/getSala", (req, res) => {
     let salaFound = false; // Flag to indicate if the sala is found
-    
+
     sales.forEach(sala => {
         if (sala.salaId === req.query.idSala) {
             console.log("Sala trobada");
@@ -417,37 +418,37 @@ app.post("/unirSala", (req, res) => {
     var user = req.body.user;
     var salaUnir = req.body.sala;
     var trobat = false;
-    sales.forEach( sala => {
-        if(sala.salaId === salaUnir){
+    sales.forEach(sala => {
+        if (sala.salaId === salaUnir) {
             var existe = false;
             sala.users.forEach(usuari => {
-                if(usuari===user){
+                if (usuari === user) {
                     existe = true;
                 }
             });
-            if(!existe){
+            if (!existe) {
                 console.log("USUARIO NO EXISTE")
                 sala.users.push(user);
                 io.emit("newUser", req.body);
-            }else{
+            } else {
                 console.log("USUARIO EXISTE")
             }
             console.log("TODO OK")
             trobat = true;
-            res.send({auth: true})
+            res.send({ auth: true })
         }
 
     });
-    if(!trobat){
+    if (!trobat) {
         console.log("CODIGO INCORRECTO DE: " + user + ", CODIGO: " + salaUnir)
-        res.send({auth: false})
+        res.send({ auth: false })
     }
 })
 
 
-app.post("/updateCliente", async (req,res)=>{
+app.post("/updateCliente", async (req, res) => {
     var id = req.query.id;
-    var sql = 'UPDATE Usuario SET mail ="' + req.body.gmail + '", vetado = ' + req.body.activo + ', username = "' + req.body.nombre_usuario + '",fechaNacimiento = "' + req.body.fecha_nacimiento +  '" WHERE idUser = ' + req.body.idUser;
+    var sql = 'UPDATE Usuario SET mail ="' + req.body.gmail + '", vetado = ' + req.body.activo + ', username = "' + req.body.nombre_usuario + '",fechaNacimiento = "' + req.body.fecha_nacimiento + '" WHERE idUser = ' + req.body.idUser;
     var comandaSql = new Promise((resolve, reject) => {
         conn.query(sql, (err, result) => {
             if (err) {
@@ -458,7 +459,7 @@ app.post("/updateCliente", async (req,res)=>{
         });
     })
     var resultat = await comandaSql
-    res.send({updated: true});
+    res.send({ updated: true });
 
 })
 
@@ -725,7 +726,7 @@ app.delete('/deleteskin/:id', async (req, res) => {
 
 
 //*************************************************************SOCKETS********************************************************************* */
-io.on('connection', (socket)=>{
+io.on('connection', (socket) => {
 
     socket.on('userNuevo', (dades) => {
         dadesJson = JSON.parse(dades);
@@ -743,12 +744,12 @@ io.on('connection', (socket)=>{
         io.emit('touchDragged', dades);
     })
 
-    socket.on('posicioCorrecio', (dades) =>{
+    socket.on('posicioCorrecio', (dades) => {
         io.emit('posicioCorrecio', dades);
     })
 
 
-    socket.on('startGame', (dades) =>{
+    socket.on('startGame', (dades) => {
         io.emit('startGame', dades);
     })
 
@@ -827,7 +828,7 @@ function ArrancarOdoo() {
                 .on('close', function (code, signal) {
                     console.log('Comando sudo docker start db ejecutado.');
                     // Luego detener el contenedor de Odoo
-                    con.exec('sudo docker start odoo', function (err, stream) { 
+                    con.exec('sudo docker start odoo', function (err, stream) {
                         if (err) throw err;
                         stream
                             .on('close', function (code, signal) {
@@ -899,22 +900,22 @@ function checkOdoo() {
 
 app.post('/detenerOdoo', async (req, res) => {
     try {
-      await DetenerOdoo(); // Esperar a que la función DetenerOdoo() se complete
-      res.send('Odoo y db detenidas correctamente.');
+        await DetenerOdoo(); // Esperar a que la función DetenerOdoo() se complete
+        res.send('Odoo y db detenidas correctamente.');
     } catch (error) {
-      console.error('Error al detener Odoo:', error);
-      res.status(500).send('Error al detener Odoo.');
+        console.error('Error al detener Odoo:', error);
+        res.status(500).send('Error al detener Odoo.');
     }
-  });
+});
 
-app.post('/arrancarOdoo', async (req, res)=>{
+app.post('/arrancarOdoo', async (req, res) => {
     try {
         await ArrancarOdoo(); // Esperar a que la función DetenerOdoo() se complete
         res.send('Odoo y db arrancadas correctamente.');
-      } catch (error) {
+    } catch (error) {
         console.error('Error al arrancar Odoo:', error);
         res.status(500).send('Error al arrancar Odoo.');
-      }
+    }
 })
 
 app.post('/checkarOdoo', async (req, res) => {
@@ -928,6 +929,18 @@ app.post('/checkarOdoo', async (req, res) => {
         res.status(500).send('Error al comprobar el estado de Odoo.');
     }
 });
+
+app.post('/syncOdoo', async (req, res) => {
+    try {
+        const personajes = await getPersonajes(client);
+        const skins = await getSkins(client);
+        const result = await insertDataIntoOdoo(personajes, skins);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error al sincronizar el estado de Odoo:', error);
+        res.status(500).send('Error al sincronizar el estado de Odoo.');
+    }
+})
 
 /***********************************************REENVIAR ACCÉS****************************************** */
 
