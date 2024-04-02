@@ -25,6 +25,12 @@ var history = require("connect-history-api-fallback");
 let sales = [];
 
 
+/*****************ACCES A DADES AMB PERSISTENCIA********************* */
+const bdConnexio = require('./persitencia/Connexio.js');
+bdConnexio.connect();
+const bdEstadistiques = require('./persitencia/Estadistiques.js');
+const bdUsuaris = require('./persitencia/Usuaris.js');
+
 //Definim la sessió i encenem el servidor
 const PORT = 3169;
 server.listen(PORT, () => {
@@ -40,8 +46,6 @@ var sess = {
         motor_ences: false,
     },
 };
-
-
 
 
 
@@ -71,26 +75,6 @@ const insertDataIntoOdoo = require ('./odoo');
 
 
 
-//*************************************************************BASE DE DADES************************************************************ */
-//Definir parametres per a la connexió a la base de dades
-var conn = mysql.createPool({
-    host: "dam.inspedralbes.cat",
-    user: "a22pabjimpri_user",
-    password: "Dam2024+++",
-    database: "a22pabjimpri_joc",
-    connectionLimit: 20,
-    queueLimit: 5,
-    waitForConnections: true,
-});
-
-//COnnexió a la base de dades
-conn.getConnection((err, connection) => {
-    if (err) {
-        console.error(err);
-    } else {
-        console.log("Connected to database!");
-    }
-});
 
 //*************************************************************DESAR IMATGES************************************************************ */
 
@@ -199,31 +183,11 @@ app.get("/crearSala", (req, res) => {
 //Agafar les estadístiques d'un usuari
 app.get("/getEstadisticas/:id", async (req, res) => {
     var id = req.params.id
-    var sql = 'SELECT * FROM Estadisticas WHERE idUser = ' + id;
-    var resultat = new Promise((resolve, reject) => {
-        conn.query(sql, (err, result) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(result)
-            }
-        });
-    })
-    res.send(await resultat);
+    res.send(await bdEstadistiques.getEstadistiques(id))
 })
 
 app.get("/getUsuarios/", async (req, res) => {
-    var sql = 'SELECT * FROM Usuario WHERE admin != 1';
-    var resultat = new Promise((resolve, reject) => {
-        conn.query(sql, (err, result) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(result)
-            }
-        });
-    })
-    res.send(await resultat);
+   res.send(await bdUsuaris.getUsuaris())
 })
 
 app.get("/getAssets", async (req, res) => {
@@ -325,30 +289,10 @@ app.post("/register", async (req, res) => {
         var fechaN = req.body.fechaN;
         var monedas = 1000;
         var gemas = 10;
-
         pwd = await Encriptar(pwd);
 
-        const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, gemas) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas + ', ' + gemas + ')';
-        console.log(sql)
-        const resultat = await new Promise((resolve, reject) => {
-            conn.query(sql, (err, result) => {
-                if (err) {
-                    // Check the error code
-                    if (err.code === 'ER_DUP_ENTRY') {
-                        // Handle duplicate entry error
-                        reject("DUPLICADO");
-                    } else {
-                        // Handle other errors
-                        reject("ERROR EN INSERT");
-                        console.log(err.message)
-                    }
-                } else {
-                    resolve(true);
-                }
-            });
-        });
-        console.log(await resultat)
-        if (resultat) {
+
+        if (await bdUsuaris.insertUsuari(user, pwd, mail, fechaN, monedas, gemas)) {
             console.log("Usuario Registrado")
             res.send({ auth: true });
         } else {
@@ -365,18 +309,9 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
     var user = req.body.user;
     var pwd = req.body.pwd;
-    var sql = 'SELECT username, password FROM Usuario WHERE Username = "' + user + '"';
 
-    var comandaSql = new Promise((resolve, reject) => {
-        conn.query(sql, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result)
-            }
-        });
-    })
-    var resultat = await comandaSql;
+  
+    var resultat = await bdUsuaris.getUsuari(user);
 
     if (resultat.length === 0) {
         res.send({ auth: false })
@@ -390,18 +325,8 @@ app.post("/login", async (req, res) => {
 app.post("/loginWeb", async (req, res) => {
     var user = req.body.user;
     var pwd = req.body.pwd;
-    var sql = 'SELECT username, password, admin FROM Usuario WHERE username = "' + user + '"';
 
-    var comandaSql = new Promise((resolve, reject) => {
-        conn.query(sql, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result)
-            }
-        });
-    })
-    var resultat = await comandaSql;
+    var resultat = await bdUsuaris.getUsuariAdmin(user);
     if (resultat.length === 0) {
         res.send(false);
         console.log("NO LOGIN")
@@ -446,20 +371,9 @@ app.post("/unirSala", (req, res) => {
 })
 
 
-app.post("/updateCliente", async (req, res) => {
-    var id = req.query.id;
-    var sql = 'UPDATE Usuario SET mail ="' + req.body.gmail + '", vetado = ' + req.body.activo + ', username = "' + req.body.nombre_usuario + '",fechaNacimiento = "' + req.body.fecha_nacimiento + '" WHERE idUser = ' + req.body.idUser;
-    var comandaSql = new Promise((resolve, reject) => {
-        conn.query(sql, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result)
-            }
-        });
-    })
-    var resultat = await comandaSql
-    res.send({ updated: true });
+app.post("/updateCliente", async (req,res)=>{    
+    await bdUsuaris.updateUsuari(req.body.gmail, req.body.activo,  req.body.nombre_usuario, req.body.fecha_nacimiento, req.body.idUser);
+    res.send({updated: true});
 
 })
 
@@ -506,28 +420,8 @@ function Comparar(plainTextPassword, hashedPassword) {
 //Funció per a afegir estadístiques
 app.post("/addStats", async (req, res) => {
     var id = req.body.id
-    var sql = 'SELECT * FROM Estadisticas WHERE idUser = ' + id;
-    var resultat = new Promise((resolve, reject) => {
-        conn.query(sql, (err, result) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(result)
-            }
-        });
-    })
-    var resultat2 = resultat;
-    var sql2 = 'UPDATE Estadisticas SET PartidasJugadas = ' + (resultat2.PartidasJugadas + 1) + ', TiempoPartida = ' + (resultat2.TiempoPartida + req.body.tiempoJugado + ', kills = ' + (resultat2.kills + req.body.kills) + ', deaths = ' + (resultat2.deaths + req.body.deaths) + ', assists = ' + (resultat2.assists + req.body.assists) + ', wins = ' + (resultat2.wins + req.body.wins))
-    var resultat3 = new Promise((resolve, reject) => {
-        conn.query(sql2, (err, result) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(result)
-            }
-        });
-    })
-    resultat3 = resultat3;
+    var resultat2 = await bdEstadistiques.getEstadistiques(id);
+    await bdEstadistiques.updateEstadistiques(resultat2.PartidasJugadas,resultat2.TiempoPartida, req.body.tiempoJugado,resultat2.kills , req.body.kills, resultat2.deaths, req.body.deaths, resultat2.assists,  req.body.assists, resultat2.wins, req.body.wins )
 })
 
 
