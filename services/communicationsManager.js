@@ -439,3 +439,17 @@ export async function getOdooStatus() {
         throw new Error('Error al obtener el estado de Odoo');
     }
 }
+
+export async function syncOdoo(){
+    try {
+        const response = await fetch(`http://localhost:3169/syncOdoo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al sincronizar Odoo');
+    }
+}

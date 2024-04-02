@@ -530,7 +530,8 @@ import {
   getMapa, 
   createMap,
   updateMap, 
-  deleteMap
+  deleteMap,
+  syncOdoo
 } from "@/services/communicationsManager.js";
 
 export default {
@@ -669,7 +670,10 @@ export default {
     async serverEstado() {},
 
     // Lógica para sincronizar productos
-    async sincroProductos() {},
+    async sincroProductos() {
+      await syncOdoo();
+      window.alert("Productos sincronizados correctamente");
+    },
 
     // Lógica para sincronizar clientes
     async sincroClientes() {},
