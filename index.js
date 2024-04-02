@@ -48,7 +48,7 @@ var sess = {
     //app.use és el intermediari, middleware
     secret: "paraula secreta",
     resave: false, //Obsolet
-    saveUninitialized: true,
+    saveUninitialized: true, 
     data: {
         motor_ences: false,
     },
