@@ -525,8 +525,8 @@ import {
   updateSkin,
   createPersonaje,
   crearSkin,
-  uploadSkin,
-  editSkin,
+  uploadSkinimg,
+  editSkinimg,
   getMapa, 
   createMap,
   updateMap, 
@@ -808,7 +808,7 @@ export default {
 
         console.log("foto a subir", this.skinEditado.pngSkin);
         console.log("foto nompre para eliminar", this.imagenSkinEditado);
-        await editSkin(this.skinEditado.pngSkin, this.imagenSkinEditado);
+        await editSkinimg(this.skinEditado.pngSkin, this.imagenSkinEditado);
 
         await updateSkin(this.idEditada, skinEditadoSinId);
         this.getProductos();
@@ -871,7 +871,7 @@ export default {
       skinNuevoCopy.pngSkin = skinNuevoCopy.pngSkin.name;
       await crearSkin(skinNuevoCopy);
 
-      await uploadSkin(this.skinNuevo.pngSkin);
+      await uploadSkinimg(this.skinNuevo.pngSkin);
       this.skinNuevo = {
         nombre: "",
         valorMonedas: 0,

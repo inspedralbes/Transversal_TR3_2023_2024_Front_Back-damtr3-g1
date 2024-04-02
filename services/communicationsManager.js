@@ -274,7 +274,7 @@ export async function getAssets() {
     }
 }
 
-export async function uploadMap(imageFile) {
+export async function uploadMapimg(imageFile) {
     try {
         let formData = new FormData();
         formData.append('image', imageFile);
@@ -292,7 +292,7 @@ export async function uploadMap(imageFile) {
     }
 }
 
-export async function uploadSkin(imageFile) {
+export async function uploadSkinimg(imageFile) {
     try {
         let formData = new FormData();
         formData.append('image', imageFile);
@@ -310,7 +310,7 @@ export async function uploadSkin(imageFile) {
     }
 }
 
-export async function editMap(imageFile, oldImageName) {
+export async function editMapimg(imageFile, oldImageName) {
     try {
         let formData = new FormData();
         formData.append('image', imageFile);
@@ -329,7 +329,7 @@ export async function editMap(imageFile, oldImageName) {
     }
 }
 
-export async function editSkin(imageFile, oldImageName) {
+export async function editSkinimg(imageFile, oldImageName) {
     try {
         let formData = new FormData();
         formData.append('image', imageFile);
