@@ -37,21 +37,23 @@
                 <v-card class="news-item" style="margin: 20px; width: 700px;" max-width="100%">
                   <v-card-text class="d-flex justify-space-between align-center">
                     <h2 style="color: black;">{{ news.title }}</h2>
-                    <v-btn @click="openUpdateDialog(news)">Editar</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-icon @click="openUpdateDialog(news)" dark color="black" style="margin-right: 10px;">mdi-pencil</v-icon>
+
+                    <v-icon @click="eliminarNoticia(news)" dark color="red">mdi-delete</v-icon>
                   </v-card-text>
                 </v-card>
               </v-col>
             </v-row>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="saveNews">Guardar</v-btn>
-            <v-btn color="red" text @click="closeDialog">Cancelar</v-btn>
+            <v-btn color="red" text @click="closeDialog">Cerrar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
 
- <!-- DIALOG para EDITAR noticia -->
- <v-dialog v-model="updateDialogVisible" max-width="600">
+      <!-- DIALOG para EDITAR noticia -->
+      <v-dialog v-model="updateDialogVisible" max-width="600">
         <v-card>
           <v-card-title>
             <span class="headline">Editar Noticia</span>
@@ -64,7 +66,7 @@
 
           </v-card-text>
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="createNews">Guardar</v-btn>
+            <v-btn color="blue darken-1" text @click="saveNews">Guardar</v-btn>
             <v-btn color="red" text @click="closeUpdateDialog">Cancelar</v-btn>
           </v-card-actions>
         </v-card>
@@ -155,7 +157,7 @@ export default {
       // LMPIAR CAMPOS
       this.limpiarCampos();
 
-      this.closeDialog();
+      this.updateDialogVisible= false;
 
       // Actualizar la lista
       await this.loadNews();
@@ -229,6 +231,15 @@ export default {
       // Guardar el índice de la noticia editanda
       this.noticiaEditadaIndex = this.newsList.indexOf(news);
       this.updateDialogVisible = true;
+    },
+
+    // ELIMINAR NOTICIA
+    async eliminarNoticia(news) {
+      if (confirm("¿Estás seguro de que deseas eliminar esta noticia?")) {
+        await deleteBroadcastNews(news._id);
+        this.limpiarCampos();
+        this.loadNews();
+      }
     },
     closeUpdateDialog() {
       this.limpiarCampos();
