@@ -23,7 +23,7 @@ const io = new Server(server, {
 const staticFieldMiddleware = express.static("public");
 var history = require("connect-history-api-fallback");
 let sales = [];
-
+const http = require('http');
 
 /*****************ACCES A DADES AMB PERSISTENCIA********************* */
 const conn = require('./persistencia/Connexio.js');
@@ -254,6 +254,49 @@ app.get("/getSkin", async (req, res) => {
 });
 
 
+app.get("/getTenda", (req,res)=>{
+   
+})
+
+app.get("getNovaTenda", (req,res)=>{
+    var data;
+    const options = {
+        hostname: 'r6pixel.dam.inspedralbes.cat', 
+        path: '/getAssets',
+        method: 'GET'
+      };
+
+      const req = http.request(options, (res) => {
+      
+        // A chunk of data has been received
+        res.on('data', (chunk) => {
+          data += chunk;
+        });
+      
+        // The whole response has been received
+        res.on('end', () => {
+          console.log(data); // Output the received data
+        });
+      });
+      
+      // Handling errors
+      req.on('error', (error) => {
+        console.error(error);
+      });
+      
+      // End the request
+      req.end();
+
+      data = data["skins"];
+      data = getRandomItems(data, 4);
+      
+      //FUNCIO ESBORRAR TAULA TENDA
+
+      //FUNCIO AFEGIR ITEM A TAULA TENDA
+      data.forEach(skin => {
+        //AFEGIR CADA SKIN A LA TENDA ACTUAL
+      });
+})
 app.get("/getSales", (req, res) => {
     res.send(sales)
 })
@@ -387,7 +430,19 @@ function generateRandomString(length) {
     }
     return result;
 }
-
+function getRandomItems(array, count) {
+    // Create a copy of the original array to avoid modifying it
+    const shuffledArray = array.slice();
+    
+    // Shuffle the array using Fisher-Yates algorithm
+    for (let i = shuffledArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    }
+    
+    // Return the first 'count' items from the shuffled array
+    return shuffledArray.slice(0, count);
+  }
 
 //Funció per a encriptar passwords i strings
 function Encriptar(string) {
