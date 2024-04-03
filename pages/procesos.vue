@@ -531,7 +531,8 @@ import {
   createMap,
   updateMap, 
   deleteMap,
-  syncOdoo
+  syncOdoo,
+  syncOdooClient
 } from "@/services/communicationsManager.js";
 
 export default {
@@ -676,7 +677,10 @@ export default {
     },
 
     // Lógica para sincronizar clientes
-    async sincroClientes() {},
+    async sincroClientes() {
+      await syncOdooClient();
+      window.alert("Clientes sincronizados correctamente");
+    },
 
     // HACER SELECT PRODUCTOS MONGO
     async selectProductosMongo() {},
