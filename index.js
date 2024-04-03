@@ -34,6 +34,7 @@ const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSki
 const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
+const { getNoticias, updateNoticia, createNoticia, deleteNoticia } = require('./funcionesmongo/noticias.js');
 const insertDataIntoOdoo = require('./odoo/odooproduct.js');
 const insertClientOdoo = require('./odoo/odooclient.js');
 
@@ -91,7 +92,7 @@ const uploadMap = multer({ storage: storageMap });
 
 const storageSkin = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './assets/skins');
+        cb(null, './assets');
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -135,7 +136,7 @@ app.post('/editMap', uploadMap.single('image'), (req, res) => {
 app.post('/editSkin', uploadSkin.single('image'), (req, res) => {
     try {
         const oldImageName = req.body.oldImageName;
-        fs.unlink(path.join(__dirname, './assets/skins', oldImageName), err => {
+        fs.unlink(path.join(__dirname, './assets', oldImageName), err => {
             if (err) throw err;
             console.log('Imagen antigua eliminada con éxito');
         });
@@ -165,6 +166,18 @@ app.get("/getMapes", async (req, res) => {
     }
 
 })
+
+app.get("/getBroadcastNews", async (req, res)=>{
+    try {
+        const result = await getNoticias(client);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al obtener el contenido de la colección' });
+    }
+
+});
+
 
 //CrearSala
 app.get("/crearSala", (req, res) => {
@@ -325,6 +338,13 @@ app.get("/getNovaTenda", (req, res) => {
     // Finalizar la solicitud
     reqHttp.end();
 });
+
+app.get("/getImg/:path", (req, res)=>{
+    console.log(req.params.path);
+    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + req.params.path;
+    res.sendFile(path)
+})
+
 
 function getRandomSkin(array, n) {
     let result = [];
@@ -538,7 +558,16 @@ app.post('/mapa', async (req, res) => {
         res.status(500).json({ message: 'Error al crear el mapa' });
     }
 });
-
+app.post('/createBroadcastNews', async (req, res) => {
+    try {
+        const noticia = req.body;
+        const result = await createNoticia(client, noticia);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al crear el noticia' });
+    }
+});
 app.post('/personaje', async (req, res) => {
     try {
         const personaje = req.body;
@@ -594,6 +623,17 @@ app.post('/updatemapa/:id', async (req, res) => {
         const id = req.params.id;
         const updatedMapa = req.body;
         const result = await updateMapa(client, id, updatedMapa);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al actualizar el mapa' });
+    }
+});
+app.post('/updateBroadcastNews/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedNoticia = req.body;
+        const result = await updateNoticia(client, id, updatedNoticia);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
@@ -662,6 +702,16 @@ app.delete('/deletemapa/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const result = await deleteMapa(client, id);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al borrar el mapa' });
+    }
+});
+app.delete('/deleteBroadcastNews/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const result = await deleteNoticia(client, id);
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
