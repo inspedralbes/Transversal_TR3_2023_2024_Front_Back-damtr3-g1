@@ -5,16 +5,15 @@
       <v-toolbar-title @click="goToHome">R6 PIXEL</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn text @click="goToProcesos">Procesos</v-btn>
-    </v-app-bar> 
+    </v-app-bar>
+    
+    
   </div>
   </v-app>
 </template>
 
 <script>
-import { getMapa, 
-  createMap,
-  updateMap, 
-  getUsuarios,
+import { getUsuarios,
   getEstadisticas,
   deleteMap } from '@/services/communicationsManager.js'
 

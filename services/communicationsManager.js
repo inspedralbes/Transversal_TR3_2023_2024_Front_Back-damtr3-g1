@@ -8,7 +8,7 @@ export async function login(user, pwd) {
     return resultat.auth;
 }
 
-export async function createMap(map){
+export async function createMap(map) {
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/mapa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -19,7 +19,18 @@ export async function createMap(map){
     return boolValue;
 }
 
-export async function createPersonaje(personaje){
+export async function createBroadcastNews(news) {
+    const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/createBroadcastNews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(news),
+    });
+    const resultat = await response.text();
+    const boolValue = resultat === "true";
+    return boolValue;
+}
+
+export async function createPersonaje(personaje) {
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/personaje`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,7 +41,7 @@ export async function createPersonaje(personaje){
     return boolValue;
 }
 
-export async function habilidad(habilidad){
+export async function habilidad(habilidad) {
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/habilidad`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -41,7 +52,7 @@ export async function habilidad(habilidad){
     return boolValue;
 }
 
-export async function arma(arma){
+export async function arma(arma) {
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/arma`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -52,7 +63,7 @@ export async function arma(arma){
     return boolValue;
 }
 
-export async function crearSkin(skin){
+export async function crearSkin(skin) {
     const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/skin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -133,8 +144,22 @@ export async function deleteSkin(id) {
     }
 }
 
+export async function deleteBroadcastNews(id) {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/deleteBroadcastNews/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al borrar la noticia');
+    }
+}
+
 export async function updateMap(id, map) {
-try {
+    try {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updatemapa/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -208,6 +233,21 @@ export async function updateSkin(id, skin) {
     }
 }
 
+export async function updateBroadcastNews(id, news) {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/updateBroadcastNews/${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(news),
+        });
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al actualizar las noticias');
+    }
+}
+
 export async function getMapa() {
     try {
         const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getMapa`);
@@ -271,6 +311,17 @@ export async function getAssets() {
     } catch (error) {
         console.error(error);
         throw new Error('Error al obtener los assets');
+    }
+}
+
+export async function getBroadcastNews() {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/getBroadcastNews`);
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al obtener Broadcast News');
     }
 }
 
@@ -440,9 +491,25 @@ export async function getOdooStatus() {
     }
 }
 
-export async function syncOdoo(){
+export async function syncOdoo() {
     try {
         const response = await fetch(`http://localhost:3169/syncOdoo`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al sincronizar Odoo');
+    }
+}
+
+// SYNC CLIENTES ODOO
+export async function syncOdooClient(){
+    try {
+        const response = await fetch(`http://localhost:3169/syncClientOdoo
+        `, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });

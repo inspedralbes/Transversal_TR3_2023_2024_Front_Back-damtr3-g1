@@ -4,10 +4,10 @@ import { normalizeURL, decode } from 'ufo'
 import { interopDefault } from './utils'
 import scrollBehavior from './router.scrollBehavior.js'
 
-const _0f979f5a = () => interopDefault(import('..\\pages\\dashboard.vue' /* webpackChunkName: "pages/dashboard" */))
-const _587b4f09 = () => interopDefault(import('..\\pages\\home.vue' /* webpackChunkName: "pages/home" */))
-const _624cc412 = () => interopDefault(import('..\\pages\\procesos.vue' /* webpackChunkName: "pages/procesos" */))
-const _0b2bd598 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
+const _b0baef3a = () => interopDefault(import('..\\pages\\dashboard.vue' /* webpackChunkName: "pages/dashboard" */))
+const _59832460 = () => interopDefault(import('..\\pages\\home.vue' /* webpackChunkName: "pages/home" */))
+const _462c15e9 = () => interopDefault(import('..\\pages\\procesos.vue' /* webpackChunkName: "pages/procesos" */))
+const _2b1eab21 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
 
@@ -22,19 +22,19 @@ export const routerOptions = {
 
   routes: [{
     path: "/dashboard",
-    component: _0f979f5a,
+    component: _b0baef3a,
     name: "dashboard"
   }, {
     path: "/home",
-    component: _587b4f09,
+    component: _59832460,
     name: "home"
   }, {
     path: "/procesos",
-    component: _624cc412,
+    component: _462c15e9,
     name: "procesos"
   }, {
     path: "/",
-    component: _0b2bd598,
+    component: _2b1eab21,
     name: "index"
   }],
 
