@@ -1,19 +1,19 @@
 version: '3.8'
 
 services:
-  apache:
-    image: httpd:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./tu_web:/usr/local/apache2/htdocs
-    restart: always
+  # apache:
+  #   image: httpd:latest
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./tu_web:/usr/local/apache2/htdocs
+  #   restart: always
 
   nodejs:
     build: 
       context: .
       dockerfile: Dockerfile.nodejs
     volumes:
-      - ./tu_aplicacion:/app
+      - ./:/app
     command: node index.js
     restart: always
