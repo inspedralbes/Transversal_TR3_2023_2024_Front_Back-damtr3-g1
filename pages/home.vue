@@ -13,15 +13,15 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       
-      <!-- ver broadcast news -->
+     <!-- ver broadcast news -->
       <div style="margin-top: 70px;" class="broadcast-news">
         <v-row>
           <v-col v-for="(news, index) in newsList" :key="index" cols="6">
-            <v-card style="width: 900px; height: 500px;">
-              <v-card-title>{{ news.title }}</v-card-title>
+            <v-card class="news-card">
+              <v-card-title class="news-title">{{ news.title }}</v-card-title>
               <v-row>
                 <v-col cols="6">
-                  <v-card-text>{{ news.description }}</v-card-text>
+                  <v-card-text class="news-description" style="margin-bottom: 25px;">{{ news.description }}</v-card-text>
                 </v-col>
                 <v-col cols="6">
                   <img :src="news.image" alt="News Image" class="news-image">
@@ -31,7 +31,6 @@
           </v-col>
         </v-row>
       </div>
-
 
       <!-- DIALOG CON LAS NOTICIAS EDITAR + ELIMINAR-->
       <v-dialog v-model="dialogVisible" max-width="2000">
@@ -265,6 +264,48 @@ export default {
 </script>
 
 <style scoped>
+.news-card {
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5; /* Color de fondo */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.news-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333; /* Color del título */
+  padding: 16px;
+}
+
+.news-description {
+  color: #555; /* Color de la descripción */
+  padding: 0 16px;
+}
+
+.news-image {
+  width: 100%;
+  height: auto;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.broadcast-news {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.broadcast-news v-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+
 .black-text {
   color: rgb(118, 118, 255);
 }
