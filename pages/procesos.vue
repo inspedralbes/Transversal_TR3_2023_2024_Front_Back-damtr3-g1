@@ -816,8 +816,9 @@ export default {
 
         console.log("foto a subir", this.skinEditado.pngSkin);
         console.log("foto nompre para eliminar", this.imagenSkinEditado);
-        await editSkinimg(this.skinEditado.pngSkin, this.imagenSkinEditado);
-
+        if (this.skinEditado.pngSkin !== this.imagenSkinEditado) {
+      await editSkinimg(this.skinEditado.pngSkin, this.imagenSkinEditado);
+    }
         await updateSkin(this.idEditada, skinEditadoSinId);
         this.getProductos();
       }
