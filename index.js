@@ -26,16 +26,16 @@ let sales = [];
 const http = require('http');
 
 /*****************ACCES A DADES AMB PERSISTENCIA********************* */
-const conn = require('./persistencia/Connexio.js');
-const bdEstadistiques = require('./persistencia/Estadistiques.js');
-const bdUsuaris = require('./persistencia/Usuaris.js');
+const conn = require('./persistenciaSQL/Connexio.js');
+const bdEstadistiques = require('./persistenciaSQL/Estadistiques.js');
+const bdUsuaris = require('./persistenciaSQL/Usuaris.js');
 
 const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin } = require('./funcionesmongo/personajeskin');
 const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
-const insertDataIntoOdoo = require ('./odoo/odooproduct.js');
-const insertClientOdoo = require ('./odoo/odooclient.js');
+const insertDataIntoOdoo = require('./odoo/odooproduct.js');
+const insertClientOdoo = require('./odoo/odooclient.js');
 
 
 //Definim la sessió i encenem el servidor
@@ -48,7 +48,7 @@ var sess = {
     //app.use és el intermediari, middleware
     secret: "paraula secreta",
     resave: false, //Obsolet
-    saveUninitialized: true, 
+    saveUninitialized: true,
     data: {
         motor_ences: false,
     },
@@ -65,7 +65,7 @@ app.use(express.json());
 
 //Connexió a base de dades
 const mysql = require("mysql2");
-const { error } = require("console");
+const { error, log } = require("console");
 const { SourceTextModule } = require("vm");
 
 
@@ -185,7 +185,7 @@ app.get("/getEstadisticas/:id", async (req, res) => {
 })
 
 app.get("/getUsuarios/", async (req, res) => {
-   res.send(await bdUsuaris.getUsuaris())
+    res.send(await bdUsuaris.getUsuaris())
 })
 
 app.get("/getAssets", async (req, res) => {
@@ -253,55 +253,98 @@ app.get("/getSkin", async (req, res) => {
     }
 });
 
-app.get("/getImg", (req,res) =>{
-    console.log(req.body.path)
-    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + req.body.path;
-    res.sendFile(path);
+
+app.get("/getTenda", async (req, res) => {
+    try {
+        const database = client.db('Juego');
+        const collection = database.collection('tienda');
+        const result = await collection.find().toArray();
+        res.status(200).json(result);
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 })
 
-app.get("/getTenda", (req,res)=>{
-   
-})
-
-app.get("/getNovaTenda", (req,res)=>{
-    var data;
+app.get("/getNovaTenda", (req, res) => {
+    var data = ''; // Inicializamos data como un string vacío
     const options = {
-        hostname: 'r6pixel.dam.inspedralbes.cat', 
+        hostname: 'r6pixel.dam.inspedralbes.cat',
+        port: 3169,
         path: '/getAssets',
         method: 'GET'
-      };
+    };
 
-      const request = http.request(options, (res) => {
-      
-        // A chunk of data has been received
-        res.on('data', (chunk) => {
-          data += chunk;
+    const reqHttp = http.request(options, (response) => {
+        // Un fragmento de datos ha sido recibido
+        response.on('data', (chunk) => {
+            data += chunk;
         });
-      
-        // The whole response has been received
-        res.on('end', () => {
-          console.log(data); // Output the received data
+
+        // Toda la respuesta ha sido recibida
+        response.on('end', () => {
+            data = JSON.parse(data); // Convertir los datos a JSON
+            data = data["skins"];
+            data = getRandomSkin(data, 4); // Obtener 4 elementos aleatorios
+
+            // Función para borrar el contenido de la tienda
+            const database = client.db('Juego');
+            const collection = database.collection('tienda');
+            collection.deleteMany({}) // Borrar todos los documentos de la colección tienda
+                .then(() => {
+                    // Función para añadir cada skin a la tienda actual
+                    let insertPromises = data.map(skin => {
+                        // Añadir cada skin a la tienda actual utilizando el ID de la skin
+                        console.log(skin); // Mostrar
+                        return collection.insertOne(skin);
+                    });
+
+                    Promise.all(insertPromises)
+                        .then(() => {
+                            res.json(data);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            res.status(500).send('Error interno del servidor');
+                        });
+                })
+                .catch(error => {
+                    console.error(error);
+                    res.status(500).send('Error interno del servidor');
+                });
         });
-      });
-      
-      // Handling errors
-      request.on('error', (error) => {
+    });
+
+    // Manejo de errores
+    reqHttp.on('error', (error) => {
         console.error(error);
-      });
-      
-      // End the request
-      request.end();
+        // Responder con un código de error en caso de que ocurra un error durante la solicitud HTTP
+        res.status(500).send('Error interno del servidor');
+    });
 
-      data = data["skins"];
-      data = getRandomItems(data, 4);
-      
-      //FUNCIO ESBORRAR TAULA TENDA
+    // Finalizar la solicitud
+    reqHttp.end();
+});
 
-      //FUNCIO AFEGIR ITEM A TAULA TENDA
-      data.forEach(skin => {
-        //AFEGIR CADA SKIN A LA TENDA ACTUAL
-      });
-})
+function getRandomSkin(array, n) {
+    let result = [];
+    let tempArray = [...array]; // Crear una copia del array original
+
+    while (result.length < n && tempArray.length > 0) {
+        // Seleccionar un índice aleatorio
+        let randomIndex = Math.floor(Math.random() * tempArray.length);
+
+        // Añadir el elemento seleccionado al resultado
+        result.push(tempArray[randomIndex]);
+
+        // Eliminar el elemento seleccionado del array temporal para evitar duplicados
+        tempArray.splice(randomIndex, 1);
+    }
+
+    return result;
+}
+
+
 app.get("/getSales", (req, res) => {
     res.send(sales)
 })
@@ -356,7 +399,7 @@ app.post("/login", async (req, res) => {
     var user = req.body.user;
     var pwd = req.body.pwd;
 
-  
+
     var resultat = await bdUsuaris.getUsuari(user);
 
     if (resultat.length === 0) {
@@ -417,9 +460,9 @@ app.post("/unirSala", (req, res) => {
 })
 
 
-app.post("/updateCliente", async (req,res)=>{    
-    await bdUsuaris.updateUsuari(req.body.gmail, req.body.activo,  req.body.nombre_usuario, req.body.fecha_nacimiento, req.body.idUser);
-    res.send({updated: true});
+app.post("/updateCliente", async (req, res) => {
+    await bdUsuaris.updateUsuari(req.body.gmail, req.body.activo, req.body.nombre_usuario, req.body.fecha_nacimiento, req.body.idUser);
+    res.send({ updated: true });
 
 })
 
@@ -438,16 +481,16 @@ function generateRandomString(length) {
 function getRandomItems(array, count) {
     // Create a copy of the original array to avoid modifying it
     const shuffledArray = array.slice();
-    
+
     // Shuffle the array using Fisher-Yates algorithm
     for (let i = shuffledArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
-    
+
     // Return the first 'count' items from the shuffled array
     return shuffledArray.slice(0, count);
-  }
+}
 
 //Funció per a encriptar passwords i strings
 function Encriptar(string) {
@@ -479,7 +522,7 @@ function Comparar(plainTextPassword, hashedPassword) {
 app.post("/addStats", async (req, res) => {
     var id = req.body.id
     var resultat2 = await bdEstadistiques.getEstadistiques(id);
-    await bdEstadistiques.updateEstadistiques(resultat2.PartidasJugadas,resultat2.TiempoPartida, req.body.tiempoJugado,resultat2.kills , req.body.kills, resultat2.deaths, req.body.deaths, resultat2.assists,  req.body.assists, resultat2.wins, req.body.wins )
+    await bdEstadistiques.updateEstadistiques(resultat2.PartidasJugadas, resultat2.TiempoPartida, req.body.tiempoJugado, resultat2.kills, req.body.kills, resultat2.deaths, req.body.deaths, resultat2.assists, req.body.assists, resultat2.wins, req.body.wins)
 })
 
 
