@@ -253,12 +253,17 @@ app.get("/getSkin", async (req, res) => {
     }
 });
 
+app.get("/getImg", (req,res) =>{
+    console.log(req.body.path)
+    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + req.body.path;
+    res.sendFile(path);
+})
 
 app.get("/getTenda", (req,res)=>{
    
 })
 
-app.get("getNovaTenda", (req,res)=>{
+app.get("/getNovaTenda", (req,res)=>{
     var data;
     const options = {
         hostname: 'r6pixel.dam.inspedralbes.cat', 
@@ -266,7 +271,7 @@ app.get("getNovaTenda", (req,res)=>{
         method: 'GET'
       };
 
-      const req = http.request(options, (res) => {
+      const request = http.request(options, (res) => {
       
         // A chunk of data has been received
         res.on('data', (chunk) => {
@@ -280,12 +285,12 @@ app.get("getNovaTenda", (req,res)=>{
       });
       
       // Handling errors
-      req.on('error', (error) => {
+      request.on('error', (error) => {
         console.error(error);
       });
       
       // End the request
-      req.end();
+      request.end();
 
       data = data["skins"];
       data = getRandomItems(data, 4);
