@@ -8,8 +8,8 @@ Ejecutar estos comandos:
 
 eval $(ssh-agent -s)
 
-chmod 600 ssh-key-2024-03-14.key
+chmod 600 ssh-key-2024-03-18.key
 
-ssh-add ssh-key-2024-03-14.key
+ssh-add ssh-key-2024-03-18.key
 
 ssh opc@138.2.179.252
