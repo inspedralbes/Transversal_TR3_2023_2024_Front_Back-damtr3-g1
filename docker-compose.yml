@@ -13,7 +13,9 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.nodejs
+    ports:
+      - "3169:3169"
     volumes:
-      - ./:/app
+      - ./tu_aplicacion:/app
     command: node index.js
     restart: always
