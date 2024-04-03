@@ -65,7 +65,7 @@ app.use(express.json());
 
 //Connexió a base de dades
 const mysql = require("mysql2");
-const { error } = require("console");
+const { error, log } = require("console");
 const { SourceTextModule } = require("vm");
 
 
@@ -283,26 +283,35 @@ app.get("/getNovaTenda", (req, res) => {
 
         // Toda la respuesta ha sido recibida
         response.on('end', () => {
-            console.log(data); // Mostrar los datos recibidos
-            const skins = JSON.parse(data)["skins"];
+            data = JSON.parse(data); // Convertir los datos a JSON
+            data = data["skins"];
+            data = getRandomSkin(data, 4); // Obtener 4 elementos aleatorios
 
             // Función para borrar el contenido de la tienda
             const database = client.db('Juego');
             const collection = database.collection('tienda');
-            collection.deleteMany({}); // Borrar todos los documentos de la colección tienda
+            collection.deleteMany({}) // Borrar todos los documentos de la colección tienda
+                .then(() => {
+                    // Función para añadir cada skin a la tienda actual
+                    let insertPromises = data.map(skin => {
+                        // Añadir cada skin a la tienda actual utilizando el ID de la skin
+                        console.log(skin); // Mostrar
+                        return collection.insertOne(skin);
+                    });
 
-            // Función para seleccionar aleatoriamente cuatro skins
-            const randomSkins = getRandomItems(skins, 4);
-
-            // Función para añadir cada skin a la tienda actual
-            for (let i = 0; i < randomSkins.length; i++) {
-                const skin = randomSkins[i];
-                // Añadir cada skin a la tienda actual utilizando el ID de la skin como _id
-                collection.insertOne({ _id: skin.id, ...skin }); // Utilizamos el ID de la skin como _id en la base de datos
-            }
-
-            // Responder a la solicitud con los datos procesados
-            res.json(randomSkins); // Por ejemplo, podrías enviar los datos procesados como respuesta
+                    Promise.all(insertPromises)
+                        .then(() => {
+                            res.json(data);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            res.status(500).send('Error interno del servidor');
+                        });
+                })
+                .catch(error => {
+                    console.error(error);
+                    res.status(500).send('Error interno del servidor');
+                });
         });
     });
 
@@ -317,6 +326,23 @@ app.get("/getNovaTenda", (req, res) => {
     reqHttp.end();
 });
 
+function getRandomSkin(array, n) {
+    let result = [];
+    let tempArray = [...array]; // Crear una copia del array original
+
+    while (result.length < n && tempArray.length > 0) {
+        // Seleccionar un índice aleatorio
+        let randomIndex = Math.floor(Math.random() * tempArray.length);
+
+        // Añadir el elemento seleccionado al resultado
+        result.push(tempArray[randomIndex]);
+
+        // Eliminar el elemento seleccionado del array temporal para evitar duplicados
+        tempArray.splice(randomIndex, 1);
+    }
+
+    return result;
+}
 
 
 app.get("/getSales", (req, res) => {
