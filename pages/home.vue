@@ -12,24 +12,33 @@
       <v-btn fab dark color="primary" class="fab-btn" @click="openDialog">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
-
-      <!-- ver brodcast news -->
-      <div class="broadcast-news">
-        <div v-for="(news, index) in newsList" :key="index" class="news-item">
-          <img :src="news.image" alt="News Image" class="news-image">
-          <div class="news-content">
-            <h2 class="news-title">{{ news.title }}</h2>
-            <p class="news-description">{{ news.description }}</p>
-          </div>
-        </div>
+      
+      <!-- ver broadcast news -->
+      <div style="margin-top: 70px;" class="broadcast-news">
+        <v-row>
+          <v-col v-for="(news, index) in newsList" :key="index" cols="6">
+            <v-card style="width: 900px; height: 500px;">
+              <v-card-title>{{ news.title }}</v-card-title>
+              <v-row>
+                <v-col cols="6">
+                  <v-card-text>{{ news.description }}</v-card-text>
+                </v-col>
+                <v-col cols="6">
+                  <img :src="news.image" alt="News Image" class="news-image">
+                </v-col>  
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
       </div>
 
-      <!-- DIALOG CON LAS NOTICIAS -->
+
+      <!-- DIALOG CON LAS NOTICIAS EDITAR + ELIMINAR-->
       <v-dialog v-model="dialogVisible" max-width="2000">
         <v-card>
           <v-card-title class="d-flex justify-space-between align-center">
             <span class="headline">Administrar noticias</span>
-            <v-btn @click="openCreateDialog">Crear noticias</v-btn>
+            <v-btn color="blue" @click="openCreateDialog">Crear noticias</v-btn>
           </v-card-title>
           <v-card-text>
             <v-row>
@@ -54,14 +63,14 @@
 
       <!-- DIALOG para EDITAR noticia -->
       <v-dialog v-model="updateDialogVisible" max-width="600">
-        <v-card>
+        <v-card style="max-height: 1900px;">
           <v-card-title>
             <span class="headline">Editar Noticia</span>
           </v-card-title>
           <v-card-text>
 
             <v-text-field v-model="newsEditList.title" label="Título"></v-text-field>
-            <v-text-field v-model="newsEditList.description" label="Descripción"></v-text-field>
+            <v-textarea v-model="newsEditList.description" label="Descripción" auto-grow></v-textarea>
             <input type="file" @change="onFileChangeUpdate" class="black-text">
 
           </v-card-text>
@@ -72,8 +81,6 @@
         </v-card>
       </v-dialog>
 
-
-
       <!-- DIALOG para crear noticia -->
       <v-dialog v-model="createDialogVisible" max-width="600">
         <v-card>
@@ -81,11 +88,9 @@
             <span class="headline">Crear Noticia</span>
           </v-card-title>
           <v-card-text>
-
             <v-text-field v-model="newsCreateList.title" label="Título"></v-text-field>
-            <v-text-field v-model="newsCreateList.description" label="Descripción"></v-text-field>
+            <v-textarea v-model="newsCreateList.description" label="Descripción" auto-grow></v-textarea>
             <input type="file" @change="onFileChange" class="black-text">
-
           </v-card-text>
           <v-card-actions>
             <v-btn color="blue darken-1" text @click="createNews">Guardar</v-btn>
