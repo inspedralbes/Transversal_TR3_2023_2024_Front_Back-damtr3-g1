@@ -8,7 +8,7 @@
         <v-btn text @click="goToDashboard">Dashboard</v-btn>
       </v-app-bar>
 
-      <!-- BTN para entrar en modo editor de noticias style="margin-top: 90px; margin-left: 20px;"  -->
+      <!-- BTN para entrar en modo editor de noticias -->
       <v-btn fab dark color="primary" class="fab-btn" @click="openDialog">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
@@ -37,7 +37,7 @@
                 <v-card class="news-item" style="margin: 20px; width: 700px;" max-width="100%">
                   <v-card-text class="d-flex justify-space-between align-center">
                     <h2 style="color: black;">{{ news.title }}</h2>
-                    <v-btn @click="openUpdateDialog">Editar</v-btn>
+                    <v-btn @click="openUpdateDialog(news)">Editar</v-btn>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -49,6 +49,28 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+ <!-- DIALOG para EDITAR noticia -->
+ <v-dialog v-model="updateDialogVisible" max-width="600">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Editar Noticia</span>
+          </v-card-title>
+          <v-card-text>
+
+            <v-text-field v-model="newsEditList.title" label="Título"></v-text-field>
+            <v-text-field v-model="newsEditList.description" label="Descripción"></v-text-field>
+            <input type="file" @change="onFileChangeUpdate" class="black-text">
+
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="blue darken-1" text @click="createNews">Guardar</v-btn>
+            <v-btn color="red" text @click="closeUpdateDialog">Cancelar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+
 
       <!-- DIALOG para crear noticia -->
       <v-dialog v-model="createDialogVisible" max-width="600">
@@ -91,6 +113,9 @@ export default {
         description: ""
       },
       file: "",
+      updateFile: "",
+      idEditada:null,
+      noticiaEditadaIndex: null,
       dialogVisible: false,
       createDialogVisible: false,
       updateDialogVisible: false
@@ -114,16 +139,31 @@ export default {
     // UPDATE NOTICIAS
     async saveNews() {
 
-      // Realizar la petición de actualización del estado
-      await updateBroadcastNews(id, this.newsEditList);
+       // Guardar los cambios realizados en la noticia
+       if (this.idEditada !== null) {
 
+      let noticiaEditadaSinId = { ...this.newsEditList };
+      delete noticiaEditadaSinId._id;
+
+      // Actualizar la noticia existente en newsList con los datos modificados
+      this.$set(this.newsList, this.noticiaEditadaIndex, noticiaEditadaSinId);
+
+      try {
+      // Realizar la petición de actualización del estado
+      await updateBroadcastNews(this.idEditada, noticiaEditadaSinId);
+      
       // LMPIAR CAMPOS
       this.limpiarCampos();
 
-      // Actualizar la lista
-      this.loadNews();
-
       this.closeDialog();
+
+      // Actualizar la lista
+      await this.loadNews();
+
+    } catch (error) {
+      console.error('Error updating news:', error);
+    }
+      }
     },
 
     // CREAR NOTICIAS
@@ -182,10 +222,12 @@ export default {
       };
       this.file = "";
     },
-    openUpdateDialog(noticia) {
+    openUpdateDialog(news) {
       // Cargar los datos del producto seleccionado en el diálogo de edición
-      this.newsEditList = { ...noticia };
-      this.idEditada = noticia._id;
+      this.newsEditList = { ...news };
+      this.idEditada = news._id;
+      // Guardar el índice de la noticia editanda
+      this.noticiaEditadaIndex = this.newsList.indexOf(news);
       this.updateDialogVisible = true;
     },
     closeUpdateDialog() {
@@ -196,6 +238,11 @@ export default {
       this.file = event.target.files[0];
       // Asignar el archivo a la propiedad image
       this.newsCreateList.image = this.file;
+    },
+    onFileChangeUpdate(event) {
+      this.updateFile = event.target.files[0];
+      // Asignar el archivo a la propiedad image
+      this.newsEditList.image = this.updateFile;
     }
   }
 };
