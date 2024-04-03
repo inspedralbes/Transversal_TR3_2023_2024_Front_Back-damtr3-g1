@@ -1,5 +1,6 @@
-bdConnexio = require("./Connexio.js");
-conn = bdConnexio.conn;
+const mysql = require("mysql2");
+
+const conn = require("./Connexio.js");
 
 module.exports = {
     getEstadistiques: function(id){
