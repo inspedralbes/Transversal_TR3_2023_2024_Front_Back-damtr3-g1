@@ -12,4 +12,4 @@ chmod 600 ssh-key-2024-03-18.key
 
 ssh-add ssh-key-2024-03-18.key
 
-ssh opc@138.2.179.252
+ssh ubuntu@89.168.118.150
