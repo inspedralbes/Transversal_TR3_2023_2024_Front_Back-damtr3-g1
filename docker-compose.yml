@@ -16,6 +16,6 @@ services:
     ports:
       - "3169:3169"
     volumes:
-      - ./tu_aplicacion:/app
+      - ./:/app
     command: node index.js
     restart: always
