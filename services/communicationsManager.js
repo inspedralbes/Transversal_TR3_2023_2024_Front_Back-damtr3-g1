@@ -491,6 +491,21 @@ export async function getOdooStatus() {
     }
 }
 
+// VER ESTADO SERVER
+export async function getServerStatus() {
+    try {
+        const response = await fetch(`http://r6pixel.dam.inspedralbes.cat:3169/checkarServidor`);
+        if (response.ok) {
+            return true; 
+        } else {
+            return false; 
+        }
+    } catch (error) {
+        console.error(error);
+        return false; 
+    }
+}
+
 export async function syncOdoo() {
     try {
         const response = await fetch(`http://localhost:3169/syncOdoo`, {
@@ -506,7 +521,7 @@ export async function syncOdoo() {
 }
 
 // SYNC CLIENTES ODOO
-export async function syncOdooClient(){
+export async function syncOdooClient() {
     try {
         const response = await fetch(`http://localhost:3169/syncClientOdoo
         `, {

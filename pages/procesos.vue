@@ -1,5 +1,3 @@
-
-
 <template>
   <v-app>
     <!-- APP BAR -->
@@ -22,11 +20,7 @@
                 {{ odooServerRunning ? "Parar Odoo" : "Arrancar Odoo" }}
               </v-btn>
               <v-btn @click="toggleGameServers" block style="margin-top: 20px">
-                {{
-                  gameServersRunning
-                    ? "Parar Servidores del Juego"
-                    : "Arrancar Servidores del Juego"
-                }}
+                {{ gameServersRunning ? "Servidores del Juego Arrancados" : "Servidores del Juego Parados" }}
               </v-btn>
             </v-card-text>
           </v-card>
@@ -37,12 +31,8 @@
           <v-card class="mx-auto" max-width="400">
             <v-card-title>Panel de Control Productos</v-card-title>
             <v-card-text>
-              <v-btn @click="sincroProductos" block
-                >Sincronizar Productos</v-btn
-              >
-              <v-btn @click="openProductosDialog" block style="margin-top: 20px"
-                >Ver Productos</v-btn
-              >
+              <v-btn @click="sincroProductos" block>Sincronizar Productos</v-btn>
+              <v-btn @click="openProductosDialog" block style="margin-top: 20px">Ver Productos</v-btn>
             </v-card-text>
           </v-card>
         </v-col>
@@ -53,9 +43,7 @@
             <v-card-title>Panel de Control Clientes</v-card-title>
             <v-card-text>
               <v-btn @click="sincroClientes" block>Sincronizar Clientes</v-btn>
-              <v-btn @click="openClientesDialog" block style="margin-top: 20px"
-                >Ver Clientes</v-btn
-              >
+              <v-btn @click="openClientesDialog" block style="margin-top: 20px">Ver Clientes</v-btn>
             </v-card-text>
           </v-card>
         </v-col>
@@ -65,8 +53,7 @@
           <v-card class="mx-auto" max-width="400">
             <v-card-title>Panel de Control Mapas</v-card-title>
             <v-card-text>
-              <v-btn @click="sincroMapas" block>Sincronizar Mapas</v-btn>
-              <v-btn @click="openMapaDialog" block style="margin-top: 20px">
+              <v-btn @click="openMapaDialog" block>
                 Ver Mapas</v-btn>
             </v-card-text>
           </v-card>
@@ -75,12 +62,7 @@
     </v-container>
 
     <!-- PANEL DE PRODUCTOS -->
-    <v-dialog
-      v-model="productosDialog"
-      max-width="1900"
-      max-height="1900"
-      style="height: auto; width: auto"
-    >
+    <v-dialog v-model="productosDialog" max-width="1900" max-height="1900" style="height: auto; width: auto">
       <template v-slot:activator="{ on }"></template>
       <v-card>
         <v-card-title>Lista de Productos</v-card-title>
@@ -91,15 +73,9 @@
               <v-card-title style="color: white">Personajes</v-card-title>
               <v-spacer></v-spacer>
               <!-- Esto empuja el botón a la derecha -->
-              <v-btn color="primary" @click="dialogPersonaje = true"
-                >Crear Personaje</v-btn
-              >
+              <v-btn color="primary" @click="dialogPersonaje = true">Crear Personaje</v-btn>
               <v-row>
-                <v-col
-                  v-for="(personaje, index) in productos.personajes"
-                  :key="index"
-                  cols="12"
-                  md="6">
+                <v-col v-for="(personaje, index) in productos.personajes" :key="index" cols="12" md="6">
                   <v-card>
                     <v-card-title>{{ personaje.nombre }}</v-card-title>
                     <v-card-text>
@@ -107,18 +83,8 @@
                       <div>Skin: {{ personaje.idSkin }}</div>
                     </v-card-text>
                     <v-card-actions>
-                      <v-btn
-                        color="primary"
-                        text
-                        @click="editarPersonaje(personaje)"
-                        >Editar</v-btn
-                      >
-                      <v-btn
-                        color="error"
-                        text
-                        @click="eliminarPersonaje(personaje)"
-                        >Eliminar</v-btn
-                      >
+                      <v-btn color="primary" text @click="editarPersonaje(personaje)">Editar</v-btn>
+                      <v-btn color="error" text @click="eliminarPersonaje(personaje)">Eliminar</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-col>
@@ -135,30 +101,18 @@
               <v-card-title style="color: white">Skins</v-card-title>
               <v-spacer></v-spacer>
               <!-- Esto empuja el botón a la derecha -->
-              <v-btn color="primary" @click="dialogSkin = true"
-                >Crear Pack Skin</v-btn
-              >
+              <v-btn color="primary" @click="dialogSkin = true">Crear Pack Skin</v-btn>
               <v-row>
-                <v-col
-                  v-for="(skin, index) in productos.skins"
-                  :key="index"
-                  cols="12"
-                  md="6"
-                >
+                <v-col v-for="(skin, index) in productos.skins" :key="index" cols="12" md="6">
                   <v-card>
                     <v-card-title>{{ skin.nombre }}</v-card-title>
                     <v-card-text>
                       <div>Valor en Monedas: {{ skin.valorMonedas }}</div>
-                      <div>Valor en Gemas: {{ skin.valorGemas }}</div>
                       <div>Imagen: {{ skin.pngSkin }}</div>
                     </v-card-text>
                     <v-card-actions>
-                      <v-btn color="primary" text @click="editarSkin(skin)"
-                        >Editar</v-btn
-                      >
-                      <v-btn color="error" text @click="eliminarSkin(skin)"
-                        >Eliminar</v-btn
-                      >
+                      <v-btn color="primary" text @click="editarSkin(skin)">Editar</v-btn>
+                      <v-btn color="error" text @click="eliminarSkin(skin)">Eliminar</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-col>
@@ -167,222 +121,116 @@
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" text @click="closeProductosDialog"
-            >Cerrar</v-btn
-          >
+          <v-btn color="primary" text @click="closeProductosDialog">Cerrar</v-btn>
         </v-card-actions>
       </v-card>
+    </v-dialog>
 
-      <!-- Diálogo de Edición de Productos -->
-      <v-dialog v-model="editarPersonajeDialog" max-width="500">
-        <v-card>
-          <v-card-title>Editar Personaje</v-card-title>
-          <v-card-text>
-            <!-- Aquí agregar campos de edición para el producto -->
-            <v-text-field
-              v-model="personajeEditado.nombre"
-              label="Nombre"
-            ></v-text-field>
-            <v-text-field
-              v-model="personajeEditado.lvlDesbloqueo"
-              label="Nivel Desbloqueo"
-            ></v-text-field>
-            <v-text-field
-              v-model="personajeEditado.descripcion"
-              label="Descripción"
-            ></v-text-field>
-            <v-row>
-              <v-col
-                v-for="skin in productos.skins"
-                :key="skin._id"
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <v-checkbox
-                  v-model="personajeEditado.packSkins"
-                  :label="skin.nombre"
-                  :value="skin._id"
-                  :input-value="
-                    personajeEditado.packSkins &&
-                    personajeEditado.packSkins.includes(skin._id)
-                  "
-                ></v-checkbox>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" text @click="guardarCambiosPersonaje"
-              >Guardar Cambios</v-btn
-            >
-            <v-btn color="primary" text @click="cancelarEdicionPersonaje">
-              Cancelar</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+    <!-- Diálogo de Edición de Productos -->
+    <v-dialog v-model="editarPersonajeDialog" max-width="500">
+      <v-card>
+        <v-card-title>Editar Personaje</v-card-title>
+        <v-card-text>
+          <!-- Aquí agregar campos de edición para el producto -->
+          <v-text-field v-model="personajeEditado.nombre" label="Nombre"></v-text-field>
+          <v-text-field v-model="personajeEditado.lvlDesbloqueo" label="Nivel Desbloqueo"></v-text-field>
+          <v-text-field v-model="personajeEditado.descripcion" label="Descripción"></v-text-field>
+          <v-row>
+            <v-col v-for="skin in productos.skins" :key="skin._id" cols="12" sm="6" md="4">
+              <v-checkbox v-model="personajeEditado.packSkins" :label="skin.nombre" :value="skin._id" :input-value="personajeEditado.packSkins &&
+        personajeEditado.packSkins.includes(skin._id)
+        "></v-checkbox>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="guardarCambiosPersonaje">Guardar Cambios</v-btn>
+          <v-btn color="primary" text @click="cancelarEdicionPersonaje">
+            Cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-      <!-- EDITAR SKIN -->
-      <v-dialog v-model="editarSkinDialog" max-width="500">
-        <v-card>
-          <v-card-title>Editar Skin</v-card-title>
-          <v-card-text>
-            <!-- Aquí agregar campos de edición para el producto -->
-            <v-text-field
-              v-model="skinEditado.nombre"
-              label="Nombre"
-            ></v-text-field>
-            <v-text-field
-              v-model="skinEditado.descripcion"
-              label="Descripción"
-            ></v-text-field>
-            <v-file-input
-              v-model="skinEditado.pngSkin"
-              label="Archivo PNG"
-              accept="image/png"
-            />
-            <v-text-field
-              v-model="skinEditado.valorMonedas"
-              label="Precio Monedas"
-            ></v-text-field>
-            <v-text-field
-              v-model="skinEditado.valorGemas"
-              label="Precio Gemas"
-            ></v-text-field>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" text @click="guardarCambioSkin"
-              >Guardar Cambios</v-btn
-            >
-            <v-btn color="primary" text @click="cancelarEdicionSkin"
-              >Cancelar</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+    <!-- EDITAR SKIN -->
+    <v-dialog v-model="editarSkinDialog" max-width="500">
+      <v-card>
+        <v-card-title>Editar Skin</v-card-title>
+        <v-card-text>
+          <!-- Aquí agregar campos de edición para el producto -->
+          <v-text-field v-model="skinEditado.nombre" label="Nombre"></v-text-field>
+          <v-text-field v-model="skinEditado.descripcion" label="Descripción"></v-text-field>
+          <v-file-input v-model="skinEditado.pngSkin" label="Archivo PNG" accept="image/png" />
+          <v-text-field v-model="skinEditado.valorMonedas" label="Precio Monedas"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="guardarCambioSkin">Guardar Cambios</v-btn>
+          <v-btn color="primary" text @click="cancelarEdicionSkin">Cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-      <!-- Dialog para CREAR PERSONAJE  -->
-      <v-dialog v-model="dialogPersonaje" persistent max-width="600px">
-        <v-card>
-          <v-card-title>
-            <span class="headline">Nuevo Personaje</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-form ref="formPersonaje" v-model="valid">
-                <v-text-field
-                  v-model="personajeNuevo.nombre"
-                  label="Nombre"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model.number="personajeNuevo.lvlDesbloqueo"
-                  label="Nivel de Desbloqueo"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="personajeNuevo.descripcion"
-                  label="Descripción"
-                  required
-                ></v-text-field>
-                <v-row>
-                  <v-col
-                    v-for="skin in productos.skins"
-                    :key="skin._id"
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-checkbox
-                      v-model="personajeNuevo.packSkins"
-                      :label="skin.nombre"
-                      :value="skin._id"
-                    ></v-checkbox>
-                  </v-col>
-                </v-row>
-              </v-form>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="dialogPersonaje = false"
-              >Cancelar</v-btn
-            >
-            <v-btn color="blue darken-1" text @click="crearPersonaje"
-              >Guardar</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+    <!-- Dialog para CREAR PERSONAJE  -->
+    <v-dialog v-model="dialogPersonaje" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Nuevo Personaje</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-form ref="formPersonaje" v-model="valid">
+              <v-text-field v-model="personajeNuevo.nombre" label="Nombre" required></v-text-field>
+              <v-text-field v-model.number="personajeNuevo.lvlDesbloqueo" label="Nivel de Desbloqueo"
+                required></v-text-field>
+              <v-text-field v-model="personajeNuevo.descripcion" label="Descripción" required></v-text-field>
+              <v-row>
+                <v-col v-for="skin in productos.skins" :key="skin._id" cols="12" sm="6" md="4">
+                  <v-checkbox v-model="personajeNuevo.packSkins" :label="skin.nombre" :value="skin._id"></v-checkbox>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialogPersonaje = false">Cancelar</v-btn>
+          <v-btn color="blue darken-1" text @click="crearPersonaje">Guardar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-      <!-- Dialog para crear skin -->
-      <v-dialog v-model="dialogSkin" persistent max-width="600px">
-        <v-card>
-          <v-card-title>
-            <span class="headline">Nueva Skin</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-form ref="formSkin" v-model="valid">
-                <v-text-field
-                  v-model="skinNuevo.nombre"
-                  label="Nombre"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="skinNuevo.descripcion"
-                  label="Descripción"
-                  required
-                ></v-text-field>
-                <v-file-input
-                  v-model="skinNuevo.pngSkin"
-                  label="Archivo PNG"
-                  accept="image/png"
-                />
-                <v-text-field
-                  v-model.number="skinNuevo.valorMonedas"
-                  label="Valor en Monedas"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="skinNuevo.valorGemas"
-                  label="Valor en Gemas"
-                  type="number"
-                  required
-                ></v-text-field>
-              </v-form>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="dialogSkin = false"
-              >Cancelar</v-btn
-            >
-            <v-btn color="blue darken-1" text @click="crearSkin">Guardar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+    <!-- Dialog para crear skin -->
+    <v-dialog v-model="dialogSkin" persistent max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Nueva Skin</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-form ref="formSkin" v-model="valid">
+              <v-text-field v-model="skinNuevo.nombre" label="Nombre" required></v-text-field>
+              <v-text-field v-model="skinNuevo.descripcion" label="Descripción" required></v-text-field>
+              <v-file-input v-model="skinNuevo.pngSkin" label="Archivo PNG" accept="image/png" />
+              <v-text-field v-model.number="skinNuevo.valorMonedas" label="Valor en Monedas" required></v-text-field>
+            </v-form>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialogSkin = false">Cancelar</v-btn>
+          <v-btn color="blue darken-1" text @click="crearSkin">Guardar</v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
 
     <!-- PANEL DE CLIENTES -->
-    <v-dialog
-      v-model="clientesDialog"
-      max-width="1900"
-      max-height="1900"
-      style="height: auto; width: auto"
-    >
+    <v-dialog v-model="clientesDialog" max-width="1900" max-height="1900" style="height: auto; width: auto">
       <template v-slot:activator="{ on }"></template>
       <v-card>
         <v-card-title>Lista de Clientes</v-card-title>
         <v-card-text>
           <v-row>
             <!-- Aquí cargarías los productos en v-cards -->
-            <v-col
-              v-for="(cliente, index) in clientes"
-              :key="index"
-              cols="12"
-              md="4"
-            >
+            <v-col v-for="(cliente, index) in clientes" :key="index" cols="12" md="4">
               <v-card>
                 <v-card-title>{{ cliente.nombre_usuario }}</v-card-title>
                 <v-card-text>
@@ -396,56 +244,38 @@
                   <div>Última conexión: {{ cliente.ultima_conexion }}</div>
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn
-                    :color="cliente.activo ? 'error' : 'success'"
-                    text
-                    @click="toggleClienteActivo(cliente)"
-                  >
+                  <v-btn :color="cliente.activo ? 'error' : 'success'" text @click="toggleClienteActivo(cliente)">
                     {{ cliente.activo ? "Jugador Vetado" : "Jugador Activo" }}
                   </v-btn>
-                  <v-btn color="primary" text @click="editarCliente(cliente)"
-                    >Editar</v-btn
-                  >
+                  <v-btn color="primary" text @click="editarCliente(cliente)">Editar</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="primary" text @click="closeClientesDialog"
-            >Cerrar</v-btn
-          >
+          <v-btn color="primary" text @click="closeClientesDialog">Cerrar</v-btn>
         </v-card-actions>
       </v-card>
-
-      <!-- Diálogo de Edición de Clientes -->
-      <v-dialog v-model="editarClienteDialog" max-width="500">
-        <v-card>
-          <v-card-title>Editar Cliente</v-card-title>
-          <v-card-text>
-            <v-text-field
-              v-model="clienteEditado.gmail"
-              label="Gmail"
-            ></v-text-field>
-            <v-text-field
-              v-model="clienteEditado.fecha_nacimiento"
-              label="Fecha de nacimiento"
-            ></v-text-field>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="primary" text @click="guardarCambiosCliente"
-              >Guardar Cambios</v-btn
-            >
-            <v-btn color="primary" text @click="cancelarEdicionCliente"
-              >Cancelar</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </v-dialog>
 
-       <!-- Dialog para mostrar los mapas -->
-   <v-dialog v-model="mapaDialog" max-width="800">
+    <!-- Diálogo de Edición de Clientes -->
+    <v-dialog v-model="editarClienteDialog" max-width="500">
+      <v-card>
+        <v-card-title>Editar Cliente</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="clienteEditado.gmail" label="Gmail"></v-text-field>
+          <v-text-field v-model="clienteEditado.fecha_nacimiento" label="Fecha de nacimiento"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="guardarCambiosCliente">Guardar Cambios</v-btn>
+          <v-btn color="primary" text @click="cancelarEdicionCliente">Cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Dialog para mostrar los mapas -->
+    <v-dialog v-model="mapaDialog" max-width="800">
       <v-card>
         <v-card-title>Mapas</v-card-title>
         <v-card-text>
@@ -459,23 +289,23 @@
                 <v-list-item-subtitle>{{ mapa.descripcion }}</v-list-item-subtitle>
               </v-list-item-content>
               <v-btn color="blue" @click="openEditarMapaDialog(mapa, index)">
-                  Editar Mapa
-                </v-btn>
-                <v-btn style="margin-left: 15px;" color="red" @click="eliminarMapa(mapa)">Eliminar Mapa</v-btn>
+                Editar Mapa
+              </v-btn>
+              <v-btn style="margin-left: 15px;" color="red" @click="eliminarMapa(mapa)">Eliminar Mapa</v-btn>
             </v-list-item>
           </v-list>
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" @click="openAgregarMapaDialog">
-                  Añadir Mapa
+            Añadir Mapa
           </v-btn>
           <v-btn color="red" text @click="mapaDialog = false">Cerrar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-     <!-- Dialog para agregar Mapa -->
-     <v-dialog v-model="agregarMapaDialog" max-width="600">
+    <!-- Dialog para agregar Mapa -->
+    <v-dialog v-model="agregarMapaDialog" max-width="600">
       <v-card>
         <v-card-title>Añadir Mapa</v-card-title>
         <v-card-text>
@@ -492,21 +322,21 @@
     </v-dialog>
 
     <!-- Dialog para editar mapa -->
-<v-dialog v-model="editarMapaDialog" max-width="600">
-  <v-card>
-    <v-card-title>Editar Mapa</v-card-title>
-    <v-card-text>
-      <v-text-field v-model="mapaEditado.nombre" label="Nombre"></v-text-field>
-      <v-text-field v-model="mapaEditado.pngMapa" label="pngMapa"></v-text-field>
-      <v-text-field v-model.number="mapaEditado.probabilidadSpawn" label="Probabilidad de Spawn"></v-text-field>
-      <v-text-field v-model="mapaEditado.descripcion" label="Descripción"></v-text-field>
-    </v-card-text>
-    <v-card-actions>
-      <v-btn color="blue darken-1" text @click="guardarEdicionMapa">Guardar</v-btn>
-      <v-btn color="red" text @click="cancelarEdicionMapa">Cancelar</v-btn>
-    </v-card-actions>
-  </v-card>
-</v-dialog>
+    <v-dialog v-model="editarMapaDialog" max-width="600">
+      <v-card>
+        <v-card-title>Editar Mapa</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="mapaEditado.nombre" label="Nombre"></v-text-field>
+          <v-text-field v-model="mapaEditado.pngMapa" label="pngMapa"></v-text-field>
+          <v-text-field v-model.number="mapaEditado.probabilidadSpawn" label="Probabilidad de Spawn"></v-text-field>
+          <v-text-field v-model="mapaEditado.descripcion" label="Descripción"></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="blue darken-1" text @click="guardarEdicionMapa">Guardar</v-btn>
+          <v-btn color="red" text @click="cancelarEdicionMapa">Cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -516,6 +346,7 @@ import {
   getEstadisticas,
   updateCliente,
   getOdooStatus,
+  getServerStatus,
   arrancarOdoo,
   detenerOdoo,
   getAssets,
@@ -527,9 +358,9 @@ import {
   crearSkin,
   uploadSkinimg,
   editSkinimg,
-  getMapa, 
+  getMapa,
   createMap,
-  updateMap, 
+  updateMap,
   deleteMap,
   syncOdoo,
   syncOdooClient
@@ -543,6 +374,7 @@ export default {
       dialogSkin: false,
       valid: true,
       odooServerRunning: false,
+      ServerRunning: false,
       gameServersRunning: false,
       productosDialog: false,
       editarPersonajeDialog: false,
@@ -559,9 +391,8 @@ export default {
       skinEditado: {
         nombre: "",
         valorMonedas: 0,
-        valorGemas: 0,
         pngSkin: null,
-        descripcion: "",
+        descripcion: ""
       },
       personajeNuevo: {
         nombre: "",
@@ -573,8 +404,7 @@ export default {
         nombre: "",
         descripcion: "",
         pngSkin: null,
-        valorMonedas: 0,
-        valorGemas: 0,
+        valorMonedas: 0
       },
       idEditada: null,
       clientes: [],
@@ -586,23 +416,23 @@ export default {
       clienteEditandoIndex: null,
       estadisticas: [],
       mapas: [],
-    mapaDialog: false,
-    agregarMapaDialog: false,
-    editarMapaDialog: false,
-    nuevoMapa: {
+      mapaDialog: false,
+      agregarMapaDialog: false,
+      editarMapaDialog: false,
+      nuevoMapa: {
         nombre: '',
         pngMapa: '',
         probabilidadSpawn: 0,
         descripcion: ''
-    },
-    mapaEditandoIndex: null,
-    mapaEditado: {
-      mapaEditandoId:null,
+      },
+      mapaEditandoIndex: null,
+      mapaEditado: {
+        mapaEditandoId: null,
         nombre: '',
         pngMapa: '',
         probabilidadSpawn: 0,
         descripcion: ''
-    },
+      },
 
     };
   },
@@ -614,6 +444,7 @@ export default {
     console.log("MOUNTED");
     this.selectClientesLabs();
     this.odooEstado();
+    this.toggleGameServers();
     this.getProductos();
     this.selectMapas();
     console.log("productasos", this.productos);
@@ -667,9 +498,6 @@ export default {
       await detenerOdoo();
     },
 
-    // PILLAR ESTADO DEL SERVER DEL JUEGO
-    async serverEstado() {},
-
     // Lógica para sincronizar productos
     async sincroProductos() {
       await syncOdoo();
@@ -683,7 +511,7 @@ export default {
     },
 
     // HACER SELECT PRODUCTOS MONGO
-    async selectProductosMongo() {},
+    async selectProductosMongo() { },
 
     // HACER SELECT CLIENTES LABS (CLIENTES)(ESTADISTICAS)
     async selectClientesLabs() {
@@ -721,14 +549,20 @@ export default {
       }
     },
 
-    toggleGameServers() {
-      this.gameServersRunning = !this.gameServersRunning;
-      // Lógica para parar/arrancar servidores del juego
-      console.log(
-        this.gameServersRunning
-          ? "Parando servidores del juego..."
-          : "Arrancando servidores del juego..."
-      );
+    // ARRANCAR Y PARAR SERVER JUEGO
+    async toggleGameServers() {
+      try {
+        const serverStatus = await getServerStatus();
+        if (serverStatus !== undefined && serverStatus !== null) {
+          this.gameServersRunning = serverStatus;
+        } else {
+          // En caso de que la respuesta del servidor no sea válida
+          console.error("La respuesta del servidor no es válida");
+        }
+      } catch (error) {
+        console.error(error);
+        // Manejar el error de obtener el estado del servidor
+      }
     },
 
     // ABRIR VDIALOG DE PRODUCTOS
@@ -772,7 +606,7 @@ export default {
       }
     },
 
-    // EDITAR EL PRODUCTO
+    // EDITAR EL Personaje
     editarPersonaje(producto) {
       // Cargar los datos del producto seleccionado en el diálogo de edición
       this.personajeEditado = { ...producto };
@@ -780,6 +614,8 @@ export default {
       this.editarPersonajeDialog = true;
 
     },
+
+    // EDITAR SKIN
     editarSkin(producto) {
       this.imagenSkinEditado = producto.pngSkin;
 
@@ -790,8 +626,23 @@ export default {
 
     },
 
-    // GUARDAR CAMBIOS DEL PRODUCTO
+    // GUARDAR CAMBIOS DEL Personaje
     async guardarCambiosPersonaje() {
+      // Verificar que los campos no estén vacíos y cumplan con las restricciones
+      if (
+        this.personajeEditado.nombre.trim() === '' ||
+        this.personajeEditado.descripcion.trim() === '' ||
+        this.personajeEditado.nombre.length > 65 ||
+        this.personajeEditado.descripcion.length > 200 ||
+        isNaN(this.personajeEditado.lvlDesbloqueo) ||
+        this.personajeEditado.lvlDesbloqueo.toString().length > 3 ||
+        (!this.personajeEditado.packSkins || this.personajeEditado.packSkins.length === 0)
+      ) {
+        // Mostrar un mensaje de error
+        alert("Por favor, complete todos los campos correctamente.");
+        return; // Salir de la función si hay algún error
+      }
+
       // Guardar los cambios realizados en el producto
       if (this.idEditada !== null) {
         this.$set(this.productos, this.idEditada, this.personajeEditado);
@@ -805,7 +656,23 @@ export default {
       this.cancelarEdicionPersonaje();
     },
 
+    // GUARDAR CAMBIOS SKIN
     async guardarCambioSkin() {
+      // Verificar que los campos no estén vacíos y cumplan con las restricciones
+      if (
+        this.skinEditado.nombre.trim() === '' ||
+        this.skinEditado.descripcion.trim() === '' ||
+        this.skinEditado.nombre.length > 65 ||
+        this.skinEditado.descripcion.length > 200 ||
+
+        isNaN(this.skinEditado.valorMonedas) ||
+        this.skinEditado.valorMonedas.toString().length > 10
+      ) {
+        // Mostrar un mensaje de error
+        alert("Por favor, complete todos los campos correctamente.");
+        return; // Salir de la función si hay algún error
+      }
+
       // Guardar los cambios realizados en el producto
       if (this.idEditada !== null) {
         this.$set(this.productos, this.idEditada, this.skinEditado);
@@ -817,15 +684,15 @@ export default {
         console.log("foto a subir", this.skinEditado.pngSkin);
         console.log("foto nompre para eliminar", this.imagenSkinEditado);
         if (this.skinEditado.pngSkin !== this.imagenSkinEditado) {
-      await editSkinimg(this.skinEditado.pngSkin, this.imagenSkinEditado);
-    }
+          await editSkinimg(this.skinEditado.pngSkin, this.imagenSkinEditado);
+        }
         await updateSkin(this.idEditada, skinEditadoSinId);
         this.getProductos();
       }
       this.cancelarEdicionSkin();
     },
 
-    // CACELAR EDICION
+    // CACELAR EDICION Personaje
     cancelarEdicionPersonaje() {
       // Cancelar la edición y cerrar el diálogo de edición
       this.editarPersonajeDialog = false;
@@ -836,20 +703,21 @@ export default {
       }),
         (this.idEditada = null);
     },
+
+    // CACELAR EDICION SKIN
     cancelarEdicionSkin() {
       // Cancelar la edición y cerrar el diálogo de edición
       this.editarSkinDialog = false;
       (this.skinEditado = {
         nombre: "",
         valorMonedas: 0,
-        valorGemas: 0,
         pngSkin: null,
         descripcion: "",
       }),
         (this.idEditada = null);
     },
 
-    // ELIMINAR PRODUCTO ?¿
+    // ELIMINAR PRODUCTO 
     async eliminarSkin(producto) {
       if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
         await deleteSkin(producto._id);
@@ -857,6 +725,7 @@ export default {
       }
     },
 
+    // ELIMINAR PERSONAJE
     async eliminarPersonaje(producto) {
       if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
         await deletePersonaje(producto._id);
@@ -864,33 +733,79 @@ export default {
       }
     },
 
+    // CREAR PERSONAJE
     async crearPersonaje() {
+      // Verificar que los campos no estén vacíos y cumplan con las restricciones
+      if (
+        this.personajeNuevo.nombre.trim() === '' ||
+        this.personajeNuevo.descripcion.trim() === '' ||
+        this.personajeNuevo.nombre.length > 40 ||
+        isNaN(this.personajeNuevo.lvlDesbloqueo) ||
+        this.personajeNuevo.lvlDesbloqueo.toString().length > 3 ||
+        (!this.personajeNuevo.packSkins || this.personajeNuevo.packSkins.length === 0)
+      ) {
+        // Mostrar un mensaje de error
+        alert("Por favor, complete todos los campos correctamente.");
+        return; // Salir de la función si hay algún error
+      }
+
+      // Crear el nuevo personaje
       await createPersonaje(this.personajeNuevo);
+
+      // Restablecer los valores a los predeterminados
       this.personajeNuevo = {
         nombre: "",
         lvlDesbloqueo: 0,
         descripcion: "",
         packSkins: [],
       };
+
+      // Cerrar el diálogo de creación de personaje
       this.dialogPersonaje = false;
+
+      // Actualizar la lista de productos
       this.getProductos();
     },
+
+    // CREAR SKIN
     async crearSkin() {
+      // Verificar que los campos no estén vacíos y cumplan con las restricciones
+      if (
+        this.skinNuevo.nombre.trim() === '' ||
+        this.skinNuevo.descripcion.trim() === '' ||
+        this.skinNuevo.nombre.length > 40 ||
+        isNaN(this.skinNuevo.valorMonedas) ||
+        this.skinNuevo.valorMonedas.toString().length > 10 ||
+        this.skinNuevo.pngSkin === null
+      ) {
+        // Mostrar un mensaje de error
+        alert("Por favor, complete todos los campos correctamente.");
+        return; // Salir de la función si hay algún error
+      }
+
+      // Crear la nueva skin
       let skinNuevoCopy = { ...this.skinNuevo };
       skinNuevoCopy.pngSkin = skinNuevoCopy.pngSkin.name;
       await crearSkin(skinNuevoCopy);
 
+      // Subir la imagen de la skin
       await uploadSkinimg(this.skinNuevo.pngSkin);
+
+      // Restablecer los valores a los predeterminados
       this.skinNuevo = {
         nombre: "",
         valorMonedas: 0,
-        valorGemas: 0,
-        pngSkin: null,
         descripcion: "",
+        pngSkin: null,
       };
+
+      // Cerrar el diálogo de creación de skin
       this.dialogSkin = false;
+
+      // Actualizar la lista de productos
       this.getProductos();
     },
+
     // EDITAR CLIENTE
     editarCliente(cliente) {
       // Abrir diálogo de edición
@@ -904,20 +819,24 @@ export default {
     // GUARDAR CAMBIOS CLIENTE
     async guardarCambiosCliente() {
       try {
+        // Validar si el campo de correo electrónico es una dirección de correo electrónico válida
+        const correoValido = this.validarCorreoElectronico(this.clienteEditado.gmail);
+        if (!correoValido) {
+          alert("Por favor, ingrese una dirección de correo electrónico válida.");
+          return; // Salir de la función si el correo electrónico no es válido
+        }
+
         // Convertir la fecha al formato deseado (año primero y separado por guiones)
         const fecha = this.clienteEditado.fecha_nacimiento;
-        const fechaFormateada = fecha
-          ? fecha.split("/").reverse().join("-")
-          : "";
+        const fechaFormateada = fecha ? fecha.split("/").reverse().join("-") : "";
 
         // Asignar la fecha formateada al clienteEditado
         this.clienteEditado.fecha_nacimiento = fechaFormateada;
 
-        console.log(this.clienteEditado);
         // Realizar la petición de actualización del cliente en la base de datos
-        await updateCliente(this.clienteEditado); // Asume que el ID del cliente está presente en clienteEditado
+        await updateCliente(this.clienteEditado);
 
-        // LMPIAR CLIENTES
+        // Limpiar clientes
         this.limpiarClientes();
 
         // Actualizar la lista de clientes después de que la actualización sea exitosa
@@ -928,6 +847,12 @@ export default {
       } catch (error) {
         console.error("Error al actualizar el cliente:", error);
       }
+    },
+
+    // validar una dirección de correo electrónico
+    validarCorreoElectronico(correo) {
+      const expresion = /\S+@\S+\.\S+/;
+      return expresion.test(correo);
     },
 
     // GUARDAR ESTADO DE BAN DE CLIENTES
@@ -974,57 +899,60 @@ export default {
     },
 
     // SELECT MAPAS
- async selectMapas(){      
+    async selectMapas() {
       try {
-      // Obtener mapas utilizando el método getUsuarios
-      const mapas= await getMapa();
-  
-      // Iterar sobre cada mapa
-      for (const mapa of mapas) {
-        
-        // Asignar valores a del mapa
-        const maps = {
-          id: mapa._id,
-          nombre: mapa.nombre,
-          pngMapa: mapa.pngMapa,
-          probabilidadSpawn: mapa.probabilidadSpawn,
-          descripcion: mapa.descripcion
-        };
+        // Obtener mapas utilizando el método getUsuarios
+        const mapas = await getMapa();
 
-        this.mapas.push(maps);
+        // Iterar sobre cada mapa
+        for (const mapa of mapas) {
+
+          // Asignar valores a del mapa
+          const maps = {
+            id: mapa._id,
+            nombre: mapa.nombre,
+            pngMapa: mapa.pngMapa,
+            probabilidadSpawn: mapa.probabilidadSpawn,
+            descripcion: mapa.descripcion
+          };
+
+          this.mapas.push(maps);
         }
       } catch (error) {
         console.error('Error al obtener mapas:', error);
       }
- },
+    },
 
- // AGREGAR MAPA
- async guardarMapa() {
-    // Verificar si algún campo está vacío
-  if (
-    this.nuevoMapa.nombre.trim() === '' ||
-    this.nuevoMapa.pngMapa.trim() === '' ||
-    this.nuevoMapa.probabilidadSpawn < 0.1 ||
-    this.nuevoMapa.descripcion.trim() === ''
-  ) {
-    alert('Por favor, complete todos los campos antes de guardar el mapa.');
-    return;
-  }
+    // AGREGAR MAPA
+    async guardarMapa() {
+      // Verificar si algún campo está vacío
+      if (
+        this.nuevoMapa.nombre.trim() === '' ||
+        this.nuevoMapa.pngMapa.trim() === '' ||
+        this.nuevoMapa.probabilidadSpawn < 0.1 ||
+        this.nuevoMapa.probabilidadSpawn > 0.9 ||
+        this.nuevoMapa.descripcion.trim() === '' ||
+        this.nuevoMapa.nombre.length > 65 ||
+        this.nuevoMapa.descripcion.length > 200
+      ) {
+        alert('Por favor, complete todos los campos antes de guardar el mapa.');
+        return;
+      }
 
-  // Crear el mapa si todos los campos están llenos
- await createMap(this.nuevoMapa);
+      // Crear el mapa si todos los campos están llenos
+      await createMap(this.nuevoMapa);
 
       // cerrar el diálogo
       this.agregarMapaDialog = false;
 
       this.limpiarMapas();
       this.selectMapas();
- },
+    },
 
- // GUARDAR CAMBIOS MAPAS
-async updateMapas(){
+    // GUARDAR CAMBIOS MAPAS
+    async updateMapas() {
       try {
-      
+
         this.guardarEdicionMapa();
 
         // LMPIAR MAPAS
@@ -1038,91 +966,90 @@ async updateMapas(){
       } catch (error) {
         console.error("Error al actualizar el mapa:", error);
       }
-},
+    },
 
-// GUARDAR LOS DATOS EDITADOS
-async guardarEdicionMapa(){
-  // Verificar si algún campo está vacío
-  if (
-    this.mapaEditado.nombre.trim() === '' ||
-    this.mapaEditado.pngMapa.trim() === '' ||
-    this.mapaEditado.probabilidadSpawn < 0.1 ||
-    this.mapaEditado.descripcion.trim() === ''
-  ) {
-    alert('Por favor, complete todos los campos antes de guardar la edición del mapa.');
-    return;
-  }
+    // GUARDAR LOS DATOS EDITADOS MAPAS
+    async guardarEdicionMapa() {
+      // Verificar si algún campo está vacío
+      if (
+        this.mapaEditado.nombre.trim() === '' ||
+        this.mapaEditado.pngMapa.trim() === '' ||
+        this.mapaEditado.probabilidadSpawn < 0.1 ||
+        this.mapaEditado.probabilidadSpawn > 0.9 ||
+        this.mapaEditado.descripcion.trim() === '' ||
+        this.mapaEditado.nombre.length > 65 ||
+        this.mapaEditado.descripcion.length > 200
+      ) {
+        alert('Por favor, complete todos los campos antes de guardar la edición del mapa.');
+        return;
+      }
 
-  try {
-    // Eliminar el campo 'id' del objeto mapaEditado
-    delete this.mapaEditado.id;
+      try {
+        // Eliminar el campo 'id' del objeto mapaEditado
+        delete this.mapaEditado.id;
 
-    // Utiliza la ID del mapa editando para actualizar los datos
-    await updateMap(this.mapaEditandoId, this.mapaEditado);
+        // Utiliza la ID del mapa editando para actualizar los datos
+        await updateMap(this.mapaEditandoId, this.mapaEditado);
 
-    // Actualiza los datos en el array de mapas local si es necesario
-    if (this.mapaEditandoIndex !== null) {
-      this.$set(this.mapas, this.mapaEditandoIndex, this.mapaEditado);
-    }
+        // Actualiza los datos en el array de mapas local si es necesario
+        if (this.mapaEditandoIndex !== null) {
+          this.$set(this.mapas, this.mapaEditandoIndex, this.mapaEditado);
+        }
 
-    // Cierra el diálogo de edición
-    this.cancelarEdicionMapa();
-  } catch (error) {
-    console.error("Error al actualizar el mapa:", error);
-  }
-},
+        // Cierra el diálogo de edición
+        this.cancelarEdicionMapa();
+      } catch (error) {
+        console.error("Error al actualizar el mapa:", error);
+      }
+    },
 
- // SINCRO MAPAS CON ODOO
- async sincroMapas(){
-
- },
-
- limpiarMapas(){
-// resetear los campos del nuevo mapa
-this.nuevoMapa = {
+    // LIMPIAR CAMPOS MAPAS
+    limpiarMapas() {
+      // resetear los campos del nuevo mapa
+      this.nuevoMapa = {
         nombre: '',
         pngMapa: '',
         probabilidadSpawn: 0,
         descripcion: ''
       };
-      this.mapas=[];
- },
+      this.mapas = [];
+    },
 
- // VDIALOG VER MAPAS
- openMapaDialog() {
-      this.mapaDialog = true; 
- },
+    // VDIALOG VER MAPAS
+    openMapaDialog() {
+      this.mapaDialog = true;
+    },
 
- // VDIALOG INSERTAR MAPAS 
- openAgregarMapaDialog() {
-  this.agregarMapaDialog = true;
- },
+    // VDIALOG INSERTAR MAPAS 
+    openAgregarMapaDialog() {
+      this.agregarMapaDialog = true;
+    },
 
-// VDIALOG EDITAR MAPAS
-openEditarMapaDialog(mapa, index) {
- this.editarMapaDialog = true;
+    // VDIALOG EDITAR MAPAS
+    openEditarMapaDialog(mapa, index) {
+      this.editarMapaDialog = true;
 
-  // Establecer datos del mapa seleccionado en mapaEditado
-  this.mapaEditado = { ...mapa };
-     
-  // Guardar el índice y la ID del mapa editando
-  this.mapaEditandoIndex = index;
-  this.mapaEditandoId = mapa.id;
-},
+      // Establecer datos del mapa seleccionado en mapaEditado
+      this.mapaEditado = { ...mapa };
 
-// CANCELAR EDICION MAPA
-cancelarEdicionMapa(){
-  this.editarMapaDialog = false;
- this.mapaEditado= {
+      // Guardar el índice y la ID del mapa editando
+      this.mapaEditandoIndex = index;
+      this.mapaEditandoId = mapa.id;
+    },
+
+    // CANCELAR EDICION MAPA
+    cancelarEdicionMapa() {
+      this.editarMapaDialog = false;
+      this.mapaEditado = {
         nombre: '',
         pngMapa: '',
         probabilidadSpawn: 0,
         descripcion: ''
-    };
-},
+      };
+    },
 
-// ELIMINAR MAPA
-async eliminarMapa(mapa) {
+    // ELIMINAR MAPA
+    async eliminarMapa(mapa) {
       if (confirm("¿Estás seguro de que deseas eliminar este mapa?")) {
         await deleteMap(mapa.id);
         this.limpiarMapas();
@@ -1133,5 +1060,4 @@ async eliminarMapa(mapa) {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
