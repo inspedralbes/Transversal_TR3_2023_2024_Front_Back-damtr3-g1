@@ -42,8 +42,8 @@ module.exports = {
         })
     },
     
-    insertUsuari: function(user, pwd, mail, fechaN, monedas, gemas){
-        const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, gemas) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas + ', ' + gemas + ')';
+    insertUsuari: function(user, pwd, mail, fechaN, monedas, fecha_altaUser){
+        const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, fecha_altaUser) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas + ', ' + fecha_altaUser + ')';
         return new Promise((resolve, reject) =>{
             conn.query(sql, (err, result) => {
                 if (err) {
