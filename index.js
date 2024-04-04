@@ -35,6 +35,8 @@ const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
 const { getNoticias, updateNoticia, createNoticia, deleteNoticia } = require('./funcionesmongo/noticias.js');
+const { getInventari, updateInventari, createInventari, deleteInventari } = require('./funcionesmongo/inventari.js');
+
 const insertDataIntoOdoo = require('./odoo/odooproduct.js');
 const insertClientOdoo = require('./odoo/odooclient.js');
 
@@ -181,6 +183,14 @@ app.get("/getBroadcastNews", async (req, res)=>{
 
 app.get("/checkarServidor", (req,res) =>{
     res.send(true);
+})
+
+app.get("/getInventari/:user", async (req,res)=>{
+    var user = req.params.user
+    var resultat = await getInventari(client);
+    resultat = resultat.filter(item => item.usuario === user);
+    res.send(resultat)
+
 })
 
 //CrearSala
