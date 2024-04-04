@@ -1,36 +1,32 @@
 <template>
   <v-app>
     <div>
-      <v-app-bar app>
-        <v-toolbar-title>R6 PIXEL</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn text @click="goToProcesos">Procesos</v-btn>
-        <v-btn text @click="goToDashboard">Dashboard</v-btn>
-      </v-app-bar>
+      <v-main>
+        <!-- BTN para entrar en modo editor de noticias -->
+        <v-btn fab dark color="primary" class="fab-btn" @click="openDialog">
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
 
-      <!-- BTN para entrar en modo editor de noticias -->
-      <v-btn fab dark color="primary" class="fab-btn" @click="openDialog">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
-      
-     <!-- ver broadcast news -->
-      <div style="margin-top: 70px;" class="broadcast-news">
-        <v-row>
-          <v-col v-for="(news, index) in newsList" :key="index" cols="6">
-            <v-card class="news-card">
-              <v-card-title class="news-title">{{ news.title }}</v-card-title>
-              <v-row>
-                <v-col cols="6">
-                  <v-card-text class="news-description" style="margin-bottom: 25px;">{{ news.description }}</v-card-text>
-                </v-col>
-                <v-col cols="6">
-                  <img :src="news.image" alt="News Image" class="news-image">
-                </v-col>  
-              </v-row>
-            </v-card>
-          </v-col>
-        </v-row>
-      </div>
+        <!-- ver broadcast news -->
+        <div class="broadcast-news">
+          <v-row>
+            <v-col v-for="(news, index) in newsList" :key="index" cols="6">
+              <v-card class="news-card">
+                <v-card-title class="news-title">{{ news.title }}</v-card-title>
+                <v-row>
+                  <v-col cols="6">
+                    <v-card-text class="news-description" style="margin-bottom: 25px;">{{ news.description
+                      }}</v-card-text>
+                  </v-col>
+                  <v-col cols="6">
+                    <img :src="news.image" alt="News Image" class="news-image">
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </div>
+      </v-main>
 
       <!-- DIALOG CON LAS NOTICIAS EDITAR + ELIMINAR-->
       <v-dialog v-model="dialogVisible" max-width="2000">
@@ -46,7 +42,8 @@
                   <v-card-text class="d-flex justify-space-between align-center">
                     <h2 style="color: black;">{{ news.title }}</h2>
                     <v-spacer></v-spacer>
-                    <v-icon @click="openUpdateDialog(news)" dark color="black" style="margin-right: 10px;">mdi-pencil</v-icon>
+                    <v-icon @click="openUpdateDialog(news)" dark color="black"
+                      style="margin-right: 10px;">mdi-pencil</v-icon>
 
                     <v-icon @click="eliminarNoticia(news)" dark color="red">mdi-delete</v-icon>
                   </v-card-text>
@@ -105,6 +102,7 @@
 import { getBroadcastNews, updateBroadcastNews, createBroadcastNews, deleteBroadcastNews } from "@/services/communicationsManager.js";
 
 export default {
+  layout: 'HomeLayout',
   data() {
     return {
       newsList: [],
@@ -120,7 +118,7 @@ export default {
       },
       file: "",
       updateFile: "",
-      idEditada:null,
+      idEditada: null,
       noticiaEditadaIndex: null,
       dialogVisible: false,
       createDialogVisible: false,
@@ -145,30 +143,30 @@ export default {
     // UPDATE NOTICIAS
     async saveNews() {
 
-       // Guardar los cambios realizados en la noticia
-       if (this.idEditada !== null) {
+      // Guardar los cambios realizados en la noticia
+      if (this.idEditada !== null) {
 
-      let noticiaEditadaSinId = { ...this.newsEditList };
-      delete noticiaEditadaSinId._id;
+        let noticiaEditadaSinId = { ...this.newsEditList };
+        delete noticiaEditadaSinId._id;
 
-      // Actualizar la noticia existente en newsList con los datos modificados
-      this.$set(this.newsList, this.noticiaEditadaIndex, noticiaEditadaSinId);
+        // Actualizar la noticia existente en newsList con los datos modificados
+        this.$set(this.newsList, this.noticiaEditadaIndex, noticiaEditadaSinId);
 
-      try {
-      // Realizar la petición de actualización del estado
-      await updateBroadcastNews(this.idEditada, noticiaEditadaSinId);
-      
-      // LMPIAR CAMPOS
-      this.limpiarCampos();
+        try {
+          // Realizar la petición de actualización del estado
+          await updateBroadcastNews(this.idEditada, noticiaEditadaSinId);
 
-      this.updateDialogVisible= false;
+          // LMPIAR CAMPOS
+          this.limpiarCampos();
 
-      // Actualizar la lista
-      await this.loadNews();
+          this.updateDialogVisible = false;
 
-    } catch (error) {
-      console.error('Error updating news:', error);
-    }
+          // Actualizar la lista
+          await this.loadNews();
+
+        } catch (error) {
+          console.error('Error updating news:', error);
+        }
       }
     },
 
@@ -189,13 +187,6 @@ export default {
       } catch (error) {
         console.error('Error loading news:', error);
       }
-    },
-
-    goToProcesos() {
-      this.$router.push('/procesos');
-    },
-    goToDashboard() {
-      this.$router.push('/dashboard');
     },
 
     openCreateDialog() {
@@ -267,7 +258,8 @@ export default {
 .news-card {
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5; /* Color de fondo */
+  background-color: #f5f5f5;
+  /* Color de fondo */
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
@@ -277,12 +269,14 @@ export default {
   margin: 0;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #333; /* Color del título */
+  color: #333;
+  /* Color del título */
   padding: 16px;
 }
 
 .news-description {
-  color: #555; /* Color de la descripción */
+  color: #555;
+  /* Color de la descripción */
   padding: 0 16px;
 }
 
@@ -304,7 +298,6 @@ export default {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
-
 
 .black-text {
   color: rgb(118, 118, 255);

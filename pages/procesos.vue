@@ -1,65 +1,62 @@
 <template>
   <v-app>
-    <!-- APP BAR -->
-    <v-app-bar app>
-      <v-toolbar-title @click="goToHome">R6 PIXEL</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn text @click="goToDashboard">Dashboard</v-btn>
-    </v-app-bar>
 
-    <!-- PANEL CONTROL -->
-    <v-container fluid style="margin-top: 75px">
-      <!-- SERVIDORES Y PRODUCTOS -->
-      <v-row justify="center">
-        <!-- Panel de Control Servidores -->
-        <v-col cols="12" sm="6">
-          <v-card class="mx-auto" max-width="400">
-            <v-card-title>Panel de Control Servidores</v-card-title>
-            <v-card-text>
-              <v-btn @click="toggleOdoo" block>
-                {{ odooServerRunning ? "Parar Odoo" : "Arrancar Odoo" }}
-              </v-btn>
-              <v-btn @click="toggleGameServers" block style="margin-top: 20px">
-                {{ gameServersRunning ? "Servidores del Juego Arrancados" : "Servidores del Juego Parados" }}
-              </v-btn>
-            </v-card-text>
-          </v-card>
-        </v-col>
 
-        <!-- PANEL DE CONTROL PRODUCTOS -->
-        <v-col cols="12" sm="6">
-          <v-card class="mx-auto" max-width="400">
-            <v-card-title>Panel de Control Productos</v-card-title>
-            <v-card-text>
-              <v-btn @click="sincroProductos" block>Sincronizar Productos</v-btn>
-              <v-btn @click="openProductosDialog" block style="margin-top: 20px">Ver Productos</v-btn>
-            </v-card-text>
-          </v-card>
-        </v-col>
+    <v-main>
+      <!-- PANEL CONTROL -->
+      <v-container fluid>
+        <!-- SERVIDORES Y PRODUCTOS -->
+        <v-row justify="center">
+          <!-- Panel de Control Servidores -->
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto" max-width="400">
+              <v-card-title>Panel de Control Servidores</v-card-title>
+              <v-card-text>
+                <v-btn @click="toggleOdoo" block>
+                  {{ odooServerRunning ? "Parar Odoo" : "Arrancar Odoo" }}
+                </v-btn>
+                <v-btn @click="toggleGameServers" block style="margin-top: 20px">
+                  {{ gameServersRunning ? "Servidores del Juego Arrancados" : "Servidores del Juego Parados" }}
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-        <!-- PANEL DE CONTROL CLIENTES -->
-        <v-col cols="12" sm="6">
-          <v-card class="mx-auto" max-width="400">
-            <v-card-title>Panel de Control Clientes</v-card-title>
-            <v-card-text>
-              <v-btn @click="sincroClientes" block>Sincronizar Clientes</v-btn>
-              <v-btn @click="openClientesDialog" block style="margin-top: 20px">Ver Clientes</v-btn>
-            </v-card-text>
-          </v-card>
-        </v-col>
+          <!-- PANEL DE CONTROL PRODUCTOS -->
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto" max-width="400">
+              <v-card-title>Panel de Control Productos</v-card-title>
+              <v-card-text>
+                <v-btn @click="sincroProductos" block>Sincronizar Productos</v-btn>
+                <v-btn @click="openProductosDialog" block style="margin-top: 20px">Ver Productos</v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
 
-        <!-- PANEL DE CONTROL MAPAS -->
-        <v-col cols="12" sm="6">
-          <v-card class="mx-auto" max-width="400">
-            <v-card-title>Panel de Control Mapas</v-card-title>
-            <v-card-text>
-              <v-btn @click="openMapaDialog" block>
-                Ver Mapas</v-btn>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+          <!-- PANEL DE CONTROL CLIENTES -->
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto" max-width="400">
+              <v-card-title>Panel de Control Clientes</v-card-title>
+              <v-card-text>
+                <v-btn @click="sincroClientes" block>Sincronizar Clientes</v-btn>
+                <v-btn @click="openClientesDialog" block style="margin-top: 20px">Ver Clientes</v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+          <!-- PANEL DE CONTROL MAPAS -->
+          <v-col cols="12" sm="6">
+            <v-card class="mx-auto" max-width="400">
+              <v-card-title>Panel de Control Mapas</v-card-title>
+              <v-card-text>
+                <v-btn @click="openMapaDialog" block>
+                  Ver Mapas</v-btn>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
 
     <!-- PANEL DE PRODUCTOS -->
     <v-dialog v-model="productosDialog" max-width="1900" max-height="1900" style="height: auto; width: auto">
@@ -367,6 +364,7 @@ import {
 } from "@/services/communicationsManager.js";
 
 export default {
+  layout: 'ProcesosLayout',
   data() {
     return {
       imagenSkinEdit: null,
@@ -454,14 +452,6 @@ export default {
     console.log("UPDATED");
   },
   methods: {
-    goToHome() {
-      this.$router.push("/home");
-    },
-
-    goToDashboard() {
-      this.$router.push("/dashboard");
-    },
-
     async getProductos() {
       const assets = await getAssets();
       this.productos = {
