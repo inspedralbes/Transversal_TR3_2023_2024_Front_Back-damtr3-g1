@@ -28,20 +28,62 @@ async function insertDataIntoOdoo(contactos) {
 
                     const objectClient = xmlrpc.createClient(objectClientOptions);
 
-                    // Insertar cada contacto
-                    contactos.forEach(contacto => {
-                        const contactData = {
-                            name: contacto.username,
-                            email: contacto.mail,
-                        };
+                    // Obtener IDs de todos los contactos existentes
+                    objectClient.methodCall('execute_kw', [db, uid, password, 'res.partner', 'search_read', [[], ['id', 'x_sqlid']]], (error, existingContacts) => {
+                        if (error) {
+                            console.error('Error al obtener los contactos:', error);
+                        } else {
+                            console.log('Contactos existentes en Odoo:', existingContacts);
 
-                        objectClient.methodCall('execute_kw', [db, uid, password, 'res.partner', 'create', [contactData]], (error, contactId) => {
-                            if (error) {
-                                console.error('Error al crear el contacto:', error);
-                            } else {
-                                console.log('ID del nuevo contacto:', contactId);
-                            }
-                        });
+                            existingContacts.forEach(existingContact => {
+                                const matchingContact = contactos.find(contact => contact.idUser.toString() === existingContact.x_sqlid.toString());
+                                if (matchingContact) {
+                                    // Actualizar el contacto en lugar de crear de nuevo
+                                    const contactData = {
+                                        name: matchingContact.username,
+                                        email: matchingContact.mail,
+                                        x_sqlid: matchingContact.idUser
+                                    };
+
+                                    objectClient.methodCall('execute_kw', [db, uid, password, 'res.partner', 'write', [[existingContact.id], contactData]], (error, result) => {
+                                        if (error) {
+                                            console.error('Error al actualizar el contacto:', error);
+                                        } else {
+                                            console.log('Contacto actualizado en Odoo:', result);
+                                        }
+                                    });
+                                } else {
+                                    // Eliminar el contacto en Odoo
+                                    objectClient.methodCall('execute_kw', [db, uid, password, 'res.partner', 'unlink', [[existingContact.id]]], (error, result) => {
+                                        if (error) {
+                                            console.error('Error al eliminar el contacto:', error);
+                                        } else {
+                                            console.log('Contacto eliminado en Odoo:', result);
+                                        }
+                                    });
+                                }
+                            });
+
+                            // Insertar nuevos contactos
+                            contactos.forEach(contacto => {
+                                const existingContact = existingContacts.find(existing => existing.x_sqlid.toString() === contacto.idUser.toString());
+                                if (!existingContact) {
+                                    const contactData = {
+                                        name: contacto.username,
+                                        email: contacto.mail,
+                                        x_sqlid: contacto.idUser
+                                    };
+
+                                    objectClient.methodCall('execute_kw', [db, uid, password, 'res.partner', 'create', [contactData]], (error, contactId) => {
+                                        if (error) {
+                                            console.error('Error al crear el contacto:', error);
+                                        } else {
+                                            console.log('ID del nuevo contacto:', contactId);
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     });
                 }
             }
