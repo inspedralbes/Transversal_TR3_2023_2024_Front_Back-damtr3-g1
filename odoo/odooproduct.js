@@ -104,7 +104,7 @@ async function insertDataIntoOdoo(personajes, skins) {
                                         name: matchingSkin.nombre,
                                         x_valorMonedas: matchingSkin.valorMonedas,
                                         categ_id: 5,
-                                        list_price: matchingSkin.valorMonedas
+                                        list_price: 0,
                                     };
 
                                     objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'write', [[existingSkin.id], productData]], (error, result) => {
@@ -134,7 +134,7 @@ async function insertDataIntoOdoo(personajes, skins) {
                                         name: skin.nombre,
                                         x_valorMonedas: skin.valorMonedas,
                                         categ_id: 5,
-                                        list_price: skin.valorMonedas,
+                                        list_price: 0,
                                         x_mongoid: skin._id.toString()
                                     };
 
