@@ -16,19 +16,7 @@ module.exports = {
             });
         })
     },
-    getUsuari: function(user){
-        var sql = 'SELECT username, password FROM Usuario WHERE Username = "' + user + '"';
-        return new Promise((resolve, reject) =>{
-            conn.query(sql, (err, result) => {
-                if (err) {
-                    reject(err)
-                }else{
-                    resolve(result)
-                }
-            });
-        })
-    },
-
+    
     getUsuariAdmin: function(user){
         var sql = 'SELECT username, password, admin FROM Usuario WHERE username = "' + user + '"';
         return new Promise((resolve, reject) =>{
@@ -41,7 +29,19 @@ module.exports = {
             });
         })
     },
-    
+    getUsuariMonedes: function(user){
+        var sql = 'SELECT monedas FROM Usuario WHERE Username = "' + user + '"';
+        return new Promise((resolve, reject) =>{
+            conn.query(sql, (err, result) => {
+                if (err) {
+                    reject(err)
+                }else{
+                    resolve(result)
+                }
+            });
+        })
+    },
+
     insertUsuari: function(user, pwd, mail, fechaN, monedas, fecha_altaUser){
         const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, fecha_altaUser) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas + ', ' + fecha_altaUser + ')';
         return new Promise((resolve, reject) =>{

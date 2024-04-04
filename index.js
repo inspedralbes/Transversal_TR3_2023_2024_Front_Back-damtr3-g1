@@ -182,6 +182,11 @@ app.get("/getBroadcastNews", async (req, res)=>{
 });
 
 
+app.get("/getMonedes/:user", async (req,res)=>{
+    var user = req.params.user;
+    var resultat = await bdUsuaris.getUsuariMonedes(user);
+    res.send(resultat);
+})
 app.get("/checkarServidor", (req,res) =>{
     res.send(true);
 })
