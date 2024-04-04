@@ -397,11 +397,10 @@ app.post("/register", async (req, res) => {
         var mail = req.body.mail;
         var fechaN = req.body.fechaN;
         var monedas = 1000;
-        var gemas = 10;
         pwd = await Encriptar(pwd);
 
 
-        if (await bdUsuaris.insertUsuari(user, pwd, mail, fechaN, monedas, gemas)) {
+        if (await bdUsuaris.insertUsuari(user, pwd, mail, fechaN, monedas)) {
             console.log("Usuario Registrado")
             res.send({ auth: true });
         } else {
