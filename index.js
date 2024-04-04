@@ -39,7 +39,8 @@ const { getInventari, updateInventari, createInventari, deleteInventari } = requ
 
 const insertDataIntoOdoo = require('./odoo/odooproduct.js');
 const insertClientOdoo = require('./odoo/odooclient.js');
-
+const getProductDataFromOdoo = require('./odoo/getodooproduct.js');
+const getClientDataFromOdoo = require('./odoo/getodooclient.js');
 
 //Definim la sessió i encenem el servidor
 const PORT = 3169;
@@ -992,6 +993,8 @@ app.post('/syncOdoo', async (req, res) => {
     try {
         const personajes = await getPersonajes(client);
         const skins = await getSkins(client);
+        console.log(personajes);
+        console.log(skins);
         const result = await insertDataIntoOdoo(personajes, skins);
         res.status(200).json(result);
     } catch (error) {
@@ -1003,8 +1006,29 @@ app.post('/syncOdoo', async (req, res) => {
 app.post('/syncClientOdoo', async (req, res) => {
     try {
         const clients = await bdUsuaris.getUsuaris();
+        console.log(clients);
         const result = await insertClientOdoo(clients);
         res.status(200).json(result);
+    } catch (error) {
+        console.error('Error al sincronizar el estado de Odoo:', error);
+        res.status(500).send('Error al sincronizar el estado de Odoo.');
+    }
+})
+
+app.get('/getOdooProduct', async (req, res)=>{
+    try {
+        const result = await getProductDataFromOdoo ();
+        console.log(result);
+    } catch (error) {
+        console.error('Error al sincronizar el estado de Odoo:', error);
+        res.status(500).send('Error al sincronizar el estado de Odoo.');
+    }
+})
+
+app.get('/getOdooClient', async (req, res)=>{
+    try {
+        const result = await getClientDataFromOdoo ();
+        console.log(result);
     } catch (error) {
         console.error('Error al sincronizar el estado de Odoo:', error);
         res.status(500).send('Error al sincronizar el estado de Odoo.');

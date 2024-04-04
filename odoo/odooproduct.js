@@ -1,6 +1,5 @@
 const xmlrpc = require('xmlrpc');
 
-// Función para insertar personajes y skins en Odoo
 async function insertDataIntoOdoo(personajes, skins) {
     const clientOptions = {
         host: '89.168.118.150',
@@ -30,68 +29,124 @@ async function insertDataIntoOdoo(personajes, skins) {
 
                     const objectClient = xmlrpc.createClient(objectClientOptions);
 
-                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'search', [[]]], (error, productIds) => {
+                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'search_read', [[['categ_id','=',4]],['id','x_mongoid']]], (error, existingPersonajes) => {
                         if (error) {
-                            console.error('Error al obtener los IDs de los productos:', error);
+                            console.error('Error al obtener los personajes:', error);
                         } else {
-                            console.log('IDs de los productos:', productIds);
+                            console.log('Personajes existentes en Odoo:', existingPersonajes);
 
-                            // Eliminar cada producto
-                            let deletePromises = productIds.map(productId => {
-                                return new Promise((resolve, reject) => {
-                                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'unlink', [[productId]]], (error, result) => {
+                            existingPersonajes.forEach(existingPersonaje => {
+                                const matchingPersonaje = personajes.find(personaje => personaje._id.toString() === existingPersonaje.x_mongoid.toString());
+                                if (matchingPersonaje) {
+                                    // Realizar un update en lugar de eliminar y crear de nuevo
+                                    const productData = {
+                                        name: matchingPersonaje.nombre,
+                                        x_lvlDesbloqueo: matchingPersonaje.lvlDesbloqueo, // No se especifica precio para los personajes
+                                        categ_id: 4, // ID de la categoría 'all/personaje'
+                                        list_price: 0
+                                    };
+
+                                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'write', [[existingPersonaje.id], productData]], (error, result) => {
                                         if (error) {
-                                            console.error('Error al eliminar el producto con ID', productId, ':', error);
-                                            reject(error);
+                                            console.error('Error al actualizar el personaje:', error);
                                         } else {
-                                            console.log('Producto con ID', productId, 'eliminado correctamente');
-                                            resolve();
+                                            console.log('Personaje actualizado en Odoo:', result);
                                         }
                                     });
-                                });
+                                } else {
+                                    // Eliminar el producto en Odoo
+                                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'unlink', [[existingPersonaje.id]]], (error, result) => {
+                                        if (error) {
+                                            console.error('Error al eliminar el personaje:', error);
+                                        } else {
+                                            console.log('Personaje eliminado en Odoo:', result);
+                                        }
+                                    });
+                                }
                             });
 
-                            Promise.all(deletePromises)
-                                .then(() => {
-                                    // Insertar personajes
-                                    personajes.forEach(personaje => {
-                                        const productData = {
-                                            name: personaje.nombre,
-                                            x_lvlDesbloqueo: personaje.lvlDesbloqueo, // No se especifica precio para los personajes
-                                            categ_id: 4, // ID de la categoría 'all/personaje'
-                                            list_price: 0,
-                                        };
+                            // Insertar nuevos personajes
+                            personajes.forEach(personaje => {
+                                const existingPersonaje = existingPersonajes.find(existing => existing.x_mongoid.toString() === personaje._id.toString());
+                                if (!existingPersonaje) {
+                                    const productData = {
+                                        name: personaje.nombre,
+                                        x_lvlDesbloqueo: personaje.lvlDesbloqueo,
+                                        categ_id: 4, // ID de la categoría 'all/personaje'
+                                        list_price: 0,
+                                        x_mongoid: personaje._id.toString()
+                                    };
 
-                                        objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'create', [productData]], (error, productId) => {
-                                            if (error) {
-                                                console.error('Error al crear el personaje:', error);
-                                            } else {
-                                                console.log('ID del nuevo personaje:', productId);
-                                            }
-                                        });
+                                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'create', [productData]], (error, productId) => {
+                                        if (error) {
+                                            console.error('Error al crear el personaje:', error);
+                                        } else {
+                                            console.log('ID del nuevo personaje:', productId);
+                                        }
                                     });
+                                }
+                            });
+                        }
+                    });
+                    
+                    // Manejar las skins
+                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'search_read', [[['categ_id','=',5]],['id','x_mongoid']]], (error, existingSkins) => {
+                        if (error) {
+                            console.error('Error al obtener las skins:', error);
+                        } else {
+                            console.log('Skins existentes en Odoo:', existingSkins);
 
-                                    // Insertar skins
-                                    skins.forEach(skin => {
-                                        const productData = {
-                                            name: skin.nombre,
-                                            x_valorMonedas: skin.valorMonedas, // Utilizar el valorMonedas como precio
-                                            categ_id: 5, // ID de la categoría correspondiente a las skins
-                                            list_price: 0,
-                                        };
+                            existingSkins.forEach(existingSkin => {
+                                const matchingSkin = skins.find(skin => skin._id.toString() === existingSkin.x_mongoid.toString());
+                                if (matchingSkin) {
+                                    // Realizar un update en lugar de eliminar y crear de nuevo
+                                    const productData = {
+                                        name: matchingSkin.nombre,
+                                        x_valorMonedas: matchingSkin.valorMonedas,
+                                        categ_id: 5,
+                                        list_price: matchingSkin.valorMonedas
+                                    };
 
-                                        objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'create', [productData]], (error, productId) => {
-                                            if (error) {
-                                                console.error('Error al crear la skin:', error);
-                                            } else {
-                                                console.log('ID de la nueva skin:', productId);
-                                            }
-                                        });
+                                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'write', [[existingSkin.id], productData]], (error, result) => {
+                                        if (error) {
+                                            console.error('Error al actualizar la skin:', error);
+                                        } else {
+                                            console.log('Skin actualizada en Odoo:', result);
+                                        }
                                     });
-                                })
-                                .catch(error => {
-                                    console.error('Error al eliminar productos:', error);
-                                });
+                                } else {
+                                    // Eliminar la skin en Odoo
+                                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'unlink', [[existingSkin.id]]], (error, result) => {
+                                        if (error) {
+                                            console.error('Error al eliminar la skin:', error);
+                                        } else {
+                                            console.log('Skin eliminada en Odoo:', result);
+                                        }
+                                    });
+                                }
+                            });
+
+                            // Insertar nuevas skins
+                            skins.forEach(skin => {
+                                const existingSkin = existingSkins.find(existing => existing.x_mongoid.toString() === skin._id.toString());
+                                if (!existingSkin) {
+                                    const productData = {
+                                        name: skin.nombre,
+                                        x_valorMonedas: skin.valorMonedas,
+                                        categ_id: 5,
+                                        list_price: skin.valorMonedas,
+                                        x_mongoid: skin._id.toString()
+                                    };
+
+                                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'create', [productData]], (error, productId) => {
+                                        if (error) {
+                                            console.error('Error al crear la skin:', error);
+                                        } else {
+                                            console.log('ID de la nueva skin:', productId);
+                                        }
+                                    });
+                                }
+                            });
                         }
                     });
                 }
