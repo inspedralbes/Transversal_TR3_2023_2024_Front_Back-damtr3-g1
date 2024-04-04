@@ -92,7 +92,7 @@ const uploadMap = multer({ storage: storageMap });
 
 const storageSkin = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './assets/skins');
+        cb(null, './assets');
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -136,7 +136,7 @@ app.post('/editMap', uploadMap.single('image'), (req, res) => {
 app.post('/editSkin', uploadSkin.single('image'), (req, res) => {
     try {
         const oldImageName = req.body.oldImageName;
-        fs.unlink(path.join(__dirname, './assets/skins', oldImageName), err => {
+        fs.unlink(path.join(__dirname, './assets', oldImageName), err => {
             if (err) throw err;
             console.log('Imagen antigua eliminada con éxito');
         });

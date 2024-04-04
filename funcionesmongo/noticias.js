@@ -32,8 +32,8 @@ async function updateNoticia(client, id, updatedNoticia) {
 async function createNoticia(client, noticia) {
     try {
         const database = client.db('Juego');
-        const noticiaCollection = database.collection('noticias');
-        const result = await noticiaCollection.insertOne(noticia);
+        const mapaCollection = database.collection('noticias');
+        const result = await mapaCollection.insertOne(noticia);
         return result;
     } catch (error) {
         console.error(error);

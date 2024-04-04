@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  # apache:
+  #   image: httpd:latest
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./tu_web:/usr/local/apache2/htdocs
+  #   restart: always
+
+  nodejs:
+    build: 
+      context: .
+      dockerfile: Dockerfile.nodejs
+    ports:
+      - "3169:3169"
+    volumes:
+      - ./:/app
+    command: node index.js
+    restart: always
