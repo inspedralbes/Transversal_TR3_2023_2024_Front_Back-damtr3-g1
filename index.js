@@ -179,6 +179,10 @@ app.get("/getBroadcastNews", async (req, res)=>{
 });
 
 
+app.get("/checkarServidor", (req,res) =>{
+    res.send(true);
+})
+
 //CrearSala
 app.get("/crearSala", (req, res) => {
     var usuari = req.query.user;
