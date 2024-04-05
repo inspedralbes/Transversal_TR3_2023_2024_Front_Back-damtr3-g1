@@ -53,9 +53,6 @@ var sess = {
     secret: "paraula secreta",
     resave: false, //Obsolet
     saveUninitialized: true,
-    data: {
-        motor_ences: false,
-    },
 };
 
 
@@ -111,6 +108,19 @@ app.post('/uploadMap', uploadMap.single('image'), (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Error al subir la imagen' });
     }
+});
+
+app.post("/comprarProducte", async (req, res)=>{
+   var user = req.body.user;
+   var monedes = req.body.monedes;
+   var idProducte = req.body.idProducto;
+   
+   await updateUsuariMonedes(monedes, user);
+
+
+
+
+   res.send("OK");
 });
 
 app.post('/uploadSkin', uploadSkin.single('image'), (req, res) => {
