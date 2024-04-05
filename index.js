@@ -128,11 +128,6 @@ app.post("/comprarProducte", async (req, res)=>{
    res.send("OK");
 });
 
-app.post("/comprarClient", async (req, res)=>{
-
-    const result = await createSaleOrderInOdoo(103, 12)
-    console.log(result);
-})
 
 
 
