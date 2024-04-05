@@ -380,9 +380,46 @@ app.get("/getNovaTenda", (req, res) => {
 
 app.get("/getImg/:path", (req, res)=>{
     console.log(req.params.path);
-    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + req.params.path;
+    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + encodeURIComponent(req.params.path);
     res.sendFile(path)
 })
+
+const archiver = require('archiver');
+
+app.post("/getImg_post", (req, res) => {
+    const directory = req.body.directory;
+    const directoryPath = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + directory;
+
+    // Comprobar si el directorio existe
+    fs.access(directoryPath, fs.constants.F_OK, (err) => {
+        if (err) {
+            console.error('El directorio no existe:', err);
+            res.status(404).send('El directorio no existe');
+            return;
+        }
+
+        // Comprimir el directorio en un archivo zip
+        const output = fs.createWriteStream(__dirname + '/mapas.zip'); // Nombre del archivo zip
+        const archive = archiver('zip');
+
+        output.on('close', () => {
+            console.log('Archivos comprimidos correctamente');
+            res.sendFile(__dirname + '/mapas.zip'); // Enviar el archivo zip con el nombre "mapas.zip"
+        });
+
+        archive.on('error', (err) => {
+            console.error('Error al comprimir archivos:', err);
+            res.status(500).send('Error al comprimir archivos');
+        });
+
+        archive.pipe(output);
+        archive.directory(directoryPath, false);
+        archive.finalize();
+    });
+});
+
+
+
 
 
 function getRandomSkin(array, n) {
