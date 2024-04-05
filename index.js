@@ -23,6 +23,7 @@ const io = new Server(server, {
 const staticFieldMiddleware = express.static("public");
 var history = require("connect-history-api-fallback");
 let sales = [];
+let usuarisConnectats = [];
 const http = require('http');
 
 /*****************ACCES A DADES AMB PERSISTENCIA********************* */
@@ -114,7 +115,7 @@ app.post("/comprarProducte", async (req, res)=>{
    var user = req.body.user;
    var monedes = req.body.monedes;
    var idProducte = req.body.idProducto;
-   
+
    await updateUsuariMonedes(monedes, user);
 
 
@@ -418,6 +419,18 @@ app.get("/getSala", (req, res) => {
 });
 
 
+app.get("/logged/:user", (req,res)=>{
+    var user = req.params.user;
+    if(usuarisConnectats.find(value => value === user)){
+        console.log("USUARI CONNECTAT")
+        res.send({auth: true})
+    }else{
+        console.log("USUARI NO CONNECTAT")
+        res.send({auth:false})
+    }
+});
+
+
 /**********************************************************************OPERACIONS POST**************************************************************** */
 //registrar un usuari
 app.post("/register", async (req, res) => {
@@ -428,9 +441,30 @@ app.post("/register", async (req, res) => {
         var fechaN = req.body.fechaN;
         var monedas = 1000;
         pwd = await Encriptar(pwd);
+                // Create a new Date object
+        var currentDate = new Date();
+
+        // Get the current year, month, and day
+        var year = currentDate.getFullYear();
+        // Month is zero-indexed, so add 1 to get the correct month
+        var month = currentDate.getMonth() + 1;
+        var day = currentDate.getDate();
+
+        // Add leading zeros if needed
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+
+        // Concatenate the year, month, and day with hyphens to get the desired format
+        var formattedDate = year + '-' + month + '-' + day;
+
+        console.log(formattedDate)
+
+        //Afegir usuari a inventari
+        var inventari  = {usuario: user, skins: []}
+        createInventari(client, inventari);
 
 
-        if (await bdUsuaris.insertUsuari(user, pwd, mail, fechaN, monedas)) {
+        if (await bdUsuaris.insertUsuari(user, pwd, mail, fechaN, monedas,formattedDate)) {
             console.log("Usuario Registrado")
             res.send({ auth: true });
         } else {
@@ -449,7 +483,7 @@ app.post("/login", async (req, res) => {
     var pwd = req.body.pwd;
 
 
-    var resultat = await bdUsuaris.getUsuari(user);
+    var resultat = await bdUsuaris.getUsuaris(user);
 
     if (resultat.length === 0) {
         res.send({ auth: false })
@@ -802,17 +836,17 @@ app.delete('/deleteskin/:id', async (req, res) => {
 //*************************************************************SOCKETS********************************************************************* */
 io.on('connection', (socket) => {
 
+    socket.on("loggedIn", (dades)=>{
+        dadesJson = JSON.parse(dades);
+        socket.user = dadesJson.user;
+        usuarisConnectats.push(dadesJson.user);
+    });
+
     socket.on('userNuevo', (dades) => {
         dadesJson = JSON.parse(dades);
         console.log("Usuario Conectado: " + dadesJson.user)
         io.emit('userNuevo', (dades));
     })
-    /*
-    {
-        "user": "user3",
-        "tecla": "UP",
-    }
-    */
     socket.on('touchDragged', (dades) => {
         console.log("Touchdragged")
         io.emit('touchDragged', dades);
@@ -827,9 +861,17 @@ io.on('connection', (socket) => {
         io.emit('startGame', dades);
     })
 
+    socket.on("sesionCerrada", () => {
+        usuarisConnectats.pop(socket.user);
+    });
 
     socket.on('disconnect', () => {
-        console.log('User disconnected');
+        let index = usuarisConnectats.indexOf(socket.user);
+        if (index !== -1) {
+            usuarisConnectats.splice(index, 1);
+        }
+        console.log('User disconnected => ', socket.user);
+        socket.user = "";
     });
 
 
