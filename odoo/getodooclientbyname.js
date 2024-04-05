@@ -1,6 +1,6 @@
 const xmlrpc = require('xmlrpc');
 
-async function getProductDataFromOdoo() {
+async function getPartnerIdFromOdoo(username) {
     const clientOptions = {
         host: '89.168.118.150',
         port: 8069,
@@ -28,21 +28,20 @@ async function getProductDataFromOdoo() {
 
                     const objectClient = xmlrpc.createClient(objectClientOptions);
 
-                    objectClient.methodCall('execute_kw', [db, uid, password, 'product.product', 'search_read', [[]]], (error, products) => {
+                    const domain = [['name', '=', username]];
+
+                    objectClient.methodCall('execute_kw', [db, uid, password, 'res.partner', 'search_read', [domain]], (error, partners) => {
                         if (error) {
-                            console.error('Error al obtener los productos:', error);
+                            console.error('Error al obtener los partners:', error);
                             reject(error);
                         } else {
-                            const formattedProducts = products.map(product => {
-                                return {
-                                    odoo_id: product.id,
-                                    nombre: product.name,
-                                    lvlDesbloqueo: product.x_lvlDesbloqueo,
-                                    valorMonedas: product.x_valorMonedas,
-                                    mongoid: product.x_mongoid
-                                };
-                            });
-                            resolve(formattedProducts);
+                            if (partners.length > 0) {
+                                const partner = partners[0]; // Solo se espera un resultado, tomamos el primero
+                                const partnerId = partner.id;
+                                resolve(partnerId);
+                            } else {
+                                resolve(null); // No se encontró ningún partner con ese username
+                            }
                         }
                     });
                 }
@@ -51,4 +50,4 @@ async function getProductDataFromOdoo() {
     });
 }
 
-module.exports = getProductDataFromOdoo;
+module.exports = getPartnerIdFromOdoo;

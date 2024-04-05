@@ -1,6 +1,6 @@
 const xmlrpc = require('xmlrpc');
 
-async function authenticateAndGetUid() {
+async function createSaleOrderInOdoo(productId, partnerId) {
     const clientOptions = {
         host: '89.168.118.150',
         port: 8069,
@@ -19,49 +19,44 @@ async function authenticateAndGetUid() {
                 console.error('Error en la autenticación:', error);
                 reject(error);
             } else {
-                console.log('Autenticación exitosa con UID:', uid);
-                resolve(uid);
+                if (uid > 0) {
+                    const objectClientOptions = {
+                        host: '89.168.118.150',
+                        port: 8069,
+                        path: '/xmlrpc/2/object'
+                    };
+
+                    const objectClient = xmlrpc.createClient(objectClientOptions);
+
+                    const saleOrderData = {
+                        partner_id: partnerId,
+                        order_line: [
+                            [0, 0, {
+                                product_id: productId,
+                                product_uom_qty: 1, // Cantidad del producto
+                            }]
+                        ]
+                    };
+
+                    objectClient.methodCall('execute_kw', [db, uid, password, 'sale.order', 'create', [saleOrderData]], (error, saleOrderId) => {
+                        if (error) {
+                            console.error('Error al crear la orden de venta:', error);
+                            reject(error);
+                        } else {
+                            objectClient.methodCall('execute_kw', [db, uid, password, 'sale.order', 'action_confirm', [[saleOrderId]]], (error, result) => {
+                                if (error) {
+                                    console.error('Error al confirmar la orden de venta:', error);
+                                    reject(error);
+                                } else {
+                                    resolve(saleOrderId);
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
     });
 }
 
-async function createSaleOrder(product, cliente) {
-    const uid = await authenticateAndGetUid();
-
-    const clientOptions = {
-        host: '89.168.118.150',
-        port: 8069,
-        path: '/xmlrpc/2/object'
-    };
-
-    const client = xmlrpc.createClient(clientOptions);
-
-    const db = 'Juego_Odoo';
-    const password = 'Dam2024+++';
-
-    const saleOrderData = {
-        partner_id: cliente.id, // ID del cliente (partner) al que se le realiza la venta
-        order_line: [ // Líneas de pedido
-            [0, 0, {
-                product_id: product.id, // ID del producto vendido
-                product_uom_qty: 1, // Cantidad vendida
-                price_unit: 100 // Precio unitario
-            }]
-        ]
-    };
-
-    return new Promise((resolve, reject) => {
-        client.methodCall('execute_kw', [db, uid, password, 'sale.order', 'create', [saleOrderData]], (error, orderId) => {
-            if (error) {
-                console.error('Error al crear la venta:', error);
-                reject(error);
-            } else {
-                console.log('Venta creada exitosamente con ID:', orderId);
-                resolve(orderId);
-            }
-        });
-    });
-}
-
-module.exports = createSaleOrder;
+module.exports = createSaleOrderInOdoo;
