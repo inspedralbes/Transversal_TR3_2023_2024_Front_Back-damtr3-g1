@@ -104,6 +104,31 @@ async function deleteSkin(client, id) {
     }
 }
 
+async function insertOrUpdateSkin(client, usuario, skinId) {
+    try {
+        const database = client.db('Juego');
+        const collection = database.collection('inventari');
+
+        const existingUser = await collection.findOne({ usuario });
+
+        if (existingUser) {
+            // Si el usuario ya existe, actualiza el array de skins
+            await collection.updateOne(
+                { usuario },
+                { $addToSet: { skins: skinId } } // $addToSet asegura que no se añadan duplicados
+            );
+        } else {
+            // Si el usuario no existe, crea un nuevo documento con el array de skins
+            await collection.insertOne({ usuario, skins: [skinId] });
+        }
+        console.log('Skin insertada/actualizada correctamente.');
+    } catch (error) {
+        console.error('Error al insertar/actualizar la skin:', error);
+        throw error;
+    }
+}
+
+
 module.exports = {
     getPersonajes,
     createPersonaje,
@@ -112,5 +137,6 @@ module.exports = {
     getSkins,
     createSkin,
     updateSkin,
-    deleteSkin
+    deleteSkin,
+    insertOrUpdateSkin
 };

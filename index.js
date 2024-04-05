@@ -30,7 +30,7 @@ const conn = require('./persistenciaSQL/Connexio.js');
 const bdEstadistiques = require('./persistenciaSQL/Estadistiques.js');
 const bdUsuaris = require('./persistenciaSQL/Usuaris.js');
 
-const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin } = require('./funcionesmongo/personajeskin');
+const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin, insertOrUpdateSkin } = require('./funcionesmongo/personajeskin');
 const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
@@ -39,8 +39,9 @@ const { getInventari, updateInventari, createInventari, deleteInventari } = requ
 
 const insertDataIntoOdoo = require('./odoo/odooproduct.js');
 const insertClientOdoo = require('./odoo/odooclient.js');
-const getProductDataFromOdoo = require('./odoo/getodooproduct.js');
-const getClientDataFromOdoo = require('./odoo/getodooclient.js');
+const getProductIdFromOdoo = require('./odoo/getodooproductbymongoid.js')
+const getPartnerIdFromOdoo = require('./odoo/getodooclientbyname.js');
+const createSaleOrderInOdoo = require('./odoo/crearventa')
 
 //Definim la sessió i encenem el servidor
 const PORT = 3169;
@@ -116,12 +117,24 @@ app.post("/comprarProducte", async (req, res)=>{
    var idProducte = req.body.idProducto;
    
    await updateUsuariMonedes(monedes, user);
+   await insertOrUpdateSkin(client, user, idProducte);
+   const idOdooProduct = await getProductIdFromOdoo(idProducte)
+   const idOdooClient = await getPartnerIdFromOdoo(user);
 
+   await createSaleOrderInOdoo(idOdooProduct, idOdooClient);
 
 
 
    res.send("OK");
 });
+
+app.post("/comprarClient", async (req, res)=>{
+
+    const result = await createSaleOrderInOdoo(103, 12)
+    console.log(result);
+})
+
+
 
 app.post('/uploadSkin', uploadSkin.single('image'), (req, res) => {
     try {
