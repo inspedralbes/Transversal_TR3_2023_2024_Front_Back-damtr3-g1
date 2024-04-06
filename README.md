@@ -13,3 +13,7 @@ chmod 600 ssh-key-2024-03-18.key
 ssh-add ssh-key-2024-03-18.key
 
 ssh ubuntu@89.168.118.150
+
+-------------------------------------------------------------------
+
+EL REPOSITORI EN ORACLE ESTÀ EN EL SEGÜENT PATH: /home/ubuntu/Transversal_TR3_2023_2024_Front_Back-damtr3-g1
