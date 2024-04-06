@@ -7,5 +7,5 @@ services:
       ports:
         - "80:80"
       volumes:
-        - ./tu_web:/usr/local/apache2/htdocs
+        - ./web/dist:/usr/local/apache2/htdocs
       restart: always
