@@ -892,9 +892,15 @@ io.on('connection', (socket) => {
         console.log("Usuario Conectado: " + dadesJson.user)
         io.emit('userNuevo', (dades));
     })
+
     socket.on('touchDragged', (dades) => {
         console.log("Touchdragged")
         io.emit('touchDragged', dades);
+    })
+
+    socket.on('disparo', (dades) => {
+        console.log("Disparo")
+        io.emit('disparo', dades);
     })
 
     socket.on('posicioCorrecio', (dades) => {
