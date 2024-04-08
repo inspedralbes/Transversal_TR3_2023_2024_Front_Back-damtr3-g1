@@ -29,7 +29,7 @@ const http = require('http');
 /*****************ACCES A DADES AMB PERSISTENCIA********************* */
 const conn = require('./persistenciaSQL/Connexio.js');
 const bdEstadistiques = require('./persistenciaSQL/Estadistiques.js');
-const { bdUsuaris, updateUsuariMonedes } = require('./persistenciaSQL/Usuaris.js');
+const { bdUsuaris, updateUsuariMonedes, getUsuariMonedes } = require('./persistenciaSQL/Usuaris.js');
 
 const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin, insertOrUpdateSkin } = require('./funcionesmongo/personajeskin');
 const client = require('./funcionesmongo/conexion');
