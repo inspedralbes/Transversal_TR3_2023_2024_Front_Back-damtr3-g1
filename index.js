@@ -31,7 +31,7 @@ const conn = require('./persistenciaSQL/Connexio.js');
 const bdEstadistiques = require('./persistenciaSQL/Estadistiques.js');
 const bdUsuaris = require('./persistenciaSQL/Usuaris.js');
 
-const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin, insertOrUpdateSkin } = require('./funcionesmongo/personajeskin');
+const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin, insertOrUpdateSkin, updateUsuariMonedes } = require('./funcionesmongo/personajeskin');
 const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
@@ -78,7 +78,6 @@ const { SourceTextModule } = require("vm");
 //const client = new MongoClient(url);
 
 //*************************************************************DESAR IMATGES************************************************************ */
-
 // Configura multer para almacenar archivos en la carpeta 'assets'
 const storageMap = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -103,6 +102,18 @@ const storageSkin = multer.diskStorage({
 
 const uploadSkin = multer({ storage: storageSkin });
 
+const storageBroadcast = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './assets/broadcast');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+
+const uploadBroadcast = multer({ storage: storageBroadcast });
+
+
 app.post('/uploadMap', uploadMap.single('image'), (req, res) => {
     try {
         res.status(200).json({ message: 'Imagen subida con éxito' });
@@ -112,26 +123,6 @@ app.post('/uploadMap', uploadMap.single('image'), (req, res) => {
     }
 });
 
-app.post("/comprarProducte", async (req, res)=>{
-   var user = req.body.user;
-   var monedes = req.body.monedes;
-   var idProducte = req.body.idProducto;
-
-   await updateUsuariMonedes(monedes, user);
-   await insertOrUpdateSkin(client, user, idProducte);
-   const idOdooProduct = await getProductIdFromOdoo(idProducte)
-   const idOdooClient = await getPartnerIdFromOdoo(user);
-
-   await createSaleOrderInOdoo(idOdooProduct, idOdooClient);
-
-
-
-   res.send("OK");
-});
-
-
-
-
 app.post('/uploadSkin', uploadSkin.single('image'), (req, res) => {
     try {
         res.status(200).json({ message: 'Imagen subida con éxito' });
@@ -140,6 +131,15 @@ app.post('/uploadSkin', uploadSkin.single('image'), (req, res) => {
         res.status(500).json({ message: 'Error al subir la imagen' });
     }
 });
+
+app.post('/uploadBroadcast', uploadBroadcast.single('image'), (req, res) => {
+    try {
+        res.status(200).json({ message: 'Imagen subida con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al subir la imagen' });
+    }
+})
 
 app.post('/editMap', uploadMap.single('image'), (req, res) => {
     try {
@@ -167,6 +167,37 @@ app.post('/editSkin', uploadSkin.single('image'), (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Error al subir la nueva imagen o eliminar la antigua' });
     }
+});
+
+app.post('/editBroadcast', uploadBroadcast.single('image'), (req, res) => {
+    try {
+        const oldImageName = req.body.oldImageName;
+        fs.unlink(path.join(__dirname, './assets/broadcast', oldImageName), err => {
+            if (err) throw err;
+            console.log('Imagen antigua eliminada con éxito');
+        });
+        res.status(200).json({ message: 'Imagen subida y antigua imagen eliminada con éxito' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error al subir la nueva imagen o eliminar la antigua' });
+    }
+})
+
+app.post("/comprarProducte", async (req, res) => {
+    var user = req.body.user;
+    var monedes = req.body.monedes;
+    var idProducte = req.body.idProducto;
+
+    await updateUsuariMonedes(monedes, user);
+    await insertOrUpdateSkin(client, user, idProducte);
+    const idOdooProduct = await getProductIdFromOdoo(idProducte)
+    const idOdooClient = await getPartnerIdFromOdoo(user);
+
+    await createSaleOrderInOdoo(idOdooProduct, idOdooClient);
+
+
+
+    res.send("OK");
 });
 
 //**********************************************************OPERACIONS GET*************************************************************** */
@@ -381,6 +412,12 @@ app.get("/getNovaTenda", (req, res) => {
 app.get("/getImg/:path", (req, res)=>{
     console.log(req.params.path);
     var path = "/app/assets/" + req.params.path;
+    res.sendFile(path)
+})
+
+app.get("/getImgBroadcast/:path", (req, res)=>{
+    console.log(req.params.path);
+    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/broadcast/" + encodeURIComponent(req.params.path);
     res.sendFile(path)
 })
 
