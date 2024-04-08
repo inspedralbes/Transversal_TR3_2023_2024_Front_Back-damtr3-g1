@@ -380,7 +380,7 @@ app.get("/getNovaTenda", (req, res) => {
 
 app.get("/getImg/:path", (req, res)=>{
     console.log(req.params.path);
-    var path = "/home/ubuntu/Transversal_TR3_2023_2024_Front_Back-damtr3-g1/assets/" + req.params.path;
+    var path = "/app/assets/" + req.params.path;
     res.sendFile(path)
 })
 
@@ -388,7 +388,7 @@ const archiver = require('archiver');
 
 app.post("/getImg_post", (req, res) => {
     const directory = req.body.directory;
-    const directoryPath = "/home/ubuntu/Transversal_TR3_2023_2024_Front_Back-damtr3-g1/assets/" + directory;
+    const directoryPath = "/appassets/" + directory;
 
     // Comprobar si el directorio existe
     fs.access(directoryPath, fs.constants.F_OK, (err) => {
