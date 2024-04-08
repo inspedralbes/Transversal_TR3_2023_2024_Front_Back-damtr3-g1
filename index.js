@@ -31,7 +31,7 @@ const conn = require('./persistenciaSQL/Connexio.js');
 const bdEstadistiques = require('./persistenciaSQL/Estadistiques.js');
 const bdUsuaris = require('./persistenciaSQL/Usuaris.js');
 
-const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin, insertOrUpdateSkin } = require('./funcionesmongo/personajeskin');
+const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin, insertOrUpdateSkin, updateUsuariMonedes } = require('./funcionesmongo/personajeskin');
 const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
