@@ -29,7 +29,7 @@ const http = require('http');
 /*****************ACCES A DADES AMB PERSISTENCIA********************* */
 const conn = require('./persistenciaSQL/Connexio.js');
 const bdEstadistiques = require('./persistenciaSQL/Estadistiques.js');
-const { bdUsuaris, updateUsuariMonedes, getUsuariMonedes } = require('./persistenciaSQL/Usuaris.js');
+const bdUsuaris = require('./persistenciaSQL/Usuaris.js');
 
 const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin, insertOrUpdateSkin } = require('./funcionesmongo/personajeskin');
 const client = require('./funcionesmongo/conexion');
@@ -188,7 +188,7 @@ app.post("/comprarProducte", async (req, res) => {
     var monedes = req.body.monedes;
     var idProducte = req.body.idProducto;
 
-    await updateUsuariMonedes(monedes, user);
+    await bdUsuaris.updateUsuariMonedes(monedes, user);
     await insertOrUpdateSkin(client, user, idProducte);
     const idOdooProduct = await getProductIdFromOdoo(idProducte)
     const idOdooClient = await getPartnerIdFromOdoo(user);
