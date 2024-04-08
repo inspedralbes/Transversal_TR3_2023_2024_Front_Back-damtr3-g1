@@ -380,7 +380,7 @@ app.get("/getNovaTenda", (req, res) => {
 
 app.get("/getImg/:path", (req, res)=>{
     console.log(req.params.path);
-    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + encodeURIComponent(req.params.path);
+    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + req.params.path;
     res.sendFile(path)
 })
 
