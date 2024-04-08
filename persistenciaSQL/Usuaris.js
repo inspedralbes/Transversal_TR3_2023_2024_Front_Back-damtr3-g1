@@ -42,7 +42,7 @@ module.exports = {
         })
     },
     updateUsuariMonedes: function(monedes, user){
-        var sql = 'UPDATE Usuario SET monedas = ' + monedes + 'WHERE Usuario = "' + user+ '"'; 
+        var sql = 'UPDATE Usuario SET monedas = ' + monedes + ' WHERE Usuario = "' + user+ '"'; 
         return new Promise((resolve, reject) =>{
             conn.query(sql, (err, result) => {
                 if (err) {
