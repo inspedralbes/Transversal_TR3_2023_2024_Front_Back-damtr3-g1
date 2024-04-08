@@ -411,7 +411,7 @@ app.get("/getNovaTenda", (req, res) => {
 
 app.get("/getImg/:path", (req, res)=>{
     console.log(req.params.path);
-    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + encodeURIComponent(req.params.path);
+    var path = "/app/assets/" + req.params.path;
     res.sendFile(path)
 })
 
@@ -425,7 +425,7 @@ const archiver = require('archiver');
 
 app.post("/getImg_post", (req, res) => {
     const directory = req.body.directory;
-    const directoryPath = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/" + directory;
+    const directoryPath = "/appassets/" + directory;
 
     // Comprobar si el directorio existe
     fs.access(directoryPath, fs.constants.F_OK, (err) => {
