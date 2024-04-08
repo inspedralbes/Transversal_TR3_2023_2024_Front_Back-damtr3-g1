@@ -2,29 +2,29 @@
   {
     "name": "dashboard",
     "path": "/dashboard",
-    "component": "C:\\\\Users\\\\rexru\\\\Documents\\\\Grau\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\dashboard.vue",
+    "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\dashboard.vue",
     "chunkName": "pages/dashboard",
-    "_name": "_452f0959"
+    "_name": "_b0baef3a"
   },
   {
     "name": "home",
     "path": "/home",
-    "component": "C:\\\\Users\\\\rexru\\\\Documents\\\\Grau\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\home.vue",
+    "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\home.vue",
     "chunkName": "pages/home",
-    "_name": "_28db61aa"
+    "_name": "_59832460"
   },
   {
     "name": "procesos",
     "path": "/procesos",
-    "component": "C:\\\\Users\\\\rexru\\\\Documents\\\\Grau\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\procesos.vue",
+    "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\procesos.vue",
     "chunkName": "pages/procesos",
-    "_name": "_09309e33"
+    "_name": "_462c15e9"
   },
   {
     "name": "index",
     "path": "/",
-    "component": "C:\\\\Users\\\\rexru\\\\Documents\\\\Grau\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\index.vue",
+    "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\index.vue",
     "chunkName": "pages/index",
-    "_name": "_46ce1717"
+    "_name": "_2b1eab21"
   }
 ]

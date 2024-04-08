@@ -4,13 +4,17 @@ import { decode, parsePath, withoutBase, withoutTrailingSlash, normalizeURL } fr
 import { getMatchedComponentsInstances, getChildrenComponentInstancesUsingFetch, promisify, globalHandleError, urlJoin, sanitizeComponent } from './utils'
 import NuxtError from '..\\layouts\\error.vue'
 import NuxtLoading from './components/nuxt-loading.vue'
+import NuxtBuildIndicator from './components/nuxt-build-indicator'
 
+import '..\\node_modules\\vuetify\\dist\\vuetify.css'
+
+import _0344d7f0 from '..\\layouts\\DashboardLayout.vue'
 import _777c3502 from '..\\layouts\\HomeLayout.vue'
 import _1ee80a1d from '..\\layouts\\LoginLayout.vue'
 import _3854cb70 from '..\\layouts\\ProcesosLayout.vue'
 import _6f6c098b from './layouts/default.vue'
 
-const layouts = { "_HomeLayout": sanitizeComponent(_777c3502),"_LoginLayout": sanitizeComponent(_1ee80a1d),"_ProcesosLayout": sanitizeComponent(_3854cb70),"_default": sanitizeComponent(_6f6c098b) }
+const layouts = { "_DashboardLayout": sanitizeComponent(_0344d7f0),"_HomeLayout": sanitizeComponent(_777c3502),"_LoginLayout": sanitizeComponent(_1ee80a1d),"_ProcesosLayout": sanitizeComponent(_3854cb70),"_default": sanitizeComponent(_6f6c098b) }
 
 export default {
   render (h, props) {
@@ -45,7 +49,7 @@ export default {
       }
     }, [
       loadingEl,
-
+      h(NuxtBuildIndicator),
       transitionEl
     ])
   },
@@ -96,10 +100,6 @@ export default {
 
     isFetching () {
       return this.nbFetching > 0
-    },
-
-    isPreview () {
-      return Boolean(this.$options.previewData)
     },
   },
 
@@ -190,6 +190,10 @@ export default {
     },
 
     setLayout (layout) {
+      if(layout && typeof layout !== 'string') {
+        throw new Error('[nuxt] Avoid using non-string value as layout property.')
+      }
+
       if (!layout || !layouts['_' + layout]) {
         layout = 'default'
       }
