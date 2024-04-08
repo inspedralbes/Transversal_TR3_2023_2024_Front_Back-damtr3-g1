@@ -15,11 +15,14 @@
                 <v-card-title class="news-title">{{ news.title }}</v-card-title>
                 <v-row>
                   <v-col cols="6">
-                    <v-card-text class="news-description" style="margin-bottom: 25px;">{{ news.description
-                      }}</v-card-text>
+                    <v-card-text
+                      class="news-description"
+                      style="margin-bottom: 25px"
+                      >{{ news.description }}</v-card-text
+                    >
                   </v-col>
                   <v-col cols="6">
-                    <img :src="news.image" alt="News Image" class="news-image">
+                    <img v-bind:src="getImagen(news.image)" alt= /> 
                   </v-col>
                 </v-row>
               </v-card>
@@ -38,14 +41,27 @@
           <v-card-text>
             <v-row>
               <v-col v-for="(news, index) in newsList" :key="index" cols="6">
-                <v-card class="news-item" style="margin: 20px; width: 700px;" max-width="100%">
-                  <v-card-text class="d-flex justify-space-between align-center">
-                    <h2 style="color: black;">{{ news.title }}</h2>
+                <v-card
+                  class="news-item"
+                  style="margin: 20px; width: 700px"
+                  max-width="100%"
+                >
+                  <v-card-text
+                    class="d-flex justify-space-between align-center"
+                  >
+                    <h2 style="color: black">{{ news.title }}</h2>
                     <v-spacer></v-spacer>
-                    <v-icon @click="openUpdateDialog(news)" dark color="black"
-                      style="margin-right: 10px;">mdi-pencil</v-icon>
+                    <v-icon
+                      @click="openUpdateDialog(news)"
+                      dark
+                      color="black"
+                      style="margin-right: 10px"
+                      >mdi-pencil</v-icon
+                    >
 
-                    <v-icon @click="eliminarNoticia(news)" dark color="red">mdi-delete</v-icon>
+                    <v-icon @click="eliminarNoticia(news)" dark color="red"
+                      >mdi-delete</v-icon
+                    >
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -59,16 +75,24 @@
 
       <!-- DIALOG para EDITAR noticia -->
       <v-dialog v-model="updateDialogVisible" max-width="600">
-        <v-card style="max-height: 1900px;">
+        <v-card style="max-height: 1900px">
           <v-card-title>
             <span class="headline">Editar Noticia</span>
           </v-card-title>
           <v-card-text>
-
-            <v-text-field v-model="newsEditList.title" label="Título"></v-text-field>
-            <v-textarea v-model="newsEditList.description" label="Descripción" auto-grow></v-textarea>
-            <input type="file" @change="onFileChangeUpdate" class="black-text">
-
+            <v-text-field
+              v-model="newsEditList.title"
+              label="Título"
+            ></v-text-field>
+            <v-textarea
+              v-model="newsEditList.description"
+              label="Descripción"
+              auto-grow
+            ></v-textarea>
+            <v-file-input
+              v-model="newsEditList.image"
+              label="Archivo de imagen"
+            />
           </v-card-text>
           <v-card-actions>
             <v-btn color="blue darken-1" text @click="saveNews">Guardar</v-btn>
@@ -84,12 +108,24 @@
             <span class="headline">Crear Noticia</span>
           </v-card-title>
           <v-card-text>
-            <v-text-field v-model="newsCreateList.title" label="Título"></v-text-field>
-            <v-textarea v-model="newsCreateList.description" label="Descripción" auto-grow></v-textarea>
-            <input type="file" @change="onFileChange" class="black-text">
+            <v-text-field
+              v-model="newsCreateList.title"
+              label="Título"
+            ></v-text-field>
+            <v-textarea
+              v-model="newsCreateList.description"
+              label="Descripción"
+              auto-grow
+            ></v-textarea>
+            <v-file-input
+              v-model="newsCreateList.image"
+              label="Archivo de imagen"
+            />
           </v-card-text>
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="createNews">Guardar</v-btn>
+            <v-btn color="blue darken-1" text @click="createNews"
+              >Guardar</v-btn
+            >
             <v-btn color="red" text @click="closeCreateDialog">Cancelar</v-btn>
           </v-card-actions>
         </v-card>
@@ -99,22 +135,32 @@
 </template>
 
 <script>
-import { getBroadcastNews, updateBroadcastNews, createBroadcastNews, deleteBroadcastNews } from "@/services/communicationsManager.js";
+import {
+  getBroadcastNews,
+  updateBroadcastNews,
+  createBroadcastNews,
+  deleteBroadcastNews,
+  editBroadcastimg,
+  uploadBroadcastImg,
+  getImg
+} from "@/services/communicationsManager.js";
 
 export default {
-  layout: 'HomeLayout',
+  layout: "HomeLayout",
   data() {
     return {
+      rutaimagen: "broadcast/",
+      imagenNoticiaEdit: null,
       newsList: [],
       newsCreateList: {
         image: "",
         title: "",
-        description: ""
+        description: "",
       },
       newsEditList: {
         image: "",
         title: "",
-        description: ""
+        description: "",
       },
       file: "",
       updateFile: "",
@@ -122,32 +168,39 @@ export default {
       noticiaEditadaIndex: null,
       dialogVisible: false,
       createDialogVisible: false,
-      updateDialogVisible: false
+      updateDialogVisible: false,
     };
   },
   created() {
-    console.log('CREATED');
+    console.log("CREATED");
     this.loadNews();
   },
 
   mounted() {
-    console.log('MOUNTED');
+    console.log("MOUNTED");
   },
 
   updated() {
-    console.log('UPDATED');
+    console.log("UPDATED");
   },
 
   methods: {
-
     // UPDATE NOTICIAS
     async saveNews() {
-
       // Guardar los cambios realizados en la noticia
       if (this.idEditada !== null) {
-
         let noticiaEditadaSinId = { ...this.newsEditList };
+        noticiaEditadaSinId.image = this.newsEditList.image.name;
         delete noticiaEditadaSinId._id;
+
+        console.log("foto a subir", this.newsEditList.image);
+        console.log("foto nompre para eliminar", this.imagenNoticiaEditado);
+        if (this.newsEditList.image !== this.imagenNoticiaEditado) {
+          await editBroadcastimg(
+            this.newsEditList.image,
+            this.imagenNoticiaEditado
+          );
+        }
 
         // Actualizar la noticia existente en newsList con los datos modificados
         this.$set(this.newsList, this.noticiaEditadaIndex, noticiaEditadaSinId);
@@ -163,16 +216,19 @@ export default {
 
           // Actualizar la lista
           await this.loadNews();
-
         } catch (error) {
-          console.error('Error updating news:', error);
+          console.error("Error updating news:", error);
         }
       }
     },
 
     // CREAR NOTICIAS
     async createNews() {
-      await createBroadcastNews(this.newsCreateList);
+      let newsList = { ...this.newsCreateList };
+      newsList.image = newsList.image.name;
+      await createBroadcastNews(newsList);
+      await uploadBroadcastImg(this.newsCreateList.image);
+      console.log(this.newsCreateList.image);
       // LIMPIAR CAMPOS
       this.limpiarCampos();
       // HACER SELECT
@@ -184,8 +240,9 @@ export default {
     async loadNews() {
       try {
         this.newsList = await getBroadcastNews();
+        console.log(this.newsList);
       } catch (error) {
-        console.error('Error loading news:', error);
+        console.error("Error loading news:", error);
       }
     },
 
@@ -210,16 +267,17 @@ export default {
       this.newsCreateList = {
         image: "",
         title: "",
-        description: ""
+        description: "",
       };
       this.newsEditList = {
         image: "",
         title: "",
-        description: ""
+        description: "",
       };
       this.file = "";
     },
     openUpdateDialog(news) {
+      this.imagenNoticiaEditado = news.image;
       // Cargar los datos del producto seleccionado en el diálogo de edición
       this.newsEditList = { ...news };
       this.idEditada = news._id;
@@ -249,8 +307,14 @@ export default {
       this.updateFile = event.target.files[0];
       // Asignar el archivo a la propiedad image
       this.newsEditList.image = this.updateFile;
-    }
-  }
+    },
+
+    async getImagen(imageName) {
+      console.log("imagen", imageName);
+    const blob = await getImg(imageName); // Asume que getImg es la función que has definido anteriormente
+    return URL.createObjectURL(blob);
+  },
+  },
 };
 </script>
 
