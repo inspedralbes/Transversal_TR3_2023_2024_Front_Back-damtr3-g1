@@ -470,7 +470,8 @@ app.post("/getImg_post", (req, res) => {
         });
 
         archive.pipe(output);
-        archive.directory(directoryPath, false);
+        // Agregar un directorio llamado "mapas" dentro del archivo ZIP
+        archive.directory(directoryPath, 'mapas');
         archive.finalize();
     });
 });
