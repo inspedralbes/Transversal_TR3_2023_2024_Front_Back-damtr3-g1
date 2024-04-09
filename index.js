@@ -429,7 +429,7 @@ const archiver = require('archiver');
 app.get("/getImgGraph", async (req,res)=>{
 
 
-    const python = spawn('python3', ['graphPy.py']);
+    const python = spawn('python3', ['./graphPy.py']);
 
  
     python.stdout.on('data', (data) =>{
