@@ -421,6 +421,24 @@ app.get("/getImgBroadcast/:path", (req, res)=>{
 
 const archiver = require('archiver');
 
+
+app.get("/getImgGraph", async (req,res)=>{
+
+
+    const python = spawn('python', ['graphPy.py']);
+
+ 
+    python.stdout.on('data', (data) =>{
+        console.log(`Python script output: ${data}`);
+    })
+
+
+    pythonProcess.on('close', (code) => {
+        console.log(`Python script exited with code ${code}`);
+        res.sendFile("/app/assets/grafico_usuarios.png");
+
+      });
+})
 app.post("/getImg_post", (req, res) => {
     const directory = req.body.directory;
     const directoryPath = "/appassets/" + directory;
