@@ -415,7 +415,7 @@ app.get("/getImg/:path", (req, res)=>{
 
 app.get("/getImgBroadcast/:path", (req, res)=>{
     console.log(req.params.path);
-    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/broadcast/" + encodeURIComponent(req.params.path);
+    var path = "/app/assets/broadcast" + req.params.path;
     res.sendFile(path)
 })
 
