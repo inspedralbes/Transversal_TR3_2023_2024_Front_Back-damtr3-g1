@@ -1,5 +1,5 @@
 <template>
-  <form action="POST">
+  <form>
     <label for="username">Nom d'usuari: </label>
     <input type="text" id="username" v-model="user">
     <br>
@@ -12,9 +12,10 @@
 
 <script>
 import { login } from '@/services/communicationsManager.js'
+import io from "socket.io-client";
 
 export default {
-  layout: 'LoginLayout', // Asigna el layout definido en LoginLayout.vue
+  layout: 'LoginLayout',
   name: 'LoginPage',
   data() {
     return {
@@ -22,15 +23,28 @@ export default {
       pwd: "",
     };
   },
+
+  created() {
+    this.socket = io("http://r6pixel.duckdns.org:3169/");
+  },
+
   methods: {
     async ferLogin(usuari, pass) {
-      var logged = await login(usuari, pass);
-      if (logged) {
-        alert("Usuario " + usuari + " válido");
-        // Navegar a la página de inicio (home)
-        this.$router.push('/home');
-      } else {
-        alert("Usuario o contraseña incorrectos")
+      try {
+        const logged = await login(usuari, pass);
+        if (logged) {
+          // Guardar estado de sesión en Vuex
+          this.$store.commit('setLoggedIn', true);
+          // Almacenar la sesión en el localStorage
+          localStorage.setItem('loggedIn', true);
+          alert("Usuario " + usuari + " válido");
+          // Redirigir a la página de inicio (home)
+          this.$router.push('/home');
+        } else {
+          alert("Usuario o contraseña incorrectos")
+        }
+      } catch (error) {
+        console.error("Error durante el inicio de sesión:", error);
       }
     }
   }

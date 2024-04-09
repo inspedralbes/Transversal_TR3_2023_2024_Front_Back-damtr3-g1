@@ -571,6 +571,7 @@ import {
 
 export default {
   layout: "ProcesosLayout",
+  middleware: 'auth',
   data() {
     return {
       imagenSkinEdit: null,

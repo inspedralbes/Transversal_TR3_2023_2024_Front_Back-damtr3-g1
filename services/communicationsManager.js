@@ -575,7 +575,7 @@ export async function syncOdooClient() {
 
 export async function getImg(path) {
     try {
-       // console.log("Haciendo solicitud a:", `http://r6pixel.duckdns.org:3169/getImgBroadcast/${path}`);
+        // console.log("Haciendo solicitud a:", `http://r6pixel.duckdns.org:3169/getImgBroadcast/${path}`);
         const response = await fetch(`http://r6pixel.duckdns.org:3169/getImgBroadcast/${path}`);
         //console.log("Respuesta de la solicitud:", response);
         if (!response.ok) {

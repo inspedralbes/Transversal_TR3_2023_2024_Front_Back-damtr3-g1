@@ -50,6 +50,7 @@ import { getImgGraph } from "@/services/communicationsManager.js";
 
 export default {
   layout: 'DashboardLayout',
+  middleware: 'auth',
   data() {
     return {
       penilaianData: {},
