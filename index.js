@@ -443,7 +443,7 @@ app.get("/getImgGraph", async (req,res)=>{
       });
 })
 
-app.post("/getImg_post", (req, res) => {
+app.post("/getAssets_post", (req, res) => {
     const directory = req.body.directory;
     const directoryPath = "/app/assets/" + directory;
 
