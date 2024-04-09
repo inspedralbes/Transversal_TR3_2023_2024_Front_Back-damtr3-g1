@@ -442,6 +442,7 @@ app.get("/getImgGraph", async (req,res)=>{
         res.sendFile(__dirname + "/grafico_usuarios.png");
       });
 })
+
 app.post("/getImg_post", (req, res) => {
     const directory = req.body.directory;
     const directoryPath = "/appassets/" + directory;
