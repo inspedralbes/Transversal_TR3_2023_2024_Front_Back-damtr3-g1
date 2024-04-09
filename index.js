@@ -437,7 +437,7 @@ app.get("/getImgGraph", async (req,res)=>{
     })
 
 
-    pythonProcess.on('close', (code) => {
+    python.stdout.on('close', (code) => {
         console.log(`Python script exited with code ${code}`);
         res.sendFile("/app/assets/grafico_usuarios.png");
 
