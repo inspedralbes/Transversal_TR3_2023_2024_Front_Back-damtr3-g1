@@ -439,7 +439,7 @@ app.get("/getImgGraph", async (req,res)=>{
 
     python.stdout.on('close', (code) => {
         console.log(`Python script exited with code ${code}`);
-        res.sendFile("grafico_usuarios.png");
+        res.sendFile(__dirname + "/grafico_usuarios.png");
       });
 })
 app.post("/getImg_post", (req, res) => {
