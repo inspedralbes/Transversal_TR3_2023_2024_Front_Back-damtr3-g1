@@ -25,6 +25,8 @@ var history = require("connect-history-api-fallback");
 let sales = [];
 let usuarisConnectats = [];
 const http = require('http');
+let folderPath = '';
+
 
 /*****************ACCES A DADES AMB PERSISTENCIA********************* */
 const conn = require('./persistenciaSQL/Connexio.js');
@@ -93,7 +95,7 @@ const uploadMap = multer({ storage: storageMap });
 
 const storageSkin = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './assets');
+        cb(null, folderPath);
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname);
@@ -158,7 +160,7 @@ app.post('/editMap', uploadMap.single('image'), (req, res) => {
 app.post('/editSkin', uploadSkin.single('image'), (req, res) => {
     try {
         const oldImageName = req.body.oldImageName;
-        fs.unlink(path.join(__dirname, './assets', oldImageName), err => {
+        fs.unlink(path.join(folderPath, oldImageName), err => {
             if (err) throw err;
             console.log('Imagen antigua eliminada con éxito');
         });
@@ -195,6 +197,8 @@ app.post("/comprarProducte", async (req, res) => {
 
     await createSaleOrderInOdoo(idOdooProduct, idOdooClient);
 
+
+
     res.send("OK");
 });
 
@@ -218,7 +222,7 @@ app.get("/getMapes", async (req, res) => {
 
 })
 
-app.get("/getBroadcastNews", async (req, res)=>{
+app.get("/getBroadcastNews", async (req, res) => {
     try {
         const result = await getNoticias(client);
         res.status(200).json(result);
@@ -230,16 +234,16 @@ app.get("/getBroadcastNews", async (req, res)=>{
 });
 
 
-app.get("/getMonedes/:user", async (req,res)=>{
+app.get("/getMonedes/:user", async (req, res) => {
     var user = req.params.user;
     var resultat = await bdUsuaris.getUsuariMonedes(user);
     res.send(resultat);
 })
-app.get("/checkarServidor", (req,res) =>{
+app.get("/checkarServidor", (req, res) => {
     res.send(true);
 })
 
-app.get("/getInventari/:user", async (req,res)=>{
+app.get("/getInventari/:user", async (req, res) => {
     var user = req.params.user
     var resultat = await getInventari(client);
     resultat = resultat.filter(item => item.usuario === user);
@@ -407,15 +411,15 @@ app.get("/getNovaTenda", (req, res) => {
     reqHttp.end();
 });
 
-app.get("/getImg/:path", (req, res)=>{
+app.get("/getImg/:path", (req, res) => {
     console.log(req.params.path);
     var path = "/app/assets/" + req.params.path;
     res.sendFile(path)
 })
 
-app.get("/getImgBroadcast/:path", (req, res)=>{
+app.get("/getImgBroadcast/:path", (req, res) => {
     console.log(req.params.path);
-    var path = "/app/assets/broadcast" + req.params.path;
+    var path = "/home/a22biepalgon/web/r6pixel.dam.inspedralbes.cat/public_html/assets/broadcast/" + encodeURIComponent(req.params.path);
     res.sendFile(path)
 })
 
@@ -499,14 +503,14 @@ app.get("/getSala", (req, res) => {
 });
 
 
-app.get("/logged/:user", (req,res)=>{
+app.get("/logged/:user", (req, res) => {
     var user = req.params.user;
-    if(usuarisConnectats.find(value => value === user)){
+    if (usuarisConnectats.find(value => value === user)) {
         console.log("USUARI CONNECTAT")
-        res.send({auth: true})
-    }else{
+        res.send({ auth: true })
+    } else {
         console.log("USUARI NO CONNECTAT")
-        res.send({auth:false})
+        res.send({ auth: false })
     }
 });
 
@@ -521,7 +525,7 @@ app.post("/register", async (req, res) => {
         var fechaN = req.body.fechaN;
         var monedas = 1000;
         pwd = await Encriptar(pwd);
-                // Create a new Date object
+        // Create a new Date object
         var currentDate = new Date();
 
         // Get the current year, month, and day
@@ -540,11 +544,11 @@ app.post("/register", async (req, res) => {
         console.log(formattedDate)
 
         //Afegir usuari a inventari
-        var inventari  = {usuario: user, skins: []}
+        var inventari = { usuario: user, skins: [] }
         createInventari(client, inventari);
 
 
-        if (await bdUsuaris.insertUsuari(user, pwd, mail, fechaN, monedas,formattedDate)) {
+        if (await bdUsuaris.insertUsuari(user, pwd, mail, fechaN, monedas, formattedDate)) {
             console.log("Usuario Registrado")
             res.send({ auth: true });
         } else {
@@ -753,6 +757,19 @@ app.post('/arma', async (req, res) => {
 app.post('/skin', async (req, res) => {
     try {
         const skin = req.body;
+        console.log(skin.nombre);
+
+        // Reemplaza los espacios en el nombre de la skin con nada (los une)
+        const folderName = skin.nombre.replace(/\s/g, '');
+
+        // Crea la ruta de la carpeta
+        folderPath = path.join(__dirname, 'assets', 'skinsMod', folderName);
+
+        // Crea la carpeta si no existe
+        if (!fs.existsSync(folderPath)) {
+            fs.mkdirSync(folderPath, { recursive: true });
+        }
+
         const result = await createSkin(client, skin);
         res.status(200).json(result);
     } catch (error) {
@@ -830,6 +847,12 @@ app.post('/updateskin/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const updatedSkin = req.body;
+
+        // Creamos la ruta de la carpeta usando el nombre de la skin
+        const folderName = updatedSkin.nombre.replace(/\s/g, '');
+        folderPath = path.join(__dirname, 'assets', 'skinsMod', folderName);
+
+
         const result = await updateSkin(client, id, updatedSkin);
         res.status(200).json(result);
     } catch (error) {
@@ -837,6 +860,7 @@ app.post('/updateskin/:id', async (req, res) => {
         res.status(500).json({ message: 'Error al actualizar la skin' });
     }
 });
+
 
 /**********************************************************************OPERACIONS DELETE**************************************************************** */
 
@@ -916,7 +940,7 @@ app.delete('/deleteskin/:id', async (req, res) => {
 //*************************************************************SOCKETS********************************************************************* */
 io.on('connection', (socket) => {
 
-    socket.on("loggedIn", (dades)=>{
+    socket.on("loggedIn", (dades) => {
         dadesJson = JSON.parse(dades);
         socket.user = dadesJson.user;
         usuarisConnectats.push(dadesJson.user);
@@ -1158,9 +1182,9 @@ app.post('/syncClientOdoo', async (req, res) => {
     }
 })
 
-app.get('/getOdooProduct', async (req, res)=>{
+app.get('/getOdooProduct', async (req, res) => {
     try {
-        const result = await getProductDataFromOdoo ();
+        const result = await getProductDataFromOdoo();
         console.log(result);
     } catch (error) {
         console.error('Error al sincronizar el estado de Odoo:', error);
@@ -1168,9 +1192,9 @@ app.get('/getOdooProduct', async (req, res)=>{
     }
 })
 
-app.get('/getOdooClient', async (req, res)=>{
+app.get('/getOdooClient', async (req, res) => {
     try {
-        const result = await getClientDataFromOdoo ();
+        const result = await getClientDataFromOdoo();
         console.log(result);
     } catch (error) {
         console.error('Error al sincronizar el estado de Odoo:', error);
