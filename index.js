@@ -428,6 +428,7 @@ const archiver = require('archiver');
 
 app.get("/getImgGraph", async (req,res)=>{
 
+    // infoStats = await bdUsuaris.getUsuaris();
 
     const python = spawn('python3', ['./graphPy.py']);
 
