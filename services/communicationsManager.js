@@ -587,3 +587,17 @@ export async function getImg(path) {
         throw new Error('Error al obtener la imagen');
     }
 }
+
+export async function getImgGraph() {
+    try {
+        const response = await fetch(`http://r6pixel.duckdns.org:3169/getImgGraph`);
+        //console.log("Respuesta de la solicitud:", response);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.url;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al obtener la imagen');
+    }
+}
