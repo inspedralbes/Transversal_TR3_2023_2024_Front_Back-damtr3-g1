@@ -195,8 +195,6 @@ app.post("/comprarProducte", async (req, res) => {
 
     await createSaleOrderInOdoo(idOdooProduct, idOdooClient);
 
-
-
     res.send("OK");
 });
 

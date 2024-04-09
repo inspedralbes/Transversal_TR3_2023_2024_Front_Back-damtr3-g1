@@ -41,18 +41,19 @@ module.exports = {
             });
         })
     },
-    updateUsuariMonedes: function(monedes, user){
-        var sql = 'UPDATE Usuario SET monedas = ' + monedes + ' WHERE Usuario = "' + user+ '"'; 
-        return new Promise((resolve, reject) =>{
-            conn.query(sql, (err, result) => {
+    updateUsuariMonedes: function(monedes, user) {
+        return new Promise((resolve, reject) => {
+            var sql = 'UPDATE Usuario SET monedas = monedas - ? WHERE username = ?';
+            conn.query(sql, [monedes, user], (err, result) => {
                 if (err) {
-                    reject(err)
-                }else{
-                    resolve(result)
+                    reject(err);
+                } else {
+                    resolve(result);
                 }
             });
         });
     },
+    
 
     insertUsuari: function(user, pwd, mail, fechaN, monedas, fecha_altaUser){
         const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, fecha_altaUser) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas + ', "' + fecha_altaUser + '")';
