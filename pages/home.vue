@@ -8,21 +8,18 @@
         </v-btn>
 
         <!-- ver broadcast news -->
-        <div class="broadcast-news">
+        <div class="broadcast-news" v-if="newsLoaded">
           <v-row>
             <v-col v-for="(news, index) in newsList" :key="index" cols="6">
               <v-card class="news-card">
                 <v-card-title class="news-title">{{ news.title }}</v-card-title>
                 <v-row>
                   <v-col cols="6">
-                    <v-card-text
-                      class="news-description"
-                      style="margin-bottom: 25px"
-                      >{{ news.description }}</v-card-text
-                    >
+                    <v-card-text class="news-description" style="margin-bottom: 25px">{{ news.description
+                      }}</v-card-text>
                   </v-col>
                   <v-col cols="6">
-                    <img v-bind:src="getImagen(news.image)" alt= /> 
+                    <img :src="news.image" class="news-image" />
                   </v-col>
                 </v-row>
               </v-card>
@@ -41,27 +38,14 @@
           <v-card-text>
             <v-row>
               <v-col v-for="(news, index) in newsList" :key="index" cols="6">
-                <v-card
-                  class="news-item"
-                  style="margin: 20px; width: 700px"
-                  max-width="100%"
-                >
-                  <v-card-text
-                    class="d-flex justify-space-between align-center"
-                  >
+                <v-card class="news-item" style="margin: 20px; width: 700px" max-width="100%">
+                  <v-card-text class="d-flex justify-space-between align-center">
                     <h2 style="color: black">{{ news.title }}</h2>
                     <v-spacer></v-spacer>
-                    <v-icon
-                      @click="openUpdateDialog(news)"
-                      dark
-                      color="black"
-                      style="margin-right: 10px"
-                      >mdi-pencil</v-icon
-                    >
+                    <v-icon @click="openUpdateDialog(news)" dark color="black"
+                      style="margin-right: 10px">mdi-pencil</v-icon>
 
-                    <v-icon @click="eliminarNoticia(news)" dark color="red"
-                      >mdi-delete</v-icon
-                    >
+                    <v-icon @click="eliminarNoticia(news)" dark color="red">mdi-delete</v-icon>
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -80,19 +64,9 @@
             <span class="headline">Editar Noticia</span>
           </v-card-title>
           <v-card-text>
-            <v-text-field
-              v-model="newsEditList.title"
-              label="Título"
-            ></v-text-field>
-            <v-textarea
-              v-model="newsEditList.description"
-              label="Descripción"
-              auto-grow
-            ></v-textarea>
-            <v-file-input
-              v-model="newsEditList.image"
-              label="Archivo de imagen"
-            />
+            <v-text-field v-model="newsEditList.title" label="Título"></v-text-field>
+            <v-textarea v-model="newsEditList.description" label="Descripción" auto-grow></v-textarea>
+            <v-file-input v-model="newsEditList.image" label="Archivo de imagen" />
           </v-card-text>
           <v-card-actions>
             <v-btn color="blue darken-1" text @click="saveNews">Guardar</v-btn>
@@ -108,24 +82,12 @@
             <span class="headline">Crear Noticia</span>
           </v-card-title>
           <v-card-text>
-            <v-text-field
-              v-model="newsCreateList.title"
-              label="Título"
-            ></v-text-field>
-            <v-textarea
-              v-model="newsCreateList.description"
-              label="Descripción"
-              auto-grow
-            ></v-textarea>
-            <v-file-input
-              v-model="newsCreateList.image"
-              label="Archivo de imagen"
-            />
+            <v-text-field v-model="newsCreateList.title" label="Título"></v-text-field>
+            <v-textarea v-model="newsCreateList.description" label="Descripción" auto-grow></v-textarea>
+            <v-file-input v-model="newsCreateList.image" label="Archivo de imagen" />
           </v-card-text>
           <v-card-actions>
-            <v-btn color="blue darken-1" text @click="createNews"
-              >Guardar</v-btn
-            >
+            <v-btn color="blue darken-1" text @click="createNews">Guardar</v-btn>
             <v-btn color="red" text @click="closeCreateDialog">Cancelar</v-btn>
           </v-card-actions>
         </v-card>
@@ -147,9 +109,17 @@ import {
 
 export default {
   layout: "HomeLayout",
+  props: {
+    value: {
+      type: String,
+      validator: function (value) {
+        // Validar que el valor sea una cadena no vacía
+        return typeof value === 'string' && value.trim() !== '';
+      }
+    }
+  },
   data() {
     return {
-      rutaimagen: "broadcast/",
       imagenNoticiaEdit: null,
       newsList: [],
       newsCreateList: {
@@ -169,11 +139,12 @@ export default {
       dialogVisible: false,
       createDialogVisible: false,
       updateDialogVisible: false,
+      newsLoaded: false
     };
   },
-  created() {
-    console.log("CREATED");
-    this.loadNews();
+  async created() {
+    await this.loadNews();
+    this.newsLoaded = true;
   },
 
   mounted() {
@@ -240,7 +211,12 @@ export default {
     async loadNews() {
       try {
         this.newsList = await getBroadcastNews();
-        console.log(this.newsList);
+
+        for (const news of this.newsList) {
+          const imageURL = await getImg(news.image);
+          news.image = imageURL;
+        }
+        //console.log("Lista de noticias cargada:", this.newsList);
       } catch (error) {
         console.error("Error loading news:", error);
       }
@@ -309,16 +285,16 @@ export default {
       this.newsEditList.image = this.updateFile;
     },
 
-    async getImagen(imageName) {
-      console.log("imagen", imageName);
-    const blob = await getImg(imageName); // Asume que getImg es la función que has definido anteriormente
-    return URL.createObjectURL(blob);
-  },
   },
 };
 </script>
 
 <style scoped>
+.news-image {
+  width: 350px !important;
+  height: 500px !important;
+}
+
 .news-card {
   width: 100%;
   height: 100%;
@@ -371,6 +347,7 @@ export default {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 1;
 }
 
 .broadcast-news {

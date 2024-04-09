@@ -39,7 +39,6 @@ import GraphKills from '@/components/GraphKills.vue';
 import GraphMediaMontoGastado from '@/components/GraphMediaMontoGastado.vue';
 import GraphMontoGastado from '@/components/GraphMontoGastado.vue';
 
-
 export default {
   layout: 'DashboardLayout',
   data() {
