@@ -68,6 +68,7 @@ export default {
   },
   // nuxt.config.js
 
-  layout: false
+  layout: false,
+  //ssr: false
 
 }

@@ -6,11 +6,6 @@ export default function ({ redirect, route }) {
       // Redirigir a la página de inicio si el usuario no está autenticado
       return redirect('/');
     }
-  } else {
-    // Verificar si la ruta es la de inicio ('/')
-    if (route.path !== '/') {
-      // Redirigir a la página de inicio si el usuario no está autenticado
-      return redirect('/');
-    }
   }
 }
+ 

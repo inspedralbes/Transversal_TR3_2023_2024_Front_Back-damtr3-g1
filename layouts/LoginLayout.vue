@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  // Configuración del layout
+
 }
 </script>
 

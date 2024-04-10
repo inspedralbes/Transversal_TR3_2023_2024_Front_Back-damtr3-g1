@@ -16,6 +16,8 @@
 </template>
 
 <script>
+//import { redirect } from '@nuxt/context';
+
 export default {
     // Configuración del layout
     methods: {
@@ -31,21 +33,21 @@ export default {
 
         // Función para cerrar sesión
         logout() {
-            console.log("cerrando sesion");
-            localStorage.removeItem('loggedIn');
-            this.$router.push('/');
-            console.log("sesion cerrada");
+            // Verificar si estamos en el lado del cliente
+            if (process.client) {
+                setTimeout(() => {
+                    if (localStorage.getItem('loggedIn')) {
+                        localStorage.removeItem('loggedIn');
+                    }
+                    // Redirigir al inicio después de 2 segundos
+                    return redirect('/');
+                }, 2000);
+            }
+           
         }
     },
     created() {
-        // Verificar si estamos en el lado del cliente
-        if (process.client) {
-            // Verificar si hay algo almacenado en el localStorage y eliminarlo si es necesario
-            if (localStorage.getItem('loggedIn')) {
-                localStorage.removeItem('loggedIn');
-                console.log("localStorage fue eliminado.");
-            }
-        }
+
     },
 }
 </script>
