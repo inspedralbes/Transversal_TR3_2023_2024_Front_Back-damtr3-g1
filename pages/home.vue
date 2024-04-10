@@ -57,41 +57,41 @@
         </v-card>
       </v-dialog>
 
-      <!-- DIALOG para EDITAR noticia -->
-      <v-dialog v-model="updateDialogVisible" max-width="600">
-        <v-card style="max-height: 1900px">
-          <v-card-title>
-            <span class="headline">Editar Noticia</span>
-          </v-card-title>
-          <v-card-text>
-            <v-text-field v-model="newsEditList.title" label="Título"></v-text-field>
-            <v-textarea v-model="newsEditList.description" label="Descripción" auto-grow></v-textarea>
-            <v-file-input v-model="newsEditList.image" label="Archivo de imagen" />
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="blue darken-1" text @click="saveNews">Guardar</v-btn>
-            <v-btn color="red" text @click="closeUpdateDialog">Cancelar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+<!-- DIALOG para EDITAR noticia -->
+<v-dialog v-model="updateDialogVisible" max-width="600">
+  <v-card class="dialog-card">
+    <v-card-title class="dialog-title">
+      <span class="headline">Editar Noticia</span>
+    </v-card-title>
+    <v-card-text>
+      <v-text-field v-model="newsEditList.title" label="Título"></v-text-field>
+      <v-textarea v-model="newsEditList.description" label="Descripción" auto-grow></v-textarea>
+      <v-file-input v-model="newsEditList.image" label="Archivo de imagen" />
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="blue darken-1" text @click="saveNews">Guardar</v-btn>
+      <v-btn color="red" text @click="closeUpdateDialog">Cancelar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
 
-      <!-- DIALOG para crear noticia -->
-      <v-dialog v-model="createDialogVisible" max-width="600">
-        <v-card>
-          <v-card-title>
-            <span class="headline">Crear Noticia</span>
-          </v-card-title>
-          <v-card-text>
-            <v-text-field v-model="newsCreateList.title" label="Título"></v-text-field>
-            <v-textarea v-model="newsCreateList.description" label="Descripción" auto-grow></v-textarea>
-            <v-file-input v-model="newsCreateList.image" label="Archivo de imagen" />
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="blue darken-1" text @click="createNews">Guardar</v-btn>
-            <v-btn color="red" text @click="closeCreateDialog">Cancelar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+<!-- DIALOG para crear noticia -->
+<v-dialog v-model="createDialogVisible" max-width="600">
+  <v-card class="dialog-card">
+    <v-card-title class="dialog-title">
+      <span class="headline">Crear Noticia</span>
+    </v-card-title>
+    <v-card-text>
+      <v-text-field v-model="newsCreateList.title" label="Título"></v-text-field>
+      <v-textarea v-model="newsCreateList.description" label="Descripción" auto-grow></v-textarea>
+      <v-file-input v-model="newsCreateList.image" label="Archivo de imagen" />
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="blue darken-1" text @click="createNews">Guardar</v-btn>
+      <v-btn color="red" text @click="closeCreateDialog">Cancelar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
     </div>
   </v-app>
 </template>
@@ -291,6 +291,26 @@ export default {
 </script>
 
 <style scoped>
+
+.dialog-title {
+    background-color: #1976d2;
+    color: #ffffff;
+  }
+
+  .dialog-text {
+    color: #333333;
+  }
+
+  /* Estilos para los text fields dentro de los diálogos */
+  .dialog-text-field {
+    width: 100%;
+  }
+
+  /* Estilos para los botones dentro de los diálogos */
+  .dialog-btn {
+    color: #ffffff;
+  }
+
 .news-image {
   width: 350px !important;
   height: 500px !important;
