@@ -3,24 +3,28 @@
     "name": "dashboard",
     "path": "/dashboard",
     "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\dashboard.vue",
-    "chunkName": "pages/dashboard"
+    "chunkName": "pages/dashboard",
+    "_name": "_b0baef3a"
   },
   {
     "name": "home",
     "path": "/home",
     "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\home.vue",
-    "chunkName": "pages/home"
+    "chunkName": "pages/home",
+    "_name": "_59832460"
   },
   {
     "name": "procesos",
     "path": "/procesos",
     "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\procesos.vue",
-    "chunkName": "pages/procesos"
+    "chunkName": "pages/procesos",
+    "_name": "_462c15e9"
   },
   {
     "name": "index",
     "path": "/",
     "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_2b1eab21"
   }
 ]

@@ -16,8 +16,6 @@
 </template>
 
 <script>
-//import { redirect } from '@nuxt/context';
-
 export default {
     // Configuración del layout
     methods: {
@@ -35,15 +33,13 @@ export default {
         logout() {
             // Verificar si estamos en el lado del cliente
             if (process.client) {
-                setTimeout(() => {
-                    if (localStorage.getItem('loggedIn')) {
-                        localStorage.removeItem('loggedIn');
-                    }
-                    // Redirigir al inicio después de 2 segundos
-                    return redirect('/');
-                }, 2000);
+
+                if (localStorage.getItem('loggedIn')) {
+                    localStorage.removeItem('loggedIn');
+                }
+                // Redirigir al inicio 
+                window.location.reload();      
             }
-           
         }
     },
     created() {

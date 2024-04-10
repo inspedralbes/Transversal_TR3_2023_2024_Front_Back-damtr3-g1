@@ -30,8 +30,15 @@ export default {
 
         // Función para cerrar sesión
         logout() {
-            localStorage.removeItem('loggedIn'); // Limpiar el local storage
-            this.$router.push('/'); // Redireccionar a la página principal
+            // Verificar si estamos en el lado del cliente
+            if (process.client) {
+
+                if (localStorage.getItem('loggedIn')) {
+                    localStorage.removeItem('loggedIn');
+                }
+                // Redirigir al inicio 
+                window.location.reload();
+            }
         }
     }
 }
