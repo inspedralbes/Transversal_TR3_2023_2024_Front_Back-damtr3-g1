@@ -1,6 +1,6 @@
 const xmlrpc = require('xmlrpc');
 
-async function createSaleOrderInOdoo(productId, partnerId) {
+async function createSaleOrderInOdoo(productId, partnerId, monedes) {
     const clientOptions = {
         host: '89.168.118.150',
         port: 8069,
@@ -28,14 +28,17 @@ async function createSaleOrderInOdoo(productId, partnerId) {
 
                     const objectClient = xmlrpc.createClient(objectClientOptions);
 
+                    // Define la línea de pedido de venta sin impuesto
+                    const saleOrderLine = {
+                        product_id: productId,
+                        product_uom_qty: 1, // Cantidad del producto
+                        price_unit: monedes, // Precio unitario
+                        tax_id: false
+                    };
+
                     const saleOrderData = {
                         partner_id: partnerId,
-                        order_line: [
-                            [0, 0, {
-                                product_id: productId,
-                                product_uom_qty: 1, // Cantidad del producto
-                            }]
-                        ]
+                        order_line: [[0, 0, saleOrderLine]]
                     };
 
                     objectClient.methodCall('execute_kw', [db, uid, password, 'sale.order', 'create', [saleOrderData]], (error, saleOrderId) => {

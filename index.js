@@ -195,7 +195,7 @@ app.post("/comprarProducte", async (req, res) => {
     const idOdooProduct = await getProductIdFromOdoo(idProducte)
     const idOdooClient = await getPartnerIdFromOdoo(user);
 
-    await createSaleOrderInOdoo(idOdooProduct, idOdooClient);
+    await createSaleOrderInOdoo(idOdooProduct, idOdooClient, monedes);
 
 
 
