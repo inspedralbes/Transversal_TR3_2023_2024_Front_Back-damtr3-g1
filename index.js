@@ -539,7 +539,10 @@ app.get("/logged/:user", (req, res) => {
 app.post("/activarSkin", async (req,res)=>{
     id = req.body.idActivo;
     idUser = req.body.id;
+    console.log("IDNUEVO: " +id);
+    console.log("IDUSER" + idUser);
     await updateActivo(client, idUser, id);
+    res.send("OK");
 })
 
 //registrar un usuari
