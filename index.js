@@ -411,9 +411,9 @@ app.get("/getNovaTenda", (req, res) => {
     reqHttp.end();
 });
 
-app.get("/getImg/:path", (req, res) => {
-    console.log(req.params.path);
-    var path = "/app/assets/" + req.params.path;
+app.post("/getImg", (req, res) => {
+    console.log(req.body.path);
+    var path = "/app/assets/";
     res.sendFile(path)
 })
 
