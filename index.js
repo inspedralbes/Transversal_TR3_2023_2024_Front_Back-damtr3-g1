@@ -537,7 +537,7 @@ app.get("/logged/:user", (req, res) => {
 
 /**********************************************************************OPERACIONS POST**************************************************************** */
 app.post("/activarSkin", async (req,res)=>{
-    id = req.body.idActivo;
+    id = req.body.idNuevo;
     idUser = req.body.id;
     console.log("IDNUEVO: " +id);
     console.log("IDUSER" + idUser);
