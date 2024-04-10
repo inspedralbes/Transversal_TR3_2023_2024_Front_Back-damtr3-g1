@@ -42,17 +42,6 @@ export async function createPersonaje(personaje) {
     return boolValue;
 }
 
-export async function habilidad(habilidad) {
-    const response = await fetch(`http://r6pixel.duckdns.org:3169/habilidad`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(habilidad),
-    });
-    const resultat = await response.text();
-    const boolValue = resultat === "true";
-    return boolValue;
-}
-
 export async function arma(arma) {
     const response = await fetch(`http://r6pixel.duckdns.org:3169/arma`, {
         method: 'POST',
@@ -100,20 +89,6 @@ export async function deletePersonaje(id) {
     } catch (error) {
         console.error(error);
         throw new Error('Error al borrar el personaje');
-    }
-}
-
-export async function deleteHabilidad(id) {
-    try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3169/deletehabilidad/${id}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Error al borrar la habilidad');
     }
 }
 
@@ -189,21 +164,6 @@ export async function updatePersonaje(id, personaje) {
     }
 }
 
-export async function updateHabilidad(id, habilidad) {
-    try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3169/updatehabilidad/${id}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(habilidad),
-        });
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Error al actualizar la habilidad');
-    }
-}
-
 export async function updateArma(id, arma) {
     try {
         const response = await fetch(`http://r6pixel.duckdns.org:3169/updatearma/${id}`, {
@@ -268,17 +228,6 @@ export async function getPersonaje() {
     } catch (error) {
         console.error(error);
         throw new Error('Error al obtener el personaje');
-    }
-}
-
-export async function getHabilidad() {
-    try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3169/getHabilidad`);
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Error al obtener la habilidad');
     }
 }
 
