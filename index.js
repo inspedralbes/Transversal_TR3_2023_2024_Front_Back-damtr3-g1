@@ -38,7 +38,7 @@ const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
 const { getNoticias, updateNoticia, createNoticia, deleteNoticia } = require('./funcionesmongo/noticias.js');
-const { getInventari, updateInventari, createInventari, deleteInventari } = require('./funcionesmongo/inventari.js');
+const { getInventari, updateInventari, createInventari, deleteInventari, updateActivo } = require('./funcionesmongo/inventari.js');
 
 const insertDataIntoOdoo = require('./odoo/odooproduct.js');
 const insertClientOdoo = require('./odoo/odooclient.js');
@@ -536,6 +536,15 @@ app.get("/logged/:user", (req, res) => {
 
 
 /**********************************************************************OPERACIONS POST**************************************************************** */
+app.post("/activarSkin", async (req,res)=>{
+    id = req.body.idActivo;
+    idUser = req.body.id;
+    console.log("IDNUEVO: " +id);
+    console.log("IDUSER" + idUser);
+    await updateActivo(client, idUser, id);
+    res.send("OK");
+})
+
 //registrar un usuari
 app.post("/register", async (req, res) => {
     try {
