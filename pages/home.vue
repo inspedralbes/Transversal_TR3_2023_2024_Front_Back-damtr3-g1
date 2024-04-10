@@ -167,12 +167,7 @@ export default {
 
         console.log("foto a subir", this.newsEditList.image);
         console.log("foto nompre para eliminar", this.imagenNoticiaEditado);
-        if (this.newsEditList.image !== this.imagenNoticiaEditado) {
-          await editBroadcastimg(
-            this.newsEditList.image,
-            this.imagenNoticiaEditado
-          );
-        }
+        
 
         // Actualizar la noticia existente en newsList con los datos modificados
         this.$set(this.newsList, this.noticiaEditadaIndex, noticiaEditadaSinId);
@@ -180,6 +175,13 @@ export default {
         try {
           // Realizar la petición de actualización del estado
           await updateBroadcastNews(this.idEditada, noticiaEditadaSinId);
+
+          if (this.newsEditList.image !== this.imagenNoticiaEditado) {
+          await editBroadcastimg(
+            this.newsEditList.image,
+            this.imagenNoticiaEditado
+          );
+        }
 
           // LMPIAR CAMPOS
           this.limpiarCampos();
