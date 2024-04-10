@@ -28,15 +28,25 @@ export default {
         goToDashboard() {
             this.$router.push('/dashboard');
         },
-        
+
         // Función para cerrar sesión
         logout() {
             console.log("cerrando sesion");
-            localStorage.removeItem('loggedIn'); 
-            this.$router.push('/'); 
+            localStorage.removeItem('loggedIn');
+            this.$router.push('/');
             console.log("sesion cerrada");
         }
-    }
+    },
+    created() {
+        // Verificar si estamos en el lado del cliente
+        if (process.client) {
+            // Verificar si hay algo almacenado en el localStorage y eliminarlo si es necesario
+            if (localStorage.getItem('loggedIn')) {
+                localStorage.removeItem('loggedIn');
+                console.log("localStorage fue eliminado.");
+            }
+        }
+    },
 }
 </script>
 

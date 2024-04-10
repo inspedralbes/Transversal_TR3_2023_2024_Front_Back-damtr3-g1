@@ -69,6 +69,10 @@ export default {
     GraphMontoGastado
   },
 
+  created() {
+    this.selectFoto();
+  },
+
   methods: {
     async ejecutarScript() {
       try {
@@ -80,7 +84,7 @@ export default {
 
         // Asigna la URL de la imagen a la variable imagenUrl
         this.imagenUrl = imageURL;
-        
+
         // Indica que el script se ha ejecutado correctamente
         this.scriptEjecutado = true;
       } catch (error) {
@@ -88,6 +92,18 @@ export default {
       } finally {
         // Habilita el botón después de que se complete la ejecución del script
         this.ejecutandoScript = false;
+      }
+    },
+
+    async selectFoto() {
+      try {
+        // Realiza la solicitud para obtener la URL de la imagen
+        const imageURL = await getImgGraph();
+
+        // Asigna la URL de la imagen a la variable imagenUrl
+        this.imagenUrl = imageURL;
+      } catch (error) {
+        console.error("Error loading news:", error);
       }
     }
   }

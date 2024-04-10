@@ -1,13 +1,19 @@
 <template>
-  <form>
-    <label for="username">Nom d'usuari: </label>
-    <input type="text" id="username" v-model="user">
-    <br>
-    <label for="pwd" style="margin-top: 20px;">Contrasenya: </label>
-    <input type="password" id="password" style="margin-top: 20px;" v-model="pwd">
-    <br><br>
-    <v-btn class="btn" @click="ferLogin(user, pwd)">LOGIN </v-btn>
-  </form>
+  <div class="login-container">
+    <form>
+      <div class="form-group">
+        <label for="username">Nombre de usuario:</label>
+        <input type="text" id="username" v-model="user" placeholder="Ingrese su nombre de usuario">
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" v-model="pwd" placeholder="Ingrese su contraseña">
+      </div>
+      <div class="form-group">
+        <v-btn class="btn" @click="ferLogin(user, pwd)">Iniciar sesión</v-btn>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -33,7 +39,7 @@ export default {
       try {
         const logged = await login(usuari, pass);
         if (logged) {
-          localStorage.removeItem('loggedIn');
+
           // Almacenar la sesión en el localStorage
           localStorage.setItem('loggedIn', true);
           alert("Usuario " + usuari + " válido");
@@ -50,14 +56,46 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.login-container {
+  width: 450px !important;
+  height: 300px !important;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
 input {
-  border: 1px solid rgb(255, 0, 200);
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .btn {
-  border: 1px solid rgb(255, 0, 200);
-  border-radius: 20px;
+  width: 100%;
   padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #72a4ff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #72a4ff;
 }
 </style>
