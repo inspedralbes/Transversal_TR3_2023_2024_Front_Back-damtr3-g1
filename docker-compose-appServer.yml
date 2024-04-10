@@ -8,8 +8,8 @@ services:
       context: .
       dockerfile: Dockerfile.nodejs
     ports:
-      - "3169:3169"
+      - "3168:3168"
     volumes:
       - ./:/app
-    command: node index.js
+    command: node appServer.js
     restart: always

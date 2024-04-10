@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  
+
+  nodejs:
+    build: 
+      context: .
+      dockerfile: Dockerfile.nodejs
+    ports:
+      - "3170:3170"
+    volumes:
+      - ./:/app
+    command: node appServer.js
+    restart: always
