@@ -23,6 +23,10 @@ export default {
   css: [
   ],
 
+  router: {
+    middleware: ['auth']
+  },
+
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['@/plugins/chart.js'
   ],
@@ -65,6 +69,5 @@ export default {
   // nuxt.config.js
 
   layout: false
-
 
 }
