@@ -1,3 +1,4 @@
+//r6pixel.duckdns.org
 export async function login(user, pwd) {
     const response = await fetch(`http://r6pixel.duckdns.org:3169/loginWeb`, {
         method: 'POST',

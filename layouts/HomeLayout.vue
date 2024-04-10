@@ -17,6 +17,8 @@
 
 <script>
 export default {
+
+    middleware: 'auth',
     // Configuración del layout
     methods: {
         // Función para redireccionar a la página de Procesos
@@ -37,14 +39,34 @@ export default {
                 if (localStorage.getItem('loggedIn')) {
                     localStorage.removeItem('loggedIn');
                 }
-                // Redirigir al inicio 
-                window.location.reload();      
+                alert("Se ha cerrado sesion");
+                // Redirigir a la página de inicio (home)
+                this.$router.push('/');
+            }
+        },
+
+        // COMPROBAR ACCESO
+        comprobarSesion() {
+            // Verificar si el código se está ejecutando en el lado del cliente (navegador)
+            if (process.client) {
+                // Verificar si el usuario ha iniciado sesión
+                const loggedIn = localStorage.getItem('loggedIn');
+
+                if (!loggedIn && route.path !== '/') {
+                    // Si el usuario no está autenticado y la ruta no es la de inicio ('/'), redirigir a la raíz
+                    this.$router.push('/');
+                }
             }
         }
     },
-    created() {
 
+    created() {
+        this.comprobarSesion();
     },
+
+    updated() {
+        this.comprobarSesion();
+    }
 }
 </script>
 

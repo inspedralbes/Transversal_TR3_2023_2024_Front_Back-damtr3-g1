@@ -1,15 +1,17 @@
-// Importa la librería js-cookie para manejar cookies
-import Cookies from 'js-cookie';
-
 export default function ({ redirect, route }) {
-  // Verificar si el usuario ha iniciado sesión
-  if (process.client && Cookies.get('loggedIn')) {
-    // El usuario ha iniciado sesión, no es necesario redirigir
-    return;
-  }
+  // Verificar si el código se está ejecutando en el lado del cliente (navegador)
+  if (process.client) {
+    // Verificar si el usuario ha iniciado sesión
+    const loggedIn = localStorage.getItem('loggedIn');
 
-  // Redirigir a la página de inicio si el usuario no ha iniciado sesión y la ruta no es la de inicio ('/')
-  if (route.path !== '/') {
-    return redirect('/');
+    if (loggedIn) {
+      // El usuario ha iniciado sesión, no es necesario redirigir
+      return;
+    }
+
+    // Redirigir a la página de inicio si el usuario no ha iniciado sesión y la ruta no es la de inicio ('/')
+    if (route.path !== '/') {
+      return redirect('/');
+    }
   }
 }
