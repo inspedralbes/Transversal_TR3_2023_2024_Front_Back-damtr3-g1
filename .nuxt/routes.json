@@ -1,0 +1,26 @@
+[
+  {
+    "name": "dashboard",
+    "path": "/dashboard",
+    "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\dashboard.vue",
+    "chunkName": "pages/dashboard"
+  },
+  {
+    "name": "home",
+    "path": "/home",
+    "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\home.vue",
+    "chunkName": "pages/home"
+  },
+  {
+    "name": "procesos",
+    "path": "/procesos",
+    "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\procesos.vue",
+    "chunkName": "pages/procesos"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "D:\\\\Azabal\\\\JuegoNuxt\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\index.vue",
+    "chunkName": "pages/index"
+  }
+]
