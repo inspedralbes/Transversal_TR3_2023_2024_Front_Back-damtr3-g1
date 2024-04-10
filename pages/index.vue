@@ -33,8 +33,7 @@ export default {
       try {
         const logged = await login(usuari, pass);
         if (logged) {
-          // Guardar estado de sesión en Vuex
-          this.$store.commit('setLoggedIn', true);
+         
           // Almacenar la sesión en el localStorage
           localStorage.setItem('loggedIn', true);
           alert("Usuario " + usuari + " válido");
