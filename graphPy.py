@@ -2,6 +2,8 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import requests
+import sys
+import json
 
 # Ruta del archivo de imagen
 ruta_imagen = 'grafico_usuarios.png'
@@ -18,6 +20,7 @@ def get_usuarios():
         url = 'http://r6pixel.duckdns.org:3169/getUsuarios'
         response = requests.get(url)
         response.raise_for_status()  # Levanta una excepción en caso de error de solicitud HTTP
+        print(response.json())
         return response.json()
     except requests.exceptions.RequestException as e:
         print('Error al obtener usuarios:', e)

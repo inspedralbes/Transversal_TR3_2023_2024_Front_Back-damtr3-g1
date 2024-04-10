@@ -428,6 +428,7 @@ const archiver = require('archiver');
 
 app.get("/getImgGraph", async (req,res)=>{
 
+    // infoStats = await bdUsuaris.getUsuaris();
 
     const python = spawn('python3', ['./graphPy.py']);
 
@@ -443,9 +444,9 @@ app.get("/getImgGraph", async (req,res)=>{
       });
 })
 
-app.post("/getImg_post", (req, res) => {
+app.post("/getAssets_post", (req, res) => {
     const directory = req.body.directory;
-    const directoryPath = "/appassets/" + directory;
+    const directoryPath = "/app/assets/" + directory;
 
     // Comprobar si el directorio existe
     fs.access(directoryPath, fs.constants.F_OK, (err) => {
@@ -470,7 +471,8 @@ app.post("/getImg_post", (req, res) => {
         });
 
         archive.pipe(output);
-        archive.directory(directoryPath, false);
+        // Agregar un directorio llamado "mapas" dentro del archivo ZIP
+        archive.directory(directoryPath, 'mapas');
         archive.finalize();
     });
 });
