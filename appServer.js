@@ -454,7 +454,15 @@ app.post("/getAssets_post", (req, res) => {
 
         archive.pipe(output);
         // Agregar un directorio llamado "mapas" dentro del archivo ZIP
-        archive.directory(directoryPath, 'mapas');
+        if (directory=="mapas") {
+            archive.directory(directoryPath, 'mapas');
+            console.log("mapas enviados")
+        }
+        else {
+            archive.directory(directoryPath, 'skinsMod');
+            console.log("skins enviados")
+        }
+        
         archive.finalize();
     });
 });
