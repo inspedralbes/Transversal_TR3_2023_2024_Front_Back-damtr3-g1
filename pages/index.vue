@@ -33,7 +33,7 @@ export default {
       try {
         const logged = await login(usuari, pass);
         if (logged) {
-         
+          localStorage.removeItem('loggedIn');
           // Almacenar la sesión en el localStorage
           localStorage.setItem('loggedIn', true);
           alert("Usuario " + usuari + " válido");
