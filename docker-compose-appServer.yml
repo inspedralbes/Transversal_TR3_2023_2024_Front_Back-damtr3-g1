@@ -3,7 +3,7 @@ version: '3'
 services:
   
 
-  appServer:
+  app_server:
     build: 
       context: .
       dockerfile: Dockerfile.nodejs
