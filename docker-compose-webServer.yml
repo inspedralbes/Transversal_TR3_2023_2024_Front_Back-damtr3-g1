@@ -11,5 +11,5 @@ services:
       - "3170:3170"
     volumes:
       - ./:/app
-    command: node appServer.js
+    command: node webServer.js
     restart: always
