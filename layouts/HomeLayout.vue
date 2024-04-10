@@ -31,8 +31,10 @@ export default {
         
         // Función para cerrar sesión
         logout() {
-            localStorage.removeItem('loggedIn'); // Limpiar el local storage
-            this.$router.push('/'); // Redireccionar a la página principal
+            console.log("cerrando sesion");
+            localStorage.removeItem('loggedIn'); 
+            this.$router.push('/'); 
+            console.log("sesion cerrada");
         }
     }
 }

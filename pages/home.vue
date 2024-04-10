@@ -109,6 +109,7 @@ import {
 
 export default {
   layout: "HomeLayout",
+  middleware: 'auth',
   props: {
     value: {
       type: String,
