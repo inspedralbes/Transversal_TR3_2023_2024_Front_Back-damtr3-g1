@@ -2,11 +2,11 @@
   <div class="login-container">
     <form>
       <div class="form-group">
-        <label for="username">Nombre de usuario:</label>
+        <label for="username" class="titulos">Nombre de usuario:</label>
         <input type="text" id="username" v-model="user" placeholder="Ingrese su nombre de usuario">
       </div>
       <div class="form-group">
-        <label for="password">Contraseña:</label>
+        <label for="password" class="titulos">Contraseña:</label>
         <input type="password" id="password" v-model="pwd" placeholder="Ingrese su contraseña">
       </div>
       <div class="form-group">
@@ -57,6 +57,10 @@ export default {
 </script>
 
 <style scoped>
+.titulos{
+color: black;
+}
+
 .login-container {
   width: 450px !important;
   height: 300px !important;

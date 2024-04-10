@@ -1,100 +1,93 @@
 <template>
   <v-app>
     <v-main>
-      <!-- PANEL CONTROL -->
-      <v-container fluid>
-        <!-- SERVIDORES Y PRODUCTOS -->
-        <v-row justify="center">
-          <!-- Panel de Control Servidores -->
-          <v-col cols="12" sm="6">
-            <v-card class="mx-auto" max-width="400">
-              <v-card-title>Panel de Control Servidores</v-card-title>
-              <v-card-text>
-                <v-btn @click="toggleOdoo" block>
-                  {{ odooServerRunning ? "Parar Odoo" : "Arrancar Odoo" }}
-                </v-btn>
-                <v-btn
-                  @click="toggleGameServers"
-                  block
-                  style="margin-top: 20px"
-                >
-                  {{
-                    gameServersRunning
-                      ? "Servidores del Juego Arrancados"
-                      : "Servidores del Juego Parados"
-                  }}
-                </v-btn>
-              </v-card-text>
-            </v-card>
-          </v-col>
+  <!-- PANEL CONTROL -->
+  <v-container fluid>
+    <!-- SERVIDORES Y PRODUCTOS -->
+    <v-row justify="center">
+      <!-- Panel de Control Servidores -->
+      <v-col cols="12" sm="6">
+        <v-card class="mx-auto panel-card" max-width="400">
+          <v-card-title class="panel-title">Panel de Control Servidores</v-card-title>
+          <v-card-text class="panel-text">
+            <v-btn @click="toggleOdoo" block class="panel-btn">
+              {{ odooServerRunning ? "Parar Odoo" : "Arrancar Odoo" }}
+            </v-btn>
+            <v-btn @click="toggleGameServers" block class="panel-btn">
+              {{
+                gameServersRunning
+                  ? "Servidores del Juego Arrancados"
+                  : "Servidores del Juego Parados"
+              }}
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
 
-          <!-- PANEL DE CONTROL PRODUCTOS -->
-          <v-col cols="12" sm="6">
-            <v-card class="mx-auto" max-width="400">
-              <v-card-title>Panel de Control Productos</v-card-title>
-              <v-card-text>
-                <v-btn @click="sincroProductos" block
-                  >Sincronizar Productos</v-btn
-                >
-                <v-btn
-                  @click="openProductosDialog"
-                  block
-                  style="margin-top: 20px"
-                  >Ver Productos</v-btn
-                >
-              </v-card-text>
-            </v-card>
-          </v-col>
+      <!-- PANEL DE CONTROL PRODUCTOS -->
+      <v-col cols="12" sm="6">
+        <v-card class="mx-auto panel-card" max-width="400">
+          <v-card-title class="panel-title">Panel de Control Productos</v-card-title>
+          <v-card-text class="panel-text">
+            <v-btn @click="sincroProductos" block class="panel-btn">
+              Sincronizar Productos
+            </v-btn>
+            <v-btn @click="openProductosDialog" block class="panel-btn">
+              Ver Productos
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
 
-          <!-- PANEL DE CONTROL CLIENTES -->
-          <v-col cols="12" sm="6">
-            <v-card class="mx-auto" max-width="400">
-              <v-card-title>Panel de Control Clientes</v-card-title>
-              <v-card-text>
-                <v-btn @click="sincroClientes" block
-                  >Sincronizar Clientes</v-btn
-                >
-                <v-btn
-                  @click="openClientesDialog"
-                  block
-                  style="margin-top: 20px"
-                  >Ver Clientes</v-btn
-                >
-              </v-card-text>
-            </v-card>
-          </v-col>
+      <!-- PANEL DE CONTROL CLIENTES -->
+      <v-col cols="12" sm="6">
+        <v-card class="mx-auto panel-card" max-width="400">
+          <v-card-title class="panel-title">Panel de Control Clientes</v-card-title>
+          <v-card-text class="panel-text">
+            <v-btn @click="sincroClientes" block class="panel-btn">
+              Sincronizar Clientes
+            </v-btn>
+            <v-btn @click="openClientesDialog" block class="panel-btn">
+              Ver Clientes
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
 
-          <!-- PANEL DE CONTROL MAPAS -->
-          <v-col cols="12" sm="6">
-            <v-card class="mx-auto" max-width="400">
-              <v-card-title>Panel de Control Mapas</v-card-title>
-              <v-card-text>
-                <v-btn @click="openMapaDialog" block> Ver Mapas</v-btn>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+      <!-- PANEL DE CONTROL MAPAS -->
+      <v-col cols="12" sm="6">
+        <v-card class="mx-auto panel-card" max-width="400">
+          <v-card-title class="panel-title">Panel de Control Mapas</v-card-title>
+          <v-card-text class="panel-text">
+            <v-btn @click="openMapaDialog" block class="panel-btn">
+              Ver Mapas
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
     </v-main>
 
-    <!-- PANEL DE PRODUCTOS -->
-    <v-dialog
-      v-model="productosDialog"
-      max-width="1900"
-      max-height="1900"
-      style="height: auto; width: auto"
-    >
-      <template v-slot:activator="{ on }"></template>
-      <v-card>
-        <v-card-title>Lista de Productos</v-card-title>
-        <v-card-text>
-          <v-row>
-            <!-- Columna de Personajes -->
-            <v-col cols="12" md="6">
-              <v-card-title style="color: white">Personajes</v-card-title>
+  <!-- PANEL DE PRODUCTOS -->
+  <v-dialog
+    v-model="productosDialog"
+    max-width="1900"
+    max-height="1900"
+    style="height: auto; width: auto"
+  >
+    <template v-slot:activator="{ on }"></template>
+    <v-card class="dialog-card">
+      <v-card-title class="dialog-title">Lista de Productos</v-card-title>
+      <v-card-text class="dialog-text">
+        <v-row>
+          <!-- Columna de Personajes -->
+          <v-col cols="12" md="6">
+            <v-card>
+              <v-card-title class="inner-title">Personajes</v-card-title>
               <v-spacer></v-spacer>
               <!-- Esto empuja el botón a la derecha -->
-              <v-btn color="primary" @click="dialogPersonaje = true"
+              <v-btn color="primary" @click="dialogPersonaje = true" class="dialog-btn"
                 >Crear Personaje</v-btn
               >
               <v-row>
@@ -104,9 +97,9 @@
                   cols="12"
                   md="6"
                 >
-                  <v-card>
-                    <v-card-title>{{ personaje.nombre }}</v-card-title>
-                    <v-card-text>
+                  <v-card class="inner-card">
+                    <v-card-title class="inner-title-2">{{ personaje.nombre }}</v-card-title>
+                    <v-card-text class="inner-text">
                       <div>Nivel Desbloqueo: {{ personaje.lvlDesbloqueo }}</div>
                     </v-card-text>
                     <v-card-actions>
@@ -114,31 +107,35 @@
                         color="primary"
                         text
                         @click="editarPersonaje(personaje)"
+                        class="dialog-btn"
                         >Editar</v-btn
                       >
                       <v-btn
                         color="error"
                         text
                         @click="eliminarPersonaje(personaje)"
+                        class="dialog-btn"
                         >Eliminar</v-btn
                       >
                     </v-card-actions>
                   </v-card>
                 </v-col>
               </v-row>
-            </v-col>
+            </v-card>
+          </v-col>
 
-            <!-- Línea Separadora -->
-            <v-col cols="12" md="1" class="d-flex justify-center align-center">
-              <v-divider vertical></v-divider>
-            </v-col>
+          <!-- Línea Separadora -->
+          <v-col cols="12" md="1" class="d-flex justify-center align-center">
+            <v-divider vertical></v-divider>
+          </v-col>
 
-            <!-- Columna de Skins -->
-            <v-col cols="12" md="5">
-              <v-card-title style="color: white">Skins</v-card-title>
+          <!-- Columna de Skins -->
+          <v-col cols="12" md="5">
+            <v-card>
+              <v-card-title class="inner-title">Skins</v-card-title>
               <v-spacer></v-spacer>
               <!-- Esto empuja el botón a la derecha -->
-              <v-btn color="primary" @click="dialogSkin = true"
+              <v-btn color="primary" @click="dialogSkin = true" class="dialog-btn"
                 >Crear Pack Skin</v-btn
               >
               <v-row>
@@ -148,396 +145,501 @@
                   cols="12"
                   md="6"
                 >
-                  <v-card>
-                    <v-card-title>{{ skin.nombre }}</v-card-title>
-                    <v-card-text>
+                  <v-card class="inner-card">
+                    <v-card-title class="inner-title-2">{{ skin.nombre }}</v-card-title>
+                    <v-card-text class="inner-text">
                       <div>Valor en Monedas: {{ skin.valorMonedas }}</div>
                       <div>Imagen: {{ skin.pngSkin }}</div>
                     </v-card-text>
                     <v-card-actions>
-                      <v-btn color="primary" text @click="editarSkin(skin)"
+                      <v-btn
+                        color="primary"
+                        text
+                        @click="editarSkin(skin)"
+                        class="dialog-btn"
                         >Editar</v-btn
                       >
-                      <v-btn color="error" text @click="eliminarSkin(skin)"
+                      <v-btn
+                        color="error"
+                        text
+                        @click="eliminarSkin(skin)"
+                        class="dialog-btn"
                         >Eliminar</v-btn
                       >
                     </v-card-actions>
                   </v-card>
                 </v-col>
               </v-row>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" text @click="closeProductosDialog"
-            >Cerrar</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+          color="primary"
+          text
+          @click="closeProductosDialog"
+          class="dialog-btn"
+          >Cerrar</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
-    <!-- Diálogo de Edición de Productos -->
-    <v-dialog v-model="editarPersonajeDialog" max-width="500">
-      <v-card>
-        <v-card-title>Editar Personaje</v-card-title>
-        <v-card-text>
-          <!-- Aquí agregar campos de edición para el producto -->
-          <v-text-field
-            v-model="personajeEditado.nombre"
-            label="Nombre"
-          ></v-text-field>
-          <v-text-field
-            v-model="personajeEditado.lvlDesbloqueo"
-            label="Nivel Desbloqueo"
-          ></v-text-field>
-          <v-text-field
-            v-model="personajeEditado.descripcion"
-            label="Descripción"
-          ></v-text-field>
-          <v-row>
-            <v-col
-              v-for="skin in productos.skins"
-              :key="skin._id"
-              cols="12"
-              sm="6"
-              md="4"
-            >
-              <v-checkbox
-                v-model="personajeEditado.packSkins"
-                :label="skin.nombre"
-                :value="skin._id"
-                :input-value="
-                  personajeEditado.packSkins &&
-                  personajeEditado.packSkins.includes(skin._id)
-                "
-              ></v-checkbox>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" text @click="guardarCambiosPersonaje"
-            >Guardar Cambios</v-btn
+  <!-- Diálogo de Edición de Productos -->
+  <v-dialog v-model="editarPersonajeDialog" max-width="500">
+    <v-card class="dialog-card">
+      <v-card-title class="dialog-title">Editar Personaje</v-card-title>
+      <v-card-text class="dialog-text">
+        <!-- Aquí agregar campos de edición para el producto -->
+        <v-text-field
+          v-model="personajeEditado.nombre"
+          label="Nombre"
+          class="dialog-text-field"
+        ></v-text-field>
+        <v-text-field
+          v-model="personajeEditado.lvlDesbloqueo"
+          label="Nivel Desbloqueo"
+          class="dialog-text-field"
+        ></v-text-field>
+        <v-text-field
+          v-model="personajeEditado.descripcion"
+          label="Descripción"
+          class="dialog-text-field"
+        ></v-text-field>
+        <v-row>
+          <v-col
+            v-for="skin in productos.skins"
+            :key="skin._id"
+            cols="12"
+            sm="6"
+            md="4"
           >
-          <v-btn color="primary" text @click="cancelarEdicionPersonaje">
-            Cancelar</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+            <v-checkbox
+              v-model="personajeEditado.packSkins"
+              :label="skin.nombre"
+              :value="skin._id"
+              class="dialog-checkbox"
+              :input-value="
+                personajeEditado.packSkins &&
+                personajeEditado.packSkins.includes(skin._id)
+              "
+            ></v-checkbox>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+          color="primary"
+          text
+          @click="guardarCambiosPersonaje"
+          class="dialog-btn"
+          >Guardar Cambios</v-btn
+        >
+        <v-btn
+          color="primary"
+          text
+          @click="cancelarEdicionPersonaje"
+          class="dialog-btn"
+          >Cancelar</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
-    <!-- EDITAR SKIN -->
-    <v-dialog v-model="editarSkinDialog" max-width="500">
-      <v-card>
-        <v-card-title>Editar Skin</v-card-title>
-        <v-card-text>
-          <!-- Aquí agregar campos de edición para el producto -->
+  <!-- EDITAR SKIN -->
+  <v-dialog v-model="editarSkinDialog" max-width="500">
+    <v-card class="dialog-card">
+      <v-card-title class="dialog-title">Editar Skin</v-card-title>
+      <v-card-text class="dialog-text">
+        <!-- Aquí agregar campos de edición para el producto -->
+        <v-text-field
+          v-model="skinEditado.nombre"
+          label="Nombre"
+          class="dialog-text-field"
+        ></v-text-field>
+        <v-text-field
+          v-model="skinEditado.descripcion"
+          label="Descripción"
+          class="dialog-text-field"
+        ></v-text-field>
+        <v-file-input
+          v-model="skinEditado.pngSkin"
+          label="Archivo PNG"
+          accept="image/png"
+          class="dialog-text-field"
+        />
+        <v-text-field
+          v-model="skinEditado.valorMonedas"
+          label="Precio Monedas"
+          class="dialog-text-field"
+        ></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+          color="primary"
+          text
+          @click="guardarCambioSkin"
+          class="dialog-btn"
+          >Guardar Cambios</v-btn
+        >
+        <v-btn
+          color="primary"
+          text
+          @click="cancelarEdicionSkin"
+          class="dialog-btn"
+          >Cancelar</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <!-- Dialog para CREAR PERSONAJE  -->
+  <v-dialog v-model="dialogPersonaje" persistent max-width="600px">
+    <v-card class="dialog-card">
+      <v-card-title class="dialog-title">
+        <span class="headline">Nuevo Personaje</span>
+      </v-card-title>
+      <v-card-text class="dialog-text">
+        <v-container>
+          <v-form ref="formPersonaje" v-model="valid">
+            <v-text-field
+              v-model="personajeNuevo.nombre"
+              label="Nombre"
+              required
+              class="dialog-text-field"
+            ></v-text-field>
+            <v-text-field
+              v-model.number="personajeNuevo.lvlDesbloqueo"
+              label="Nivel de Desbloqueo"
+              required
+              class="dialog-text-field"
+            ></v-text-field>
+            <v-text-field
+              v-model="personajeNuevo.descripcion"
+              label="Descripción"
+              required
+              class="dialog-text-field"
+            ></v-text-field>
+            <v-row>
+              <v-col
+                v-for="skin in productos.skins"
+                :key="skin._id"
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-checkbox
+                  v-model="personajeNuevo.packSkins"
+                  :label="skin.nombre"
+                  :value="skin._id"
+                  class="dialog-checkbox"
+                ></v-checkbox>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="blue darken-1"
+          text
+          @click="dialogPersonaje = false"
+          class="dialog-btn"
+          >Cancelar</v-btn
+        >
+        <v-btn
+          color="blue darken-1"
+          text
+          @click="crearPersonaje"
+          class="dialog-btn"
+          >Guardar</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+
+<!-- Dialog para crear skin -->
+<v-dialog v-model="dialogSkin" persistent max-width="600px">
+  <v-card class="dialog-card">
+    <v-card-title class="dialog-title">
+      <span class="headline">Nueva Skin</span>
+    </v-card-title>
+    <v-card-text class="dialog-text">
+      <v-container>
+        <v-form ref="formSkin" v-model="valid">
           <v-text-field
-            v-model="skinEditado.nombre"
+            v-model="skinNuevo.nombre"
             label="Nombre"
+            required
+            class="dialog-text-field"
           ></v-text-field>
           <v-text-field
-            v-model="skinEditado.descripcion"
+            v-model="skinNuevo.descripcion"
             label="Descripción"
+            required
+            class="dialog-text-field"
           ></v-text-field>
           <v-file-input
-            v-model="skinEditado.pngSkin"
+            v-model="skinNuevo.pngSkin"
             label="Archivo PNG"
             accept="image/png"
+            class="dialog-text-field"
           />
           <v-text-field
-            v-model="skinEditado.valorMonedas"
-            label="Precio Monedas"
+            v-model.number="skinNuevo.valorMonedas"
+            label="Valor en Monedas"
+            required
+            class="dialog-text-field"
           ></v-text-field>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" text @click="guardarCambioSkin"
-            >Guardar Cambios</v-btn
-          >
-          <v-btn color="primary" text @click="cancelarEdicionSkin"
-            >Cancelar</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+        </v-form>
+      </v-container>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn
+        color="blue darken-1"
+        text
+        @click="dialogSkin = false"
+        class="dialog-btn"
+        >Cancelar</v-btn
+      >
+      <v-btn
+        color="blue darken-1"
+        text
+        @click="crearSkin"
+        class="dialog-btn"
+        >Guardar</v-btn
+      >
+    </v-card-actions>
+  </v-card>
+</v-dialog>
 
-    <!-- Dialog para CREAR PERSONAJE  -->
-    <v-dialog v-model="dialogPersonaje" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Nuevo Personaje</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-form ref="formPersonaje" v-model="valid">
-              <v-text-field
-                v-model="personajeNuevo.nombre"
-                label="Nombre"
-                required
-              ></v-text-field>
-              <v-text-field
-                v-model.number="personajeNuevo.lvlDesbloqueo"
-                label="Nivel de Desbloqueo"
-                required
-              ></v-text-field>
-              <v-text-field
-                v-model="personajeNuevo.descripcion"
-                label="Descripción"
-                required
-              ></v-text-field>
-              <v-row>
-                <v-col
-                  v-for="skin in productos.skins"
-                  :key="skin._id"
-                  cols="12"
-                  sm="6"
-                  md="4"
-                >
-                  <v-checkbox
-                    v-model="personajeNuevo.packSkins"
-                    :label="skin.nombre"
-                    :value="skin._id"
-                  ></v-checkbox>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialogPersonaje = false"
-            >Cancelar</v-btn
-          >
-          <v-btn color="blue darken-1" text @click="crearPersonaje"
-            >Guardar</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <!-- Dialog para crear skin -->
-    <v-dialog v-model="dialogSkin" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Nueva Skin</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-form ref="formSkin" v-model="valid">
-              <v-text-field
-                v-model="skinNuevo.nombre"
-                label="Nombre"
-                required
-              ></v-text-field>
-              <v-text-field
-                v-model="skinNuevo.descripcion"
-                label="Descripción"
-                required
-              ></v-text-field>
-              <v-file-input
-                v-model="skinNuevo.pngSkin"
-                label="Archivo PNG"
-                accept="image/png"
-              />
-              <v-text-field
-                v-model.number="skinNuevo.valorMonedas"
-                label="Valor en Monedas"
-                required
-              ></v-text-field>
-            </v-form>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialogSkin = false"
-            >Cancelar</v-btn
-          >
-          <v-btn color="blue darken-1" text @click="crearSkin">Guardar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <!-- PANEL DE CLIENTES -->
-    <v-dialog
-      v-model="clientesDialog"
-      max-width="1900"
-      max-height="1900"
-      style="height: auto; width: auto"
-    >
-      <template v-slot:activator="{ on }"></template>
-      <v-card>
-        <v-card-title>Lista de Clientes</v-card-title>
-        <v-card-text>
-          <v-row>
-            <!-- Aquí cargarías los productos en v-cards -->
-            <v-col
-              v-for="(cliente, index) in clientes"
-              :key="index"
-              cols="12"
-              md="4"
-            >
-              <v-card>
-                <v-card-title>{{ cliente.nombre_usuario }}</v-card-title>
-                <v-card-text>
-                  <div>Contacto: {{ cliente.gmail }}</div>
-                  <div>Fecha de nacimiento: {{ cliente.fecha_nacimiento }}</div>
-                  <div>{{ cliente.horas_jugadas }} horas jugadas</div>
-                  <div v-if="cliente.ha_gastado_dinero">
-                    Ha gastado {{ cliente.monto_gastado }}€
-                  </div>
-                  <div v-else>No ha gastado dinero</div>
-                  <div>Última conexión: {{ cliente.ultima_conexion }}</div>
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn
-                    :color="cliente.activo ? 'error' : 'success'"
-                    text
-                    @click="toggleClienteActivo(cliente)"
-                  >
-                    {{ cliente.activo ? "Jugador Vetado" : "Jugador Activo" }}
-                  </v-btn>
-                  <v-btn color="primary" text @click="editarCliente(cliente)"
-                    >Editar</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" text @click="closeClientesDialog"
-            >Cerrar</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <!-- Diálogo de Edición de Clientes -->
-    <v-dialog v-model="editarClienteDialog" max-width="500">
-      <v-card>
-        <v-card-title>Editar Cliente</v-card-title>
-        <v-card-text>
-          <v-text-field
-            v-model="clienteEditado.gmail"
-            label="Gmail"
-          ></v-text-field>
-          <v-text-field
-            v-model="clienteEditado.fecha_nacimiento"
-            label="Fecha de nacimiento"
-          ></v-text-field>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" text @click="guardarCambiosCliente"
-            >Guardar Cambios</v-btn
-          >
-          <v-btn color="primary" text @click="cancelarEdicionCliente"
-            >Cancelar</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <!-- Dialog para mostrar los mapas -->
-    <v-dialog v-model="mapaDialog" max-width="800">
-      <v-card>
-        <v-card-title>Mapas</v-card-title>
-        <v-card-text>
-          <!-- Mostrar los mapas aquí -->
-          <v-list>
-            <v-list-item v-for="(mapa, index) in mapas" :key="index">
-              <v-list-item-content>
-                <v-list-item-title>{{ mapa.nombre }}</v-list-item-title>
-                <v-list-item-subtitle>{{ mapa.pngMapa }}</v-list-item-subtitle>
-                <v-list-item-subtitle>{{
-                  mapa.probabilidadSpawn
-                }}</v-list-item-subtitle>
-                <v-list-item-subtitle>{{
-                  mapa.descripcion
-                }}</v-list-item-subtitle>
-              </v-list-item-content>
-              <v-btn color="blue" @click="openEditarMapaDialog(mapa, index)">
-                Editar Mapa
+<!-- PANEL DE CLIENTES -->
+<v-dialog
+  v-model="clientesDialog"
+  max-width="1900"
+  max-height="1900"
+  style="height: auto; width: auto"
+>
+  <template v-slot:activator="{ on }"></template>
+  <v-card class="dialog-card">
+    <v-card-title class="dialog-title">Lista de Clientes</v-card-title>
+    <v-card-text class="dialog-text">
+      <v-row>
+        <!-- Aquí cargarías los productos en v-cards -->
+        <v-col
+          v-for="(cliente, index) in clientes"
+          :key="index"
+          cols="12"
+          md="4"
+        >
+          <v-card class="inner-card">
+            <v-card-title>{{ cliente.nombre_usuario }}</v-card-title>
+            <v-card-text style="color: black;">
+              <div>Contacto: {{ cliente.gmail }}</div>
+              <div>Fecha de nacimiento: {{ cliente.fecha_nacimiento }}</div>
+              <div>{{ cliente.horas_jugadas }} horas jugadas</div>
+              <div v-if="cliente.ha_gastado_dinero">
+                Ha gastado {{ cliente.monto_gastado }}€
+              </div>
+              <div v-else>No ha gastado dinero</div>
+              <div>Última conexión: {{ cliente.ultima_conexion }}</div>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                :color="cliente.activo ? 'error' : 'success'"
+                text
+                @click="toggleClienteActivo(cliente)"
+                class="dialog-btn"
+              >
+                {{ cliente.activo ? "Jugador Vetado" : "Jugador Activo" }}
               </v-btn>
               <v-btn
-                style="margin-left: 15px"
-                color="red"
-                @click="eliminarMapa(mapa)"
-                >Eliminar Mapa</v-btn
+                color="primary"
+                text
+                @click="editarCliente(cliente)"
+                class="dialog-btn"
+                >Editar</v-btn
               >
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="primary" @click="openAgregarMapaDialog">
-            Añadir Mapa
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn
+        color="primary"
+        text
+        @click="closeClientesDialog"
+        class="dialog-btn"
+        >Cerrar</v-btn
+      >
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+<!-- Diálogo de Edición de Clientes -->
+<v-dialog v-model="editarClienteDialog" max-width="500">
+  <v-card class="dialog-card">
+    <v-card-title class="dialog-title">Editar Cliente</v-card-title>
+    <v-card-text class="dialog-text">
+      <v-text-field
+        v-model="clienteEditado.gmail"
+        label="Gmail"
+        class="dialog-text-field"
+      ></v-text-field>
+      <v-text-field
+        v-model="clienteEditado.fecha_nacimiento"
+        label="Fecha de nacimiento"
+        class="dialog-text-field"
+      ></v-text-field>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn
+        color="primary"
+        text
+        @click="guardarCambiosCliente"
+        class="dialog-btn"
+        >Guardar Cambios</v-btn
+      >
+      <v-btn
+        color="primary"
+        text
+        @click="cancelarEdicionCliente"
+        class="dialog-btn"
+        >Cancelar</v-btn
+      >
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+<!-- Dialog para mostrar los mapas -->
+<v-dialog v-model="mapaDialog" max-width="800">
+  <v-card>
+    <v-card-title class="dialog-title">Mapas</v-card-title>
+    <v-card-text>
+      <!-- Mostrar los mapas aquí -->
+      <v-list>
+        <v-list-item v-for="(mapa, index) in mapas" :key="index" class="inner-card">
+          <v-list-item-content>
+            <v-list-item-title>{{ mapa.nombre }}</v-list-item-title>
+            <v-list-item-subtitle style="color: black;">{{ mapa.pngMapa }}</v-list-item-subtitle>
+            <v-list-item-subtitle style="color: black;">{{ mapa.probabilidadSpawn }}</v-list-item-subtitle>
+            <v-list-item-subtitle style="color: black;">{{ mapa.descripcion }}</v-list-item-subtitle>
+          </v-list-item-content>
+          <v-btn color="blue" @click="openEditarMapaDialog(mapa, index)" class="dialog-btn">
+            Editar Mapa
           </v-btn>
-          <v-btn color="red" text @click="mapaDialog = false">Cerrar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <!-- Dialog para agregar Mapa -->
-    <v-dialog v-model="agregarMapaDialog" max-width="600">
-      <v-card>
-        <v-card-title>Añadir Mapa</v-card-title>
-        <v-card-text>
-          <v-text-field
-            v-model="nuevoMapa.nombre"
-            label="Nombre"
-          ></v-text-field>
-          <v-file-input
-            v-model="nuevoMapa.pngMapa"
-            label="Archivo PNG"
-            accept="image/png"
-          />
-          <v-text-field
-            v-model.number="nuevoMapa.probabilidadSpawn"
-            label="Probabilidad de Spawn"
-          ></v-text-field>
-          <v-text-field
-            v-model="nuevoMapa.descripcion"
-            label="Descripción"
-          ></v-text-field>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="blue darken-1" text @click="guardarMapa">Guardar</v-btn>
-          <v-btn color="red" text @click="agregarMapaDialog = false"
-            >Cancelar</v-btn
+          <v-btn
+            style="margin-left: 15px"
+            color="red"
+            @click="eliminarMapa(mapa)"
+            class="dialog-btn"
+            >Eliminar Mapa</v-btn
           >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+        </v-list-item>
+      </v-list>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="primary" @click="openAgregarMapaDialog" class="dialog-btn">
+        Añadir Mapa
+      </v-btn>
+      <v-btn color="red" text @click="mapaDialog = false" class="dialog-btn">Cerrar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
 
-    <!-- Dialog para editar mapa -->
-    <v-dialog v-model="editarMapaDialog" max-width="600">
-      <v-card>
-        <v-card-title>Editar Mapa</v-card-title>
-        <v-card-text>
-          <v-text-field
-            v-model="mapaEditado.nombre"
-            label="Nombre"
-          ></v-text-field>
-          <v-file-input
-            v-model="mapaEditado.pngMapa"
-            label="Archivo PNG"
-            accept="image/png"
-          />
-          <v-text-field
-            v-model.number="mapaEditado.probabilidadSpawn"
-            label="Probabilidad de Spawn"
-          ></v-text-field>
-          <v-text-field
-            v-model="mapaEditado.descripcion"
-            label="Descripción"
-          ></v-text-field>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="blue darken-1" text @click="guardarEdicionMapa"
-            >Guardar</v-btn
-          >
-          <v-btn color="red" text @click="cancelarEdicionMapa">Cancelar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+
+   <!-- Dialog para agregar Mapa -->
+<v-dialog v-model="agregarMapaDialog" max-width="600">
+  <v-card>
+    <v-card-title class="dialog-title">Añadir Mapa</v-card-title>
+    <v-card-text class="dialog-text">
+      <v-text-field
+        v-model="nuevoMapa.nombre"
+        label="Nombre"
+        class="dialog-text-field"
+      ></v-text-field>
+      <v-file-input
+        v-model="nuevoMapa.pngMapa"
+        label="Archivo PNG"
+        accept="image/png"
+        class="dialog-text-field"
+      />
+      <v-text-field
+        v-model.number="nuevoMapa.probabilidadSpawn"
+        label="Probabilidad de Spawn"
+        class="dialog-text-field"
+      ></v-text-field>
+      <v-text-field
+        v-model="nuevoMapa.descripcion"
+        label="Descripción"
+        class="dialog-text-field"
+      ></v-text-field>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn
+        color="blue darken-1"
+        text
+        @click="guardarMapa"
+        class="dialog-btn"
+      >Guardar</v-btn>
+      <v-btn
+        color="red"
+        text
+        @click="agregarMapaDialog = false"
+        class="dialog-btn"
+      >Cancelar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
+<!-- Dialog para editar mapa -->
+<v-dialog v-model="editarMapaDialog" max-width="600">
+  <v-card>
+    <v-card-title class="dialog-title">Editar Mapa</v-card-title>
+    <v-card-text class="dialog-text">
+      <v-text-field
+        v-model="mapaEditado.nombre"
+        label="Nombre"
+        class="dialog-text-field"
+      ></v-text-field>
+      <v-file-input
+        v-model="mapaEditado.pngMapa"
+        label="Archivo PNG"
+        accept="image/png"
+        class="dialog-text-field"
+      />
+      <v-text-field
+        v-model.number="mapaEditado.probabilidadSpawn"
+        label="Probabilidad de Spawn"
+        class="dialog-text-field"
+      ></v-text-field>
+      <v-text-field
+        v-model="mapaEditado.descripcion"
+        label="Descripción"
+        class="dialog-text-field"
+      ></v-text-field>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn
+        color="blue darken-1"
+        text
+        @click="guardarEdicionMapa"
+        class="dialog-btn"
+      >Guardar</v-btn>
+      <v-btn
+        color="red"
+        text
+        @click="cancelarEdicionMapa"
+        class="dialog-btn"
+      >Cancelar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
   </v-app>
 </template>
 
@@ -1269,4 +1371,87 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+  /* Estilos para los diálogos */
+.inner-card {
+  background-color: white;
+  color: black !important;
+  margin: 20px;
+}
+
+.inner-title {
+  color: rgb(255, 255, 255);
+}
+.inner-title-2 {
+  color: rgb(0, 0, 0);
+}
+.inner-text {
+  color: black !important;
+}
+
+  .dialog-title {
+    background-color: #1976d2;
+    color: #ffffff;
+  }
+
+  .dialog-text {
+    color: #333333;
+  }
+
+  /* Estilos para los text fields dentro de los diálogos */
+  .dialog-text-field {
+    width: 100%;
+  }
+
+  /* Estilos para los botones dentro de los diálogos */
+  .dialog-btn {
+    color: #ffffff;
+  }
+
+  /* Estilos para los checkboxes dentro de los diálogos */
+  .dialog-checkbox {
+    color: #1976d2;
+  }
+
+ /* Estilos para los botones */
+ .panel-btn {
+    margin-top: 20px;
+  }
+
+  /* Animación para los botones */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* Aplicar la animación a los botones */
+  .panel-btn:hover {
+    animation: pulse 0.5s ease infinite alternate;
+  }
+
+  /* Estilos para los v-card */
+  .panel-card {
+    background-color: #ffffff;
+    text-align: center;
+    padding: 20px;
+  }
+
+  /* Estilos para el texto dentro de los v-card */
+  .panel-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333333;
+  }
+
+  .panel-text {
+    font-size: 16px;
+    color: #666666;
+  }
+</style>

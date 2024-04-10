@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-app-bar app>
+        <v-app-bar app color="#1976d2">
             <v-toolbar-title @click="goToHome">R6 PIXEL</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn text @click="goToProcesos">Procesos</v-btn>
