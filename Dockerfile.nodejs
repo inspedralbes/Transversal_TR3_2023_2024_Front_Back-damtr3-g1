@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y \
     # python3-matplotlib \
     # python3-pandas \
     # python3-requests
-
 WORKDIR /app
 
 # Copia los archivos de paquete de Node.js
