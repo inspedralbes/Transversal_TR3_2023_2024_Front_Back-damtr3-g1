@@ -28,6 +28,19 @@ async function updateInventari(client, id, updatedInventari) {
     }
 }
 
+// Función para actualizar una noticia por su ID
+async function updateActivo(client, id, idNuevo) {
+    try {
+        const database = client.db('Juego');
+        const inventariCollection = database.collection('inventari');
+        const result = await inventariCollection.updateOne({ _id: new ObjectId(id) }, { $set: {"activo": idNuevo} });
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 // Función para crear una nueva noticia
 async function createInventari(client, inventari) {
     try {
@@ -54,4 +67,4 @@ async function deleteInventari(inventari, id) {
     }
 }
 
-module.exports = { getInventari, updateInventari, createInventari, deleteInventari };
+module.exports = { getInventari, updateInventari, createInventari, deleteInventari, updateActivo };
