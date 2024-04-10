@@ -413,6 +413,7 @@ app.get("/getNovaTenda", (req, res) => {
 
 app.post("/getImg", (req, res) => {
     var path = "/app/assets/" + req.body.path;
+    console.log("PATH: " +  path)
     res.sendFile(path)
 })
 
