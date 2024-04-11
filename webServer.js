@@ -569,6 +569,24 @@ app.get("/getImgGraph", async (req,res)=>{
       });
 })
 
+app.get("/getImgGraphBenefits", async (req,res)=>{
+
+    // infoStats = await bdUsuaris.getUsuaris();
+
+    const python = spawn('python3', ['./graphbenefits.py']);
+
+ 
+    python.stdout.on('data', (data) =>{
+        console.log(`Python script output: ${data}`);
+    })
+
+
+    python.stdout.on('close', (code) => {
+        console.log(`Python script exited with code ${code}`);
+        res.sendFile(__dirname + "/grafico_beneficios.png");
+      });
+})
+
 app.get("/getImg/:path", (req, res) => {
     console.log(req.params.path);
     var path = "/app/assets/" + req.params.path;
