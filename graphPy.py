@@ -17,7 +17,7 @@ if os.path.exists(ruta_imagen):
 # Definir la función para obtener usuarios
 def get_usuarios():
     try:
-        url = 'http://r6pixel.duckdns.org:3169/getUsuarios'
+        url = 'http://r6pixel.duckdns.org:3170/getUsuarios'
         response = requests.get(url)
         response.raise_for_status()  # Levanta una excepción en caso de error de solicitud HTTP
         print(response.json())
