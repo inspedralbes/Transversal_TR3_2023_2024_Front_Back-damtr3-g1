@@ -430,173 +430,6 @@ app.delete('/deleteskin/:id', async (req, res) => {
 });
 
 
-function DetenerOdoo() {
-    const con = new Client();
-    const sshConfig = {
-        host: '89.168.118.150',
-        port: 22,
-        username: 'ubuntu',
-        privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
-    };
-
-    con.on('ready', function () {
-        console.log('Conexión establecida. Ejecutando comando...');
-        // Detener primero el contenedor de la base de datos
-        con.exec('sudo docker stop db', function (err, stream) {
-            if (err) throw err;
-            stream
-                .on('close', function (code, signal) {
-                    console.log('Comando sudo docker stop db ejecutado.');
-                    // Luego detener el contenedor de Odoo
-                    con.exec('sudo docker stop odoo', function (err, stream) {
-                        if (err) throw err;
-                        stream
-                            .on('close', function (code, signal) {
-                                console.log('Comando sudo docker stop odoo ejecutado.');
-                                con.end();
-                            })
-                            .on('data', function (data) {
-                                console.log('STDOUT: ' + data);
-                            })
-                            .stderr.on('data', function (data) {
-                                console.log('STDERR: ' + data);
-                            });
-                    });
-                })
-                .on('data', function (data) {
-                    console.log('STDOUT: ' + data);
-                })
-                .stderr.on('data', function (data) {
-                    console.log('STDERR: ' + data);
-                });
-        });
-    }).connect(sshConfig);
-
-    con.on('error', function (err) {
-        console.error('Error de conexión:', err);
-    });
-}
-
-function ArrancarOdoo() {
-    const con = new Client();
-    const sshConfig = {
-        host: '89.168.118.150',
-        port: 22,
-        username: 'ubuntu',
-        privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
-    };
-
-    con.on('ready', function () {
-        console.log('Conexión establecida. Ejecutando comando...');
-        // Detener primero el contenedor de la base de datos
-        con.exec('sudo docker start db', function (err, stream) {
-            if (err) throw err;
-            stream
-                .on('close', function (code, signal) {
-                    console.log('Comando sudo docker start db ejecutado.');
-                    // Luego detener el contenedor de Odoo
-                    con.exec('sudo docker start odoo', function (err, stream) {
-                        if (err) throw err;
-                        stream
-                            .on('close', function (code, signal) {
-                                console.log('Comando sudo docker start odoo ejecutado.');
-                                con.end();
-                            })
-                            .on('data', function (data) {
-                                console.log('STDOUT: ' + data);
-                            })
-                            .stderr.on('data', function (data) {
-                                console.log('STDERR: ' + data);
-                            });
-                    });
-                })
-                .on('data', function (data) {
-                    console.log('STDOUT: ' + data);
-                })
-                .stderr.on('data', function (data) {
-                    console.log('STDERR: ' + data);
-                });
-        });
-    }).connect(sshConfig);
-
-    con.on('error', function (err) {
-        console.error('Error de conexión:', err);
-    });
-}
-
-function checkOdoo() {
-    return new Promise((resolve, reject) => {
-        const con = new Client();
-        const sshConfig = {
-            host: '89.168.118.150',
-            port: 22,
-            username: 'ubuntu',
-            privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
-        };
-
-        con.on('ready', function () {
-            console.log('Conexión SSH establecida. Ejecutando comando...');
-            con.exec("sudo docker inspect --format='{{.State.Status}}' odoo", function (err, stream) {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                stream
-                    .on('close', function (code, signal) {
-                        console.log('Comando docker inspect ejecutado.');
-                        con.end();
-                    })
-                    .on('data', function (data) {
-                        const estadoOdoo = data.toString().trim(); // Convertir los datos a cadena y eliminar espacios en blanco
-                        resolve(estadoOdoo); // Resolver la promesa con el estado obtenido
-                    })
-                    .stderr.on('data', function (data) {
-                        console.error('Error al ejecutar docker inspect:', data.toString());
-                        reject(data.toString()); // Rechazar la promesa si hay un error
-                    });
-            });
-        }).connect(sshConfig);
-
-        con.on('error', function (err) {
-            console.error('Error de conexión SSH:', err);
-            reject(err); // Rechazar la promesa en caso de error de conexión
-        });
-    });
-}
-
-
-app.post('/detenerOdoo', async (req, res) => {
-    try {
-        await DetenerOdoo(); // Esperar a que la función DetenerOdoo() se complete
-        res.send('Odoo y db detenidas correctamente.');
-    } catch (error) {
-        console.error('Error al detener Odoo:', error);
-        res.status(500).send('Error al detener Odoo.');
-    }
-});
-
-app.post('/arrancarOdoo', async (req, res) => {
-    try {
-        await ArrancarOdoo(); // Esperar a que la función DetenerOdoo() se complete
-        res.send('Odoo y db arrancadas correctamente.');
-    } catch (error) {
-        console.error('Error al arrancar Odoo:', error);
-        res.status(500).send('Error al arrancar Odoo.');
-    }
-})
-
-app.post('/checkarOdoo', async (req, res) => {
-    try {
-        const estadoOdoo = await checkOdoo(); // Esperar a que la función checkOdoo() se complete
-        const isRunning = estadoOdoo === 'running'; // Devuelve true si el estado es 'running', false en caso contrario
-        console.log(isRunning);
-        res.send(isRunning);
-    } catch (error) {
-        console.error('Error al comprobar el estado de Odoo:', error);
-        res.status(500).send('Error al comprobar el estado de Odoo.');
-    }
-});
-
 app.post('/syncOdoo', async (req, res) => {
     try {
         const personajes = await getPersonajes(client);
@@ -752,6 +585,312 @@ function Comparar(plainTextPassword, hashedPassword) {
         });
     });
 }
+
+function DetenerOdoo() {
+    const con = new Client();
+    const sshConfig = {
+        host: '89.168.118.150',
+        port: 22,
+        username: 'ubuntu',
+        privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
+    };
+
+    con.on('ready', function () {
+        console.log('Conexión establecida. Ejecutando comando...');
+        // Detener primero el contenedor de la base de datos
+        con.exec('sudo docker stop db', function (err, stream) {
+            if (err) throw err;
+            stream
+                .on('close', function (code, signal) {
+                    console.log('Comando sudo docker stop db ejecutado.');
+                    // Luego detener el contenedor de Odoo
+                    con.exec('sudo docker stop odoo', function (err, stream) {
+                        if (err) throw err;
+                        stream
+                            .on('close', function (code, signal) {
+                                console.log('Comando sudo docker stop odoo ejecutado.');
+                                con.end();
+                            })
+                            .on('data', function (data) {
+                                console.log('STDOUT: ' + data);
+                            })
+                            .stderr.on('data', function (data) {
+                                console.log('STDERR: ' + data);
+                            });
+                    });
+                })
+                .on('data', function (data) {
+                    console.log('STDOUT: ' + data);
+                })
+                .stderr.on('data', function (data) {
+                    console.log('STDERR: ' + data);
+                });
+        });
+    }).connect(sshConfig);
+
+    con.on('error', function (err) {
+        console.error('Error de conexión:', err);
+    });
+}
+
+function ArrancarOdoo() {
+    const con = new Client();
+    const sshConfig = {
+        host: '89.168.118.150',
+        port: 22,
+        username: 'ubuntu',
+        privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
+    };
+
+    con.on('ready', function () {
+        console.log('Conexión establecida. Ejecutando comando...');
+        // Detener primero el contenedor de la base de datos
+        con.exec('sudo docker start db', function (err, stream) {
+            if (err) throw err;
+            stream
+                .on('close', function (code, signal) {
+                    console.log('Comando sudo docker start db ejecutado.');
+                    // Luego detener el contenedor de Odoo
+                    con.exec('sudo docker start odoo', function (err, stream) {
+                        if (err) throw err;
+                        stream
+                            .on('close', function (code, signal) {
+                                console.log('Comando sudo docker start odoo ejecutado.');
+                                con.end();
+                            })
+                            .on('data', function (data) {
+                                console.log('STDOUT: ' + data);
+                            })
+                            .stderr.on('data', function (data) {
+                                console.log('STDERR: ' + data);
+                            });
+                    });
+                })
+                .on('data', function (data) {
+                    console.log('STDOUT: ' + data);
+                })
+                .stderr.on('data', function (data) {
+                    console.log('STDERR: ' + data);
+                });
+        });
+    }).connect(sshConfig);
+
+    con.on('error', function (err) {
+        console.error('Error de conexión:', err);
+    });
+}
+
+function DetenerGame() {
+    const con = new Client();
+    const sshConfig = {
+        host: '89.168.118.150',
+        port: 22,
+        username: 'ubuntu',
+        privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
+    };
+
+    con.on('ready', function () {
+        console.log('Conexión establecida. Ejecutando comando...');
+        // Detener el contenedor especificado
+        con.exec("sudo docker stop transversal_tr3_2023_2024_front_back-damtr3-g1_app_server_1", function (err, stream) {
+            if (err) throw err;
+            stream
+                .on('close', function (code, signal) {
+                    console.log('Comando sudo docker stop ejecutado.');
+                    con.end();
+                })
+                .on('data', function (data) {
+                    console.log('STDOUT: ' + data);
+                })
+                .stderr.on('data', function (data) {
+                    console.log('STDERR: ' + data);
+                });
+        });
+    }).connect(sshConfig);
+
+    con.on('error', function (err) {
+        console.error('Error de conexión:', err);
+    });
+}
+
+function ArrancarGame() {
+    const con = new Client();
+    const sshConfig = {
+        host: '89.168.118.150',
+        port: 22,
+        username: 'ubuntu',
+        privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
+    };
+
+    con.on('ready', function () {
+        console.log('Conexión establecida. Ejecutando comando...');
+        // Arrancar el contenedor especificado
+        con.exec("sudo docker start transversal_tr3_2023_2024_front_back-damtr3-g1_app_server_1", function (err, stream) {
+            if (err) throw err;
+            stream
+                .on('close', function (code, signal) {
+                    console.log('Comando sudo docker start ejecutado.');
+                    con.end();
+                })
+                .on('data', function (data) {
+                    console.log('STDOUT: ' + data);
+                })
+                .stderr.on('data', function (data) {
+                    console.log('STDERR: ' + data);
+                });
+        });
+    }).connect(sshConfig);
+
+    con.on('error', function (err) {
+        console.error('Error de conexión:', err);
+    });
+}
+
+
+app.post('/detenerOdoo', async (req, res) => {
+    try {
+        await DetenerOdoo(); // Esperar a que la función DetenerOdoo() se complete
+        res.send('Odoo y db detenidas correctamente.');
+    } catch (error) {
+        console.error('Error al detener Odoo:', error);
+        res.status(500).send('Error al detener Odoo.');
+    }
+});
+
+app.post('/arrancarOdoo', async (req, res) => {
+    try {
+        await ArrancarOdoo(); // Esperar a que la función DetenerOdoo() se complete
+        res.send('Odoo y db arrancadas correctamente.');
+    } catch (error) {
+        console.error('Error al arrancar Odoo:', error);
+        res.status(500).send('Error al arrancar Odoo.');
+    }
+})
+
+app.post('/detenerGame', async (req, res) => {
+    try {
+        await DetenerGame(); // Esperar a que la función DetenerOdoo() se complete
+        res.send('Game detenido correctamente.');
+    } catch (error) {
+        console.error('Error al detener Game:', error);
+        res.status(500).send('Error al detener Game.');
+    }
+});
+
+app.post('/arrancarGame', async (req, res) => {
+    try {
+        await ArrancarGame(); // Esperar a que la función DetenerOdoo() se complete
+        res.send('Game arrancadas correctamente.');
+    } catch (error) {
+        console.error('Error al arrancar Game:', error);
+        res.status(500).send('Error al arrancar Game.');
+    }
+})
+
+function checkGame() {
+    return new Promise((resolve, reject) => {
+        const con = new Client();
+        const sshConfig = {
+            host: '89.168.118.150',
+            port: 22,
+            username: 'ubuntu',
+            privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
+        };
+
+        con.on('ready', function () {
+            console.log('Conexión SSH establecida. Ejecutando comando...');
+            con.exec("sudo docker inspect --format='{{.State.Status}}' transversal_tr3_2023_2024_front_back-damtr3-g1_app_server_1", function (err, stream) {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                stream
+                    .on('close', function (code, signal) {
+                        console.log('Comando docker inspect ejecutado.');
+                        con.end();
+                    })
+                    .on('data', function (data) {
+                        const estadoOdoo = data.toString().trim(); // Convertir los datos a cadena y eliminar espacios en blanco
+                        resolve(estadoOdoo); // Resolver la promesa con el estado obtenido
+                    })
+                    .stderr.on('data', function (data) {
+                        console.error('Error al ejecutar docker inspect:', data.toString());
+                        reject(data.toString()); // Rechazar la promesa si hay un error
+                    });
+            });
+        }).connect(sshConfig);
+
+        con.on('error', function (err) {
+            console.error('Error de conexión SSH:', err);
+            reject(err); // Rechazar la promesa en caso de error de conexión
+        });
+    });
+}
+
+function checkOdoo() {
+    return new Promise((resolve, reject) => {
+        const con = new Client();
+        const sshConfig = {
+            host: '89.168.118.150',
+            port: 22,
+            username: 'ubuntu',
+            privateKey: require('fs').readFileSync('ssh-key-2024-03-18.key')
+        };
+
+        con.on('ready', function () {
+            console.log('Conexión SSH establecida. Ejecutando comando...');
+            con.exec("sudo docker inspect --format='{{.State.Status}}' odoo", function (err, stream) {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                stream
+                    .on('close', function (code, signal) {
+                        console.log('Comando docker inspect ejecutado.');
+                        con.end();
+                    })
+                    .on('data', function (data) {
+                        const estadoOdoo = data.toString().trim(); // Convertir los datos a cadena y eliminar espacios en blanco
+                        resolve(estadoOdoo); // Resolver la promesa con el estado obtenido
+                    })
+                    .stderr.on('data', function (data) {
+                        console.error('Error al ejecutar docker inspect:', data.toString());
+                        reject(data.toString()); // Rechazar la promesa si hay un error
+                    });
+            });
+        }).connect(sshConfig);
+
+        con.on('error', function (err) {
+            console.error('Error de conexión SSH:', err);
+            reject(err); // Rechazar la promesa en caso de error de conexión
+        });
+    });
+}
+
+app.post('/checkarOdoo', async (req, res) => {
+    try {
+        const estadoOdoo = await checkOdoo(); // Esperar a que la función checkOdoo() se complete
+        const isRunning = estadoOdoo === 'running'; // Devuelve true si el estado es 'running', false en caso contrario
+        console.log(isRunning);
+        res.send(isRunning);
+    } catch (error) {
+        console.error('Error al comprobar el estado de Odoo:', error);
+        res.status(500).send('Error al comprobar el estado de Odoo.');
+    }
+});
+
+app.post('/checkarGame', async (req, res) => {
+    try {
+        const estadoGame = await checkGame(); // Esperar a que la función checkOdoo() se complete
+        const isRunning = estadoGame === 'running'; // Devuelve true si el estado es 'running', false en caso contrario
+        console.log("juego: " + isRunning);
+        res.send(isRunning);
+    } catch (error) {
+        console.error('Error al comprobar el estado de Game:', error);
+        res.status(500).send('Error al comprobar el estado de Game.');
+    }
+});
+
 
 //*************************************************************SOCKETS********************************************************************* */
 io.on('connection', (socket) => {

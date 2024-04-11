@@ -51,16 +51,10 @@ app.use(cors());
 app.use(express.json());
 
 
-
 //Connexió a base de dades
 const mysql = require("mysql2");
 const { error, log } = require("console");
 const { SourceTextModule } = require("vm");
-
-
-
-
-
 
 
 /***********************************************REENVIAR ACCÉS****************************************** */
