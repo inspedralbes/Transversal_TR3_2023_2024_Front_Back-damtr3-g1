@@ -14,7 +14,7 @@ if os.path.exists(ruta_imagen):
 # Definir la función para obtener los beneficios
 def getBeneficios():
     try:
-        url = 'http://r6pixel.duckdns.org:3170/getBeneficios'
+        url = 'http://r6pixel.duckdns.org:3170/getCompras'
         response = requests.get(url)
         response.raise_for_status()  # Levanta una excepción en caso de error de solicitud HTTP
         return response.json()
