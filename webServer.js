@@ -168,6 +168,20 @@ app.get("/getEstadisticas/:id", async (req, res) => {
     res.send(await bdEstadistiques.getEstadistiques(id))
 })
 
+app.get('/getCompras', (req, res) => {
+    // Llamamos a la función getCompres para obtener todas las compras
+    bdEstadistiques.getCompres()
+        .then((compras) => {
+            res.json(compras);
+        })
+        .catch((err) => {
+            // Si hay un error, enviamos un mensaje de error
+            console.error('Error al obtener las compras:', err);
+            res.status(500).send('Error al obtener las compras');
+        });
+});
+
+
 //comprovar login
 app.post("/loginWeb", async (req, res) => {
     var user = req.body.user;
