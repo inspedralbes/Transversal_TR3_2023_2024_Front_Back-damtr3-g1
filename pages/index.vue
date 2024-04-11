@@ -31,7 +31,7 @@ export default {
   },
 
   created() {
-    this.socket = io("http://r6pixel.duckdns.org:3169/");
+    this.socket = io("http://r6pixel.duckdns.org:3170/");
   },
 
   methods: {
