@@ -88,7 +88,28 @@ module.exports = {
             }
         });
     })
+    },
+
+    updateMonedesGastades: function(monedes, user) {
+        return new Promise((resolve, reject) => {
+            var sql = `
+                UPDATE Estadisticas AS e
+                JOIN Usuario AS u ON e.idUser = u.idUser
+                SET e.monto_gastado = e.monto_gastado + ?
+                WHERE u.username = ?
+            `;
+            conn.query(sql, [monedes, user], (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
     }
+    
+
+    
 
 
 }
