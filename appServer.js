@@ -66,7 +66,7 @@ app.post("/comprarProducte", async (req, res) => {
 
     await bdUsuaris.updateUsuariMonedes(monedes, user);
     await bdUsuaris.updateMonedesGastades(monedes, user);
-    await Estadistiques.insertCompra(monedes, user)
+    await bdEstadistiques.insertCompra(monedes, user)
     await insertOrUpdateSkin(client, user, idProducte);
     const idOdooProduct = await getProductIdFromOdoo(idProducte)
     const idOdooClient = await getPartnerIdFromOdoo(user);
