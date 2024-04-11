@@ -418,14 +418,20 @@ app.get("/getTenda", async (req, res) => {
 
 app.get("/getImg/:path", (req, res) => {
     console.log(req.params.path);
-    var path = "/app/assets/" + req.params.path;
-    res.sendFile(path)
+    var filepath = path.join(__dirname, "assets", req.params.path);
+    res.sendFile(filepath)
+})
+
+app.post("/getImg", (req, res) => {
+    console.log(req.body.path);
+    var filepath = path.join(__dirname, "assets", req.body.path);
+    res.sendFile(filepath)
 })
 
 app.get("/getImgBroadcast/:path", (req, res) => {
     console.log(req.params.path);
-    var path = "/app/assets/broadcast/" + req.params.path;
-    res.sendFile(path)
+    var filePath = path.join(__dirname, "assets", "broadcast", req.params.path);
+    res.sendFile(filePath)
 })
 
 app.post("/getAssets_post", (req, res) => {
