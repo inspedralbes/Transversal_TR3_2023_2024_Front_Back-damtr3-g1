@@ -2,29 +2,29 @@
   {
     "name": "dashboard",
     "path": "/dashboard",
-    "component": "D:\\\\Usuaris\\\\alum-01\\\\Documents\\\\pablo\\\\tr3\\\\vue\\\\pages\\\\dashboard.vue",
+    "component": "/home/pol/Escritorio/visualStudioWorkspace/Transversal_TR3_2023_2024_Front_Back-damtr3-g1/pages/dashboard.vue",
     "chunkName": "pages/dashboard",
-    "_name": "_77b7d90c"
+    "_name": "_0f9037ce"
   },
   {
     "name": "home",
     "path": "/home",
-    "component": "D:\\\\Usuaris\\\\alum-01\\\\Documents\\\\pablo\\\\tr3\\\\vue\\\\pages\\\\home.vue",
+    "component": "/home/pol/Escritorio/visualStudioWorkspace/Transversal_TR3_2023_2024_Front_Back-damtr3-g1/pages/home.vue",
     "chunkName": "pages/home",
-    "_name": "_64bec6e9"
+    "_name": "_fc0b83d6"
   },
   {
     "name": "procesos",
     "path": "/procesos",
-    "component": "D:\\\\Usuaris\\\\alum-01\\\\Documents\\\\pablo\\\\tr3\\\\vue\\\\pages\\\\procesos.vue",
+    "component": "/home/pol/Escritorio/visualStudioWorkspace/Transversal_TR3_2023_2024_Front_Back-damtr3-g1/pages/procesos.vue",
     "chunkName": "pages/procesos",
-    "_name": "_2e514bf2"
+    "_name": "_753565c4"
   },
   {
     "name": "index",
     "path": "/",
-    "component": "D:\\\\Usuaris\\\\alum-01\\\\Documents\\\\pablo\\\\tr3\\\\vue\\\\pages\\\\index.vue",
+    "component": "/home/pol/Escritorio/visualStudioWorkspace/Transversal_TR3_2023_2024_Front_Back-damtr3-g1/pages/index.vue",
     "chunkName": "pages/index",
-    "_name": "_f1514c90"
+    "_name": "_118ac80c"
   }
 ]

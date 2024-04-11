@@ -413,6 +413,21 @@ export async function getEstadisticas(id) {
     }
 }
 
+// SELECT A LOS BENEFICIOS
+export async function getBeneficios() {
+    try {
+        const response = await fetch(`http://r6pixel.duckdns.org:3170/getCompras`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al actualizar los beneficios');
+    }
+}
+
 // UPDATE CLIENTES
 export async function updateCliente(datosActualizadosCliente) {
     try {
@@ -574,6 +589,20 @@ export async function getImg(path) {
 export async function getImgGraph() {
     try {
         const response = await fetch(`http://r6pixel.duckdns.org:3170/getImgGraph`);
+        //console.log("Respuesta de la solicitud:", response);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.url;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error al obtener la imagen');
+    }
+}
+
+export async function getImgGraphBeneficios() {
+    try {
+        const response = await fetch(`http://r6pixel.duckdns.org:3170/getImgGraphBenefits`);
         //console.log("Respuesta de la solicitud:", response);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
