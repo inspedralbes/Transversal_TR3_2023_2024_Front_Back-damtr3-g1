@@ -16,18 +16,73 @@ module.exports = {
         })
     },
 
-    updateEstadistiques: function(partidasJugadas, tiempoPartida, tiempoJugado, totalkills, killsPartida, totalDeaths, deathsPartida, totalAssists, assistsPartida, totalWins, winsPartida){
-        var sql = 'UPDATE Estadisticas SET PartidasJugadas = ' + (partidasJugadas + 1) + ', TiempoPartida = ' + (tiempoPartida + tiempoJugado + ', kills = ' + ( totalkills + killsPartida) + ', deaths = ' + (totalDeaths + deathsPartida) + ', assists = ' + (totalAssists + assistsPartida) + ', wins = ' + (totalWins + winsPartida))
+    updateEstadistiquesWin: function(killsPartida, deathsPartida, assistsPartida, user){
+        var sqlUser = `SELECT idUser FROM Usuario WHERE username = ?`;
         return new Promise((resolve, reject) =>{
-            conn.query(sql, (err, result) => {
+            conn.query(sqlUser, [user], (err, rows) => {
                 if (err) {
-                    reject(err)
-                }else{
-                    resolve(result)
+                    reject(err);
+                } else {
+                    if (rows.length > 0) {
+                        var idUsuario = rows[0].idUser;
+                        var sql = `UPDATE Estadisticas SET PartidasJugadas = PartidasJugadas + 1, Kills = Kills + ?, Muertes = Muertes + ?, Asistencias = Asistencias + ?, NumeroVictorias = NumeroVictorias + 1 WHERE idUser = ?`;
+                        var values = [killsPartida, deathsPartida, assistsPartida, idUsuario];
+                        conn.query(sql, values, (err, result) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                // Actualizar porcentaje de victorias
+                                var sqlPorcentaje = `UPDATE PorcentageVictorias SET Porcentaje = (NumeroVictorias / PartidasJugadas) * 100 WHERE idUser = ?`;
+                                conn.query(sqlPorcentaje, [idUsuario], (err, result) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        resolve(result);
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        reject("Usuario no encontrado");
+                    }
                 }
             });
-        })
+        });
     },
+    
+    updateEstadistiquesLose: function(killsPartida, deathsPartida, assistsPartida, user){
+        var sqlUser = `SELECT idUser FROM Usuario WHERE username = ?`;
+        return new Promise((resolve, reject) =>{
+            conn.query(sqlUser, [user], (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    if (rows.length > 0) {
+                        var idUsuario = rows[0].idUser;
+                        var sql = `UPDATE Estadisticas SET PartidasJugadas = PartidasJugadas + 1, Kills = Kills + ?, Muertes = Muertes + ?, Asistencias = Asistencias + ? WHERE idUser = ?`;
+                        var values = [killsPartida, deathsPartida, assistsPartida, idUsuario];
+                        conn.query(sql, values, (err, result) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                // Actualizar porcentaje de victorias
+                                var sqlPorcentaje = `UPDATE PorcentageVictorias SET Porcentaje = (NumeroVictorias / PartidasJugadas) * 100 WHERE idUser = ?`;
+                                conn.query(sqlPorcentaje, [idUsuario], (err, result) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        resolve(result);
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        reject("Usuario no encontrado");
+                    }
+                }
+            });
+        });
+    },  
 
     getCompres: function(){
         var sql = 'SELECT * FROM Compras';
@@ -68,6 +123,8 @@ module.exports = {
             });
         });
     }
+
+
     
    
 

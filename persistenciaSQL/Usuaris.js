@@ -108,6 +108,19 @@ module.exports = {
         });
     },
 
+    updateFinalPartida : function(monedes, user) {
+        return new Promise((resolve, reject) => {
+            var sql = 'UPDATE Usuario SET monedas = monedas + ? WHERE username = ?';
+            conn.query(sql, [monedes, user], (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    },
+
     
     
     

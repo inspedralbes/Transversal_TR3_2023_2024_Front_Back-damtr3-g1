@@ -187,10 +187,10 @@ function getRandomSkin(array, n) {
     return result;
 }
 
-app.post("/activarSkin", async (req,res)=>{
+app.post("/activarSkin", async (req, res) => {
     id = req.body.idNuevo;
     idUser = req.body.id;
-    console.log("IDNUEVO: " +id);
+    console.log("IDNUEVO: " + id);
     console.log("IDUSER" + idUser);
     await updateActivo(client, idUser, id);
     res.send("OK");
@@ -462,7 +462,7 @@ app.post("/getAssets_post", (req, res) => {
 
         archive.pipe(output);
         // Agregar un directorio llamado "mapas" dentro del archivo ZIP
-        if (directory=="mapas") {
+        if (directory == "mapas") {
             archive.directory(directoryPath, 'mapas');
             console.log("mapas enviados")
         }
@@ -470,7 +470,7 @@ app.post("/getAssets_post", (req, res) => {
             archive.directory(directoryPath, 'skinsMod');
             console.log("skins enviados")
         }
-        
+
         archive.finalize();
     });
 });
@@ -509,12 +509,21 @@ app.get("/logged/:user", (req, res) => {
     }
 });
 
-app.post("/addStats", async (req, res) => {
-    var id = req.body.id
-    var resultat2 = await bdEstadistiques.getEstadistiques(id);
-    await bdEstadistiques.updateEstadistiques(resultat2.PartidasJugadas, resultat2.TiempoPartida, req.body.tiempoJugado, resultat2.kills, req.body.kills, resultat2.deaths, req.body.deaths, resultat2.assists, req.body.assists, resultat2.wins, req.body.wins)
-})
+app.post("/finalGame", async (req, res) => {
+    var user = req.body.user;
+    var monedes = req.body.monedes;
+    var kills = req.body.kills;
+    var deaths = req.body.deaths;
+    var assists = req.body.assists;
+    var isWin = req.body.isWin;
 
+    if (isWin) {
+        await bdEstadistiques.updateEstadistiquesWin(kills, deaths, assists, user);
+    } else {
+        await bdEstadistiques.updateEstadistiquesLose(kills, deaths, assists, user);
+    }
+    await bdUsuaris.updateFinalPartida(monedes, user);
+})
 
 //*************************************************************SOCKETS********************************************************************* */
 io.on('connection', (socket) => {
