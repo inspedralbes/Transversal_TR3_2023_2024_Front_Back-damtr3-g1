@@ -8,18 +8,18 @@
         </v-btn>
 
         <!-- ver broadcast news -->
-        <div class="broadcast-news">
+        <div class="broadcast-news" v-if="newsLoaded">
           <v-row>
             <v-col v-for="(news, index) in newsList" :key="index" cols="6">
               <v-card class="news-card">
                 <v-card-title class="news-title">{{ news.title }}</v-card-title>
                 <v-row>
                   <v-col cols="6">
-                    <v-card-text class="news-description" style="margin-bottom: 25px;">{{ news.description
+                    <v-card-text class="news-description" style="margin-bottom: 25px">{{ news.description
                       }}</v-card-text>
                   </v-col>
                   <v-col cols="6">
-                    <img :src="news.image" alt="News Image" class="news-image">
+                    <img :src="news.image" class="news-image" />
                   </v-col>
                 </v-row>
               </v-card>
@@ -38,12 +38,12 @@
           <v-card-text>
             <v-row>
               <v-col v-for="(news, index) in newsList" :key="index" cols="6">
-                <v-card class="news-item" style="margin: 20px; width: 700px;" max-width="100%">
+                <v-card class="news-item" style="margin: 20px; width: 700px" max-width="100%">
                   <v-card-text class="d-flex justify-space-between align-center">
-                    <h2 style="color: black;">{{ news.title }}</h2>
+                    <h2 style="color: black">{{ news.title }}</h2>
                     <v-spacer></v-spacer>
                     <v-icon @click="openUpdateDialog(news)" dark color="black"
-                      style="margin-right: 10px;">mdi-pencil</v-icon>
+                      style="margin-right: 10px">mdi-pencil</v-icon>
 
                     <v-icon @click="eliminarNoticia(news)" dark color="red">mdi-delete</v-icon>
                   </v-card-text>
@@ -57,64 +57,81 @@
         </v-card>
       </v-dialog>
 
-      <!-- DIALOG para EDITAR noticia -->
-      <v-dialog v-model="updateDialogVisible" max-width="600">
-        <v-card style="max-height: 1900px;">
-          <v-card-title>
-            <span class="headline">Editar Noticia</span>
-          </v-card-title>
-          <v-card-text>
+<!-- DIALOG para EDITAR noticia -->
+<v-dialog v-model="updateDialogVisible" max-width="600">
+  <v-card class="dialog-card">
+    <v-card-title class="dialog-title">
+      <span class="headline">Editar Noticia</span>
+    </v-card-title>
+    <v-card-text>
+      <v-text-field v-model="newsEditList.title" label="Título"></v-text-field>
+      <v-textarea v-model="newsEditList.description" label="Descripción" auto-grow></v-textarea>
+      <v-file-input v-model="newsEditList.image" label="Archivo de imagen" />
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="blue darken-1" text @click="saveNews">Guardar</v-btn>
+      <v-btn color="red" text @click="closeUpdateDialog">Cancelar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
 
-            <v-text-field v-model="newsEditList.title" label="Título"></v-text-field>
-            <v-textarea v-model="newsEditList.description" label="Descripción" auto-grow></v-textarea>
-            <input type="file" @change="onFileChangeUpdate" class="black-text">
-
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="blue darken-1" text @click="saveNews">Guardar</v-btn>
-            <v-btn color="red" text @click="closeUpdateDialog">Cancelar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-      <!-- DIALOG para crear noticia -->
-      <v-dialog v-model="createDialogVisible" max-width="600">
-        <v-card>
-          <v-card-title>
-            <span class="headline">Crear Noticia</span>
-          </v-card-title>
-          <v-card-text>
-            <v-text-field v-model="newsCreateList.title" label="Título"></v-text-field>
-            <v-textarea v-model="newsCreateList.description" label="Descripción" auto-grow></v-textarea>
-            <input type="file" @change="onFileChange" class="black-text">
-          </v-card-text>
-          <v-card-actions>
-            <v-btn color="blue darken-1" text @click="createNews">Guardar</v-btn>
-            <v-btn color="red" text @click="closeCreateDialog">Cancelar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+<!-- DIALOG para crear noticia -->
+<v-dialog v-model="createDialogVisible" max-width="600">
+  <v-card class="dialog-card">
+    <v-card-title class="dialog-title">
+      <span class="headline">Crear Noticia</span>
+    </v-card-title>
+    <v-card-text>
+      <v-text-field v-model="newsCreateList.title" label="Título"></v-text-field>
+      <v-textarea v-model="newsCreateList.description" label="Descripción" auto-grow></v-textarea>
+      <v-file-input v-model="newsCreateList.image" label="Archivo de imagen" />
+    </v-card-text>
+    <v-card-actions>
+      <v-btn color="blue darken-1" text @click="createNews">Guardar</v-btn>
+      <v-btn color="red" text @click="closeCreateDialog">Cancelar</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
     </div>
   </v-app>
 </template>
 
 <script>
-import { getBroadcastNews, updateBroadcastNews, createBroadcastNews, deleteBroadcastNews } from "@/services/communicationsManager.js";
+import {
+  getBroadcastNews,
+  updateBroadcastNews,
+  createBroadcastNews,
+  deleteBroadcastNews,
+  editBroadcastimg,
+  uploadBroadcastImg,
+  getImg
+} from "@/services/communicationsManager.js";
 
 export default {
-  layout: 'HomeLayout',
+  layout: "HomeLayout",
+  middleware: 'auth',
+  props: {
+    value: {
+      type: String,
+      validator: function (value) {
+        // Validar que el valor sea una cadena no vacía
+        return typeof value === 'string' && value.trim() !== '';
+      }
+    }
+  },
   data() {
     return {
+      imagenNoticiaEdit: null,
       newsList: [],
       newsCreateList: {
         image: "",
         title: "",
-        description: ""
+        description: "",
       },
       newsEditList: {
         image: "",
         title: "",
-        description: ""
+        description: "",
       },
       file: "",
       updateFile: "",
@@ -122,32 +139,35 @@ export default {
       noticiaEditadaIndex: null,
       dialogVisible: false,
       createDialogVisible: false,
-      updateDialogVisible: false
+      updateDialogVisible: false,
+      newsLoaded: false
     };
   },
-  created() {
-    console.log('CREATED');
-    this.loadNews();
+  async created() {
+    await this.loadNews();
+    this.newsLoaded = true;
   },
 
   mounted() {
-    console.log('MOUNTED');
+    console.log("MOUNTED");
   },
 
   updated() {
-    console.log('UPDATED');
+    console.log("UPDATED");
   },
 
   methods: {
-
     // UPDATE NOTICIAS
     async saveNews() {
-
       // Guardar los cambios realizados en la noticia
       if (this.idEditada !== null) {
-
         let noticiaEditadaSinId = { ...this.newsEditList };
+        noticiaEditadaSinId.image = this.newsEditList.image.name;
         delete noticiaEditadaSinId._id;
+
+        console.log("foto a subir", this.newsEditList.image);
+        console.log("foto nompre para eliminar", this.imagenNoticiaEditado);
+        
 
         // Actualizar la noticia existente en newsList con los datos modificados
         this.$set(this.newsList, this.noticiaEditadaIndex, noticiaEditadaSinId);
@@ -156,6 +176,13 @@ export default {
           // Realizar la petición de actualización del estado
           await updateBroadcastNews(this.idEditada, noticiaEditadaSinId);
 
+          if (this.newsEditList.image !== this.imagenNoticiaEditado) {
+          await editBroadcastimg(
+            this.newsEditList.image,
+            this.imagenNoticiaEditado
+          );
+        }
+
           // LMPIAR CAMPOS
           this.limpiarCampos();
 
@@ -163,16 +190,19 @@ export default {
 
           // Actualizar la lista
           await this.loadNews();
-
         } catch (error) {
-          console.error('Error updating news:', error);
+          console.error("Error updating news:", error);
         }
       }
     },
 
     // CREAR NOTICIAS
     async createNews() {
-      await createBroadcastNews(this.newsCreateList);
+      let newsList = { ...this.newsCreateList };
+      newsList.image = newsList.image.name;
+      await createBroadcastNews(newsList);
+      await uploadBroadcastImg(this.newsCreateList.image);
+      console.log(this.newsCreateList.image);
       // LIMPIAR CAMPOS
       this.limpiarCampos();
       // HACER SELECT
@@ -184,8 +214,14 @@ export default {
     async loadNews() {
       try {
         this.newsList = await getBroadcastNews();
+
+        for (const news of this.newsList) {
+          const imageURL = await getImg(news.image);
+          news.image = imageURL;
+        }
+        //console.log("Lista de noticias cargada:", this.newsList);
       } catch (error) {
-        console.error('Error loading news:', error);
+        console.error("Error loading news:", error);
       }
     },
 
@@ -210,16 +246,17 @@ export default {
       this.newsCreateList = {
         image: "",
         title: "",
-        description: ""
+        description: "",
       };
       this.newsEditList = {
         image: "",
         title: "",
-        description: ""
+        description: "",
       };
       this.file = "";
     },
     openUpdateDialog(news) {
+      this.imagenNoticiaEditado = news.image;
       // Cargar los datos del producto seleccionado en el diálogo de edición
       this.newsEditList = { ...news };
       this.idEditada = news._id;
@@ -249,12 +286,38 @@ export default {
       this.updateFile = event.target.files[0];
       // Asignar el archivo a la propiedad image
       this.newsEditList.image = this.updateFile;
-    }
-  }
+    },
+
+  },
 };
 </script>
 
 <style scoped>
+
+.dialog-title {
+    background-color: #1976d2;
+    color: #ffffff;
+  }
+
+  .dialog-text {
+    color: #333333;
+  }
+
+  /* Estilos para los text fields dentro de los diálogos */
+  .dialog-text-field {
+    width: 100%;
+  }
+
+  /* Estilos para los botones dentro de los diálogos */
+  .dialog-btn {
+    color: #ffffff;
+  }
+
+.news-image {
+  width: 350px !important;
+  height: 500px !important;
+}
+
 .news-card {
   width: 100%;
   height: 100%;
@@ -307,6 +370,7 @@ export default {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  z-index: 1;
 }
 
 .broadcast-news {

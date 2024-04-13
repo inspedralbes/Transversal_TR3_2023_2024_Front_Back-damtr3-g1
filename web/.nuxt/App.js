@@ -5,12 +5,13 @@ import { getMatchedComponentsInstances, getChildrenComponentInstancesUsingFetch,
 import NuxtError from '..\\layouts\\error.vue'
 import NuxtLoading from './components/nuxt-loading.vue'
 
+import _0344d7f0 from '..\\layouts\\DashboardLayout.vue'
 import _777c3502 from '..\\layouts\\HomeLayout.vue'
 import _1ee80a1d from '..\\layouts\\LoginLayout.vue'
 import _3854cb70 from '..\\layouts\\ProcesosLayout.vue'
 import _6f6c098b from './layouts/default.vue'
 
-const layouts = { "_HomeLayout": sanitizeComponent(_777c3502),"_LoginLayout": sanitizeComponent(_1ee80a1d),"_ProcesosLayout": sanitizeComponent(_3854cb70),"_default": sanitizeComponent(_6f6c098b) }
+const layouts = { "_DashboardLayout": sanitizeComponent(_0344d7f0),"_HomeLayout": sanitizeComponent(_777c3502),"_LoginLayout": sanitizeComponent(_1ee80a1d),"_ProcesosLayout": sanitizeComponent(_3854cb70),"_default": sanitizeComponent(_6f6c098b) }
 
 export default {
   render (h, props) {
