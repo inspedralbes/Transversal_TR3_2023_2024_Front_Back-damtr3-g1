@@ -25,7 +25,7 @@ module.exports = {
                 } else {
                     if (rows.length > 0) {
                         var idUsuario = rows[0].idUser;
-                        var sql = `UPDATE Estadisticas SET PartidasJugadas = PartidasJugadas + 1, Kills = Kills + ?, Muertes = Muertes + ?, Asistencias = Asistencias + ?, NumeroVictorias = NumeroVictorias + 1 WHERE idUser = ?`;
+                        var sql = `UPDATE Estadisticas SET PartidasJugadas = PartidasJugadas + 1, Kills = Kills + ?, NumeroVictorias = NumeroVictorias + 1 WHERE idUser = ?`;
                         var values = [killsPartida, deathsPartida, assistsPartida, idUsuario];
                         conn.query(sql, values, (err, result) => {
                             if (err) {
@@ -59,7 +59,7 @@ module.exports = {
                 } else {
                     if (rows.length > 0) {
                         var idUsuario = rows[0].idUser;
-                        var sql = `UPDATE Estadisticas SET PartidasJugadas = PartidasJugadas + 1, Kills = Kills + ?, Muertes = Muertes + ?, Asistencias = Asistencias + ? WHERE idUser = ?`;
+                        var sql = `UPDATE Estadisticas SET PartidasJugadas = PartidasJugadas + 1, Kills = Kills + ? WHERE idUser = ?`;
                         var values = [killsPartida, deathsPartida, assistsPartida, idUsuario];
                         conn.query(sql, values, (err, result) => {
                             if (err) {

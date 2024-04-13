@@ -170,7 +170,14 @@
           <!-- Aquí agregar campos de edición para el producto -->
           <v-text-field v-model="skinEditado.nombre" label="Nombre" class="dialog-text-field"></v-text-field>
           <v-text-field v-model="skinEditado.descripcion" label="Descripción" class="dialog-text-field"></v-text-field>
-          <v-file-input v-model="skinEditado.pngSkin" label="Archivo PNG" accept="image/png" class="dialog-text-field" />
+          <v-file-input v-model="skinEditado.pngSkin.arriba" label="Archivo PNG (Arriba)" accept="image/png"
+            class="dialog-text-field" />
+          <v-file-input v-model="skinEditado.pngSkin.abajo" label="Archivo PNG (Abajo)" accept="image/png"
+            class="dialog-text-field" />
+          <v-file-input v-model="skinEditado.pngSkin.izq" label="Archivo PNG (Izquierda)" accept="image/png"
+            class="dialog-text-field" />
+          <v-file-input v-model="skinEditado.pngSkin.derecha" label="Archivo PNG (Derecha)" accept="image/png"
+            class="dialog-text-field" />
           <v-text-field v-model="skinEditado.valorMonedas" label="Precio Monedas"
             class="dialog-text-field"></v-text-field>
         </v-card-text>
@@ -226,7 +233,13 @@
               <v-text-field v-model="skinNuevo.nombre" label="Nombre" required class="dialog-text-field"></v-text-field>
               <v-text-field v-model="skinNuevo.descripcion" label="Descripción" required
                 class="dialog-text-field"></v-text-field>
-              <v-file-input v-model="skinNuevo.pngSkin" label="Archivo PNG" accept="image/png"
+              <v-file-input v-model="skinNuevo.pngSkin.arriba" label="Archivo PNG (Arriba)" accept="image/png"
+                class="dialog-text-field" />
+              <v-file-input v-model="skinNuevo.pngSkin.abajo" label="Archivo PNG (Abajo)" accept="image/png"
+                class="dialog-text-field" />
+              <v-file-input v-model="skinNuevo.pngSkin.izq" label="Archivo PNG (Izquierda)" accept="image/png"
+                class="dialog-text-field" />
+              <v-file-input v-model="skinNuevo.pngSkin.derecha" label="Archivo PNG (Derecha)" accept="image/png"
                 class="dialog-text-field" />
               <v-text-field v-model.number="skinNuevo.valorMonedas" label="Valor en Monedas" required
                 class="dialog-text-field"></v-text-field>
@@ -236,7 +249,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="dialogSkin = false" class="dialog-btn">Cancelar</v-btn>
-          <v-btn color="blue darken-1" text @click="crearSkin" class="dialog-btn">Guardar</v-btn>
+          <v-btn color="blue darken-1" text @click="crearSkins" class="dialog-btn">Guardar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -400,7 +413,7 @@ export default {
   middleware: 'auth',
   data() {
     return {
-      imagenSkinEdit: null,
+      imagenSkinEdit: { arriba: null, abajo: null, izq: null, derecha: null },
       imagenMapaEdit: null,
       dialogPersonaje: false,
       dialogSkin: false,
@@ -422,7 +435,7 @@ export default {
       skinEditado: {
         nombre: "",
         valorMonedas: 0,
-        pngSkin: null,
+        pngSkin: { arriba: null, abajo: null, izq: null, derecha: null },
         descripcion: "",
       },
       personajeNuevo: {
@@ -434,7 +447,7 @@ export default {
       skinNuevo: {
         nombre: "",
         descripcion: "",
-        pngSkin: null,
+        pngSkin: { arriba: null, abajo: null, izq: null, derecha: null },
         valorMonedas: 0,
       },
       idEditada: null,
@@ -515,7 +528,7 @@ export default {
     },
 
     // PILLAR ESTADO DEL SERVIDOR DE ODOO
-    
+
     async odooEstado() {
       const odooStatus = await getOdooStatus();
       if (odooStatus) {
@@ -651,7 +664,12 @@ export default {
 
     // EDITAR SKIN
     editarSkin(producto) {
-      this.imagenSkinEditado = producto.pngSkin;
+      this.imagenSkinEditado = {
+        arriba: producto.pngSkin.arriba,
+        abajo: producto.pngSkin.abajo,
+        izq: producto.pngSkin.izq,
+        derecha: producto.pngSkin.derecha
+      };
 
       this.skinEditado = { ...producto };
       this.idEditada = producto._id;
@@ -692,40 +710,59 @@ export default {
 
     // GUARDAR CAMBIOS SKIN
     async guardarCambioSkin() {
-      // Verificar que los campos no estén vacíos y cumplan con las restricciones
-      if (
-        this.skinEditado.nombre.trim() === "" ||
-        this.skinEditado.descripcion.trim() === "" ||
-        this.skinEditado.nombre.length > 65 ||
-        this.skinEditado.descripcion.length > 200 ||
-        isNaN(this.skinEditado.valorMonedas) ||
-        this.skinEditado.valorMonedas.toString().length > 10
-      ) {
-        // Mostrar un mensaje de error
-        alert("Por favor, complete todos los campos correctamente.");
-        return; // Salir de la función si hay algún error
-      }
+  // Verificar que los campos no estén vacíos y cumplan con las restricciones
+  if (
+    this.skinEditado.nombre.trim() === "" ||
+    this.skinEditado.descripcion.trim() === "" ||
+    this.skinEditado.nombre.length > 65 ||
+    this.skinEditado.descripcion.length > 200 ||
+    isNaN(this.skinEditado.valorMonedas) ||
+    this.skinEditado.valorMonedas.toString().length > 10 ||
+    this.skinEditado.pngSkin.arriba === null ||
+    this.skinEditado.pngSkin.abajo === null ||
+    this.skinEditado.pngSkin.izq === null ||
+    this.skinEditado.pngSkin.derecha === null
+  ) {
+    // Mostrar un mensaje de error
+    alert("Por favor, complete todos los campos correctamente.");
+    return; // Salir de la función si hay algún error
+  }
 
-      // Guardar los cambios realizados en el producto
-      if (this.idEditada !== null) {
-        this.$set(this.productos, this.idEditada, this.skinEditado);
+  // Guardar los cambios realizados en el producto
+  if (this.idEditada !== null) {
+    this.$set(this.productos, this.idEditada, this.skinEditado);
 
-        let skinEditadoSinId = { ...this.skinEditado };
-        skinEditadoSinId.pngSkin = this.skinEditado.pngSkin.name;
-        delete skinEditadoSinId._id;
+    let skinEditadoSinId = { ...this.skinEditado };
+    skinEditadoSinId.pngSkin = {
+      arriba: this.skinEditado.pngSkin.arriba.name,
+      abajo: this.skinEditado.pngSkin.abajo.name,
+      izq: this.skinEditado.pngSkin.izq.name,
+      derecha: this.skinEditado.pngSkin.derecha.name
+    };
+    delete skinEditadoSinId._id;
 
-        console.log("foto a subir", this.skinEditado.pngSkin);
-        console.log("foto nompre para eliminar", this.imagenSkinEditado);
-        await updateSkin(this.idEditada, skinEditadoSinId);
+    await updateSkin(this.idEditada, skinEditadoSinId);
 
-        if (this.skinEditado.pngSkin !== this.imagenSkinEditado) {
-          await editSkinimg(this.skinEditado.pngSkin, this.imagenSkinEditado);
-        }
+    // Verificar si las imágenes han cambiado y actualizarlas si es necesario
+    if (
+      this.skinEditado.pngSkin.arriba !== this.imagenSkinEditado.arriba ||
+      this.skinEditado.pngSkin.abajo !== this.imagenSkinEditado.abajo ||
+      this.skinEditado.pngSkin.izq !== this.imagenSkinEditado.izq ||
+      this.skinEditado.pngSkin.derecha !== this.imagenSkinEditado.derecha
+    ) {
+      await Promise.all([
+        editSkinimg(this.skinEditado.pngSkin.arriba, this.imagenSkinEditado.arriba),
+        editSkinimg(this.skinEditado.pngSkin.abajo, this.imagenSkinEditado.abajo),
+        editSkinimg(this.skinEditado.pngSkin.izq, this.imagenSkinEditado.izq),
+        editSkinimg(this.skinEditado.pngSkin.derecha, this.imagenSkinEditado.derecha)
+      ]);
+    }
 
-        this.getProductos();
-      }
-      this.cancelarEdicionSkin();
-    },
+    this.getProductos();
+  }
+  this.cancelarEdicionSkin();
+},
+
 
     // CACELAR EDICION Personaje
     cancelarEdicionPersonaje() {
@@ -804,35 +841,48 @@ export default {
     },
 
     // CREAR SKIN
-    async crearSkin() {
+    async crearSkins() {
       // Verificar que los campos no estén vacíos y cumplan con las restricciones
       if (
-        this.skinNuevo.nombre.trim() === "" ||
-        this.skinNuevo.descripcion.trim() === "" ||
-        this.skinNuevo.nombre.length > 40 ||
-        isNaN(this.skinNuevo.valorMonedas) ||
-        this.skinNuevo.valorMonedas.toString().length > 10 ||
-        this.skinNuevo.pngSkin === null
+        this.skinNuevo.nombre === "" 
+        
       ) {
         // Mostrar un mensaje de error
         alert("Por favor, complete todos los campos correctamente.");
         return; // Salir de la función si hay algún error
       }
 
+      console.log(this.skinNuevo.pngSkin);
+
       // Crear la nueva skin
       let skinNuevoCopy = { ...this.skinNuevo };
-      skinNuevoCopy.pngSkin = skinNuevoCopy.pngSkin.name;
+      skinNuevoCopy.pngSkin = {
+        arriba: this.skinNuevo.pngSkin.arriba.name,
+        abajo: this.skinNuevo.pngSkin.abajo.name,
+        izq: this.skinNuevo.pngSkin.izq.name,
+        derecha: this.skinNuevo.pngSkin.derecha.name
+      };
       await crearSkin(skinNuevoCopy);
 
-      // Subir la imagen de la skin
-      await uploadSkinimg(this.skinNuevo.pngSkin);
+      // Subir las imágenes de la skin
+      await Promise.all([
+        uploadSkinimg(this.skinNuevo.pngSkin.arriba),
+        uploadSkinimg(this.skinNuevo.pngSkin.abajo),
+        uploadSkinimg(this.skinNuevo.pngSkin.izq),
+        uploadSkinimg(this.skinNuevo.pngSkin.derecha)
+      ]);
 
       // Restablecer los valores a los predeterminados
       this.skinNuevo = {
         nombre: "",
         valorMonedas: 0,
         descripcion: "",
-        pngSkin: null,
+        pngSkin: {
+          arriba: null,
+          abajo: null,
+          izq: null,
+          derecha: null
+        }
       };
 
       // Cerrar el diálogo de creación de skin
@@ -841,6 +891,7 @@ export default {
       // Actualizar la lista de productos
       this.getProductos();
     },
+
 
     // EDITAR CLIENTE
     editarCliente(cliente) {
