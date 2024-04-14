@@ -35,7 +35,7 @@ const conn = require('./persistenciaSQL/Connexio.js');
 const bdEstadistiques = require('./persistenciaSQL/Estadistiques.js');
 const bdUsuaris = require('./persistenciaSQL/Usuaris.js');
 
-const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin, insertOrUpdateSkin } = require('./funcionesmongo/personajeskin');
+const { getPersonajes, createPersonaje, updatePersonaje, deletePersonaje, getSkins, createSkin, updateSkin, deleteSkin, getSkinById } = require('./funcionesmongo/personajeskin');
 const client = require('./funcionesmongo/conexion');
 const { getAssets } = require('./funcionesmongo/assets'); // Importa la función getAssets
 const { getMapas, updateMapa, createMapa, deleteMapa } = require('./funcionesmongo/mapa'); // Importa las funciones relacionadas con los mapas
@@ -135,19 +135,32 @@ app.post('/editMap', uploadMap.single('image'), (req, res) => {
     }
 });
 
-app.post('/editSkin', uploadSkin.array('images', 4), (req, res) => {
+app.post('/editSkin', uploadSkin.array('images', 4), async (req, res) => {
     try {
-        const oldImages = req.body.oldImages;
-        fs.unlink(path.join(folderPath, oldImageName), err => {
-            if (err) throw err;
-            console.log('Imagen antigua eliminada con éxito');
+        const id = req.body.id;
+        const skinPngSkin = await getSkinById(client, id); // Obtener el pngSkin de la skin por ID
+
+        const existingImages = fs.readdirSync(folderPath);
+
+        // Eliminar las imágenes existentes que no coinciden con ninguna de las imágenes en skinPngSkin
+        existingImages.forEach(image => {
+            // Verificar si la imagen no coincide con ninguno de los nombres de las imágenes en skinPngSkin
+            if (!Object.values(skinPngSkin).includes(image)) {
+                fs.unlink(path.join(folderPath, image), err => {
+                    if (err) throw err;
+                    console.log(`Imagen ${image} eliminada con éxito`);
+                });
+            }
         });
+
         res.status(200).json({ message: 'Imagen subida y antigua imagen eliminada con éxito' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error al subir la nueva imagen o eliminar la antigua' });
     }
 });
+
+
 
 app.post('/editBroadcast', uploadBroadcast.single('image'), (req, res) => {
     try {

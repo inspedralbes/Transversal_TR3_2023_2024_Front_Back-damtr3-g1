@@ -348,11 +348,15 @@ export async function editMapimg(imageFile, oldImageName) {
     }
 }
 
-export async function editSkinimg(imageFile, oldImageName) {
+export async function editSkinimg(imageFiles, id) {
     try {
         let formData = new FormData();
-        formData.append('image', imageFile);
-        formData.append('oldImageName', oldImageName);
+        for (const key in imageFiles) {
+            if (imageFiles[key] instanceof File) {
+                formData.append('images', imageFiles[key]);
+            }
+        }
+        formData.append('id', id)
 
         const response = await fetch(`http://localhost:3170/editSkin`, {
             method: 'POST',
@@ -366,6 +370,7 @@ export async function editSkinimg(imageFile, oldImageName) {
         throw new Error('Error al subir la nueva imagen o eliminar la antigua');
     }
 }
+
 
 export async function editBroadcastimg(imageFile, oldImageName) {
     try {
