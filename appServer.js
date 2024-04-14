@@ -266,23 +266,28 @@ app.post("/unirSala", (req, res) => {
     var trobat = false;
     sales.forEach(sala => {
         if (sala.salaId === salaUnir) {
+            trobat = true;
             var existe = false;
             sala.users.forEach(usuari => {
                 if (usuari === user) {
                     existe = true;
                 }
             });
-            if (!existe) {
+            if (!existe && sala.users.length < 10) {
                 console.log("USUARIO NO EXISTE")
                 sala.users.push(user);
                 sala.skins.push(skin);
-                io.emit("newUser", req.body);
-            } else {
+                // io.emit("newUser", req.body);
+                console.log("TODO OK")
+                res.send({ auth: true })
+            } else if (existe){
                 console.log("USUARIO EXISTE")
-            }
-            console.log("TODO OK")
-            trobat = true;
-            res.send({ auth: true })
+                res.send({ msg: "USUARIO EXISTE" })
+            } else if (sala.users.length >= 10) {
+                console.log("SALA LLENA")
+                res.send({ msg: "SALA LLENA" })
+            } 
+            
         }
 
     });
