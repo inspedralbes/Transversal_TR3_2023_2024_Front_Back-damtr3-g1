@@ -128,6 +128,22 @@ async function insertOrUpdateSkin(client, usuario, skinId) {
     }
 }
 
+async function getSkinById(client, id) {
+    try {
+      const database = client.db('Juego');
+      const collection = database.collection('skins');
+      const result = await collection.findOne({ _id: new ObjectId(id) });
+      if (!result) {
+        throw new Error('No se encontró ninguna skin con el ID proporcionado');
+      }
+      return result.pngSkin;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  
+
 
 module.exports = {
     getPersonajes,
@@ -138,5 +154,6 @@ module.exports = {
     createSkin,
     updateSkin,
     deleteSkin,
-    insertOrUpdateSkin
+    insertOrUpdateSkin,
+    getSkinById
 };

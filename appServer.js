@@ -280,14 +280,14 @@ app.post("/unirSala", (req, res) => {
                 // io.emit("newUser", req.body);
                 console.log("TODO OK")
                 res.send({ auth: true })
-            } else if (existe){
+            } else if (existe) {
                 console.log("USUARIO EXISTE")
                 res.send({ msg: "USUARIO EXISTE" })
             } else if (sala.users.length >= 10) {
                 console.log("SALA LLENA")
                 res.send({ msg: "SALA LLENA" })
-            } 
-            
+            }
+
         }
 
     });
@@ -523,19 +523,36 @@ app.get("/logged/:user", (req, res) => {
 });
 
 app.post("/finalGame", async (req, res) => {
-    var user = req.body.user;
-    var monedes = req.body.monedes;
+    var userWin = req.body.userWin;
+    var userLose = req.body.userLose;
+    var monedesWin = req.body.monedasWin;
+    var monedesLose = req.body.monedasLose;
     var kills = req.body.kills;
-    var deaths = req.body.deaths;
-    var assists = req.body.assists;
-    var isWin = req.body.isWin;
 
-    if (isWin) {
-        await bdEstadistiques.updateEstadistiquesWin(kills, deaths, assists, user);
-    } else {
-        await bdEstadistiques.updateEstadistiquesLose(kills, deaths, assists, user);
-    }
-    await bdUsuaris.updateFinalPartida(monedes, user);
+    console.log("Usuarios WIN : " + userWin.UserWIN);
+    console.log("KILLS WIN: " + userWin.KillWIN);
+    console.log("Usuarios lose: " + userLose.UserLose);
+    console.log("KILLS LOSE: " + userLose.KillLOSE);
+
+    await bdEstadistiques.updateEstadistiquesWin(userWin.KillWIN, userWin)
+    .catch(error => {
+        console.error("Error en updateEstadistiquesWin:", error);
+    });
+
+await bdEstadistiques.updateEstadistiquesLose(userLose.KillLOSE, userLose)
+    .catch(error => {
+        console.error("Error en updateEstadistiquesLose:", error);
+    });
+
+await bdUsuaris.updateFinalPartidaWin(monedesWin, userWin.UserWIN)
+    .catch(error => {
+        console.error("Error en updateFinalPartida (monedesWin):", error);
+    });
+
+await bdUsuaris.updateFinalPartidaLose(monedesLose, userLose.UserLose)
+    .catch(error => {
+        console.error("Error en updateFinalPartida (monedesLose):", error);
+    });
 })
 
 //*************************************************************SOCKETS********************************************************************* */

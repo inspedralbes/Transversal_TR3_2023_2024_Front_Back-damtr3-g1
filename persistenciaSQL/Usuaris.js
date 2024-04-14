@@ -108,10 +108,10 @@ module.exports = {
         });
     },
 
-    updateFinalPartida : function(monedes, user) {
+    updateFinalPartidaWin : function(monedesWin, user) {
         return new Promise((resolve, reject) => {
             var sql = 'UPDATE Usuario SET monedas = monedas + ? WHERE username = ?';
-            conn.query(sql, [monedes, user], (err, result) => {
+            conn.query(sql, [monedesWin, user.UserWIN], (err, result) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -121,7 +121,18 @@ module.exports = {
         });
     },
 
-    
+    updateFinalPartidaLose : function(monedesLose, user) {
+        return new Promise((resolve, reject) => {
+            var sql = 'UPDATE Usuario SET monedas = monedas + ? WHERE username = ?';
+            conn.query(sql, [monedesLose, user.UserLose], (err, result) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    },
     
     
 
