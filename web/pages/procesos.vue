@@ -115,8 +115,9 @@
                     <v-card class="inner-card">
                       <v-card-title class="inner-title-2">{{ skin.nombre }}</v-card-title>
                       <v-card-text class="inner-text">
+                        <div>Descripcion: {{ skin.descripcion }}</div>
+                        <br />
                         <div>Valor en Monedas: {{ skin.valorMonedas }}</div>
-                        <div>Imagen: {{ skin.pngSkin }}</div>
                       </v-card-text>
                       <v-card-actions>
                         <v-btn color="primary" text @click="editarSkin(skin)" class="dialog-btn">Editar</v-btn>
@@ -677,6 +678,92 @@ export default {
       console.log("fotaca", this.imagenSkinEditado);
     },
 
+    // GUARDAR CAMBIOS SKIN
+    async guardarCambioSkin() {
+      if (
+        !this.skinEditado ||
+        this.skinEditado.nombre.trim() === "" ||
+        this.skinEditado.descripcion.trim() === "" ||
+        this.skinEditado.nombre.length > 65 ||
+        this.skinEditado.descripcion.length > 200 ||
+        isNaN(this.skinEditado.valorMonedas) ||
+        this.skinEditado.valorMonedas.toString().length > 10 ||
+        !this.skinEditado.pngSkin || // Verificar si this.skinEditado.pngSkin es null o undefined
+        (!this.skinEditado.pngSkin.arriba && this.skinEditado.pngSkin.arriba !== null) || // Verificar si this.skinEditado.pngSkin.arriba es null o undefined
+        (!this.skinEditado.pngSkin.abajo && this.skinEditado.pngSkin.abajo !== null) || // Verificar si this.skinEditado.pngSkin.abajo es null o undefined
+        (!this.skinEditado.pngSkin.izq && this.skinEditado.pngSkin.izq !== null) || // Verificar si this.skinEditado.pngSkin.izq es null o undefined
+        (!this.skinEditado.pngSkin.derecha && this.skinEditado.pngSkin.derecha !== null) // Verificar si this.skinEditado.pngSkin.derecha es null o undefined
+      ) {
+        // Mostrar un mensaje de error
+        alert("Por favor, complete todos los campos correctamente.");
+        return; // Salir de la función si hay algún error
+      }
+
+      // Guardar los nombres de las imágenes antiguas
+      const nombresImagenesAntiguas = {
+        arriba: this.imagenSkinEditado.arriba,
+        abajo: this.imagenSkinEditado.abajo,
+        izq: this.imagenSkinEditado.izq,
+        derecha: this.imagenSkinEditado.derecha
+      };
+
+      console.log("nombresImagenesAntiguas", nombresImagenesAntiguas);
+      // Asignar nombres de imágenes antiguas si las nuevas no están definidas
+      if (this.imagenSkinEditado !== null && this.imagenSkinEditado !== undefined) {
+        if (this.skinEditado.pngSkin.arriba === undefined) {
+          this.skinEditado.pngSkin.arriba = nombresImagenesAntiguas.arriba;
+        }
+        if (this.skinEditado.pngSkin.abajo === undefined) {
+          this.skinEditado.pngSkin.abajo = nombresImagenesAntiguas.abajo;
+        }
+        if (this.skinEditado.pngSkin.izq === undefined) {
+          this.skinEditado.pngSkin.izq = nombresImagenesAntiguas.izq;
+        }
+        if (this.skinEditado.pngSkin.derecha === undefined) {
+          this.skinEditado.pngSkin.derecha = nombresImagenesAntiguas.derecha;
+        }
+      }
+
+      console.log("skinEditado", this.skinEditado);
+      // Guardar los cambios realizados en el producto
+      if (this.idEditada !== null) {
+        this.$set(this.productos, this.idEditada, this.skinEditado);
+
+        let skinEditadoSinId = { ...this.skinEditado };
+        skinEditadoSinId.pngSkin = {};
+
+        // Iterar sobre las propiedades del objeto this.skinEditado.pngSkin
+        for (const key in this.skinEditado.pngSkin) {
+          // Verificar si el valor es de tipo File
+          if (this.skinEditado.pngSkin[key] instanceof File) {
+            // Asignar el nombre del archivo a la propiedad correspondiente
+            skinEditadoSinId.pngSkin[key] = this.skinEditado.pngSkin[key].name;
+          } else {
+            // Dejar el valor tal cual si no es de tipo File
+            skinEditadoSinId.pngSkin[key] = this.skinEditado.pngSkin[key];
+          }
+        }
+        delete skinEditadoSinId._id;
+        console.log("skinEditadoSinId", skinEditadoSinId);
+
+        await updateSkin(this.idEditada, skinEditadoSinId);
+
+        // Verificar si las imágenes han cambiado y actualizarlas si es necesario
+        if (
+          this.imagenSkinEditado && // Verificar si this.imagenSkinEditado está definido y no es null
+          (this.skinEditado.pngSkin.arriba !== nombresImagenesAntiguas.arriba ||
+            this.skinEditado.pngSkin.abajo !== nombresImagenesAntiguas.abajo ||
+            this.skinEditado.pngSkin.izq !== nombresImagenesAntiguas.izq ||
+            this.skinEditado.pngSkin.derecha !== nombresImagenesAntiguas.derecha)
+        ) {
+          await editSkinimg(this.skinEditado.pngSkin);
+        }
+
+        this.getProductos();
+      }
+      this.cancelarEdicionSkin();
+    },
+
     // GUARDAR CAMBIOS DEL Personaje
     async guardarCambiosPersonaje() {
       // Verificar que los campos no estén vacíos y cumplan con las restricciones
@@ -708,61 +795,6 @@ export default {
       this.cancelarEdicionPersonaje();
     },
 
-    // GUARDAR CAMBIOS SKIN
-    async guardarCambioSkin() {
-  // Verificar que los campos no estén vacíos y cumplan con las restricciones
-  if (
-    this.skinEditado.nombre.trim() === "" ||
-    this.skinEditado.descripcion.trim() === "" ||
-    this.skinEditado.nombre.length > 65 ||
-    this.skinEditado.descripcion.length > 200 ||
-    isNaN(this.skinEditado.valorMonedas) ||
-    this.skinEditado.valorMonedas.toString().length > 10 ||
-    this.skinEditado.pngSkin.arriba === null ||
-    this.skinEditado.pngSkin.abajo === null ||
-    this.skinEditado.pngSkin.izq === null ||
-    this.skinEditado.pngSkin.derecha === null
-  ) {
-    // Mostrar un mensaje de error
-    alert("Por favor, complete todos los campos correctamente.");
-    return; // Salir de la función si hay algún error
-  }
-
-  // Guardar los cambios realizados en el producto
-  if (this.idEditada !== null) {
-    this.$set(this.productos, this.idEditada, this.skinEditado);
-
-    let skinEditadoSinId = { ...this.skinEditado };
-    skinEditadoSinId.pngSkin = {
-      arriba: this.skinEditado.pngSkin.arriba.name,
-      abajo: this.skinEditado.pngSkin.abajo.name,
-      izq: this.skinEditado.pngSkin.izq.name,
-      derecha: this.skinEditado.pngSkin.derecha.name
-    };
-    delete skinEditadoSinId._id;
-
-    await updateSkin(this.idEditada, skinEditadoSinId);
-
-    // Verificar si las imágenes han cambiado y actualizarlas si es necesario
-    if (
-      this.skinEditado.pngSkin.arriba !== this.imagenSkinEditado.arriba ||
-      this.skinEditado.pngSkin.abajo !== this.imagenSkinEditado.abajo ||
-      this.skinEditado.pngSkin.izq !== this.imagenSkinEditado.izq ||
-      this.skinEditado.pngSkin.derecha !== this.imagenSkinEditado.derecha
-    ) {
-      await Promise.all([
-        editSkinimg(this.skinEditado.pngSkin.arriba, this.imagenSkinEditado.arriba),
-        editSkinimg(this.skinEditado.pngSkin.abajo, this.imagenSkinEditado.abajo),
-        editSkinimg(this.skinEditado.pngSkin.izq, this.imagenSkinEditado.izq),
-        editSkinimg(this.skinEditado.pngSkin.derecha, this.imagenSkinEditado.derecha)
-      ]);
-    }
-
-    this.getProductos();
-  }
-  this.cancelarEdicionSkin();
-},
-
 
     // CACELAR EDICION Personaje
     cancelarEdicionPersonaje() {
@@ -783,7 +815,7 @@ export default {
       (this.skinEditado = {
         nombre: "",
         valorMonedas: 0,
-        pngSkin: null,
+        pngSkin: { arriba: null, abajo: null, izq: null, derecha: null } ,
         descripcion: "",
       }),
         (this.idEditada = null);
@@ -844,8 +876,8 @@ export default {
     async crearSkins() {
       // Verificar que los campos no estén vacíos y cumplan con las restricciones
       if (
-        this.skinNuevo.nombre === "" 
-        
+        this.skinNuevo.nombre === ""
+
       ) {
         // Mostrar un mensaje de error
         alert("Por favor, complete todos los campos correctamente.");
