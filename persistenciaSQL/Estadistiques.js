@@ -16,23 +16,23 @@ module.exports = {
         })
     },
 
-    updateEstadistiquesWin: function(killsPartida, deathsPartida, assistsPartida, user){
+    updateEstadistiquesWin: function(killsPartida, user){
         var sqlUser = `SELECT idUser FROM Usuario WHERE username = ?`;
         return new Promise((resolve, reject) =>{
-            conn.query(sqlUser, [user], (err, rows) => {
+            conn.query(sqlUser, [user.UserWIN], (err, rows) => {
                 if (err) {
                     reject(err);
                 } else {
                     if (rows.length > 0) {
                         var idUsuario = rows[0].idUser;
                         var sql = `UPDATE Estadisticas SET PartidasJugadas = PartidasJugadas + 1, Kills = Kills + ?, NumeroVictorias = NumeroVictorias + 1 WHERE idUser = ?`;
-                        var values = [killsPartida, deathsPartida, assistsPartida, idUsuario];
+                        var values = [killsPartida, idUsuario];
                         conn.query(sql, values, (err, result) => {
                             if (err) {
                                 reject(err);
                             } else {
                                 // Actualizar porcentaje de victorias
-                                var sqlPorcentaje = `UPDATE PorcentageVictorias SET Porcentaje = (NumeroVictorias / PartidasJugadas) * 100 WHERE idUser = ?`;
+                                var sqlPorcentaje = `UPDATE Estadisticas SET PorcentageVictorias = (NumeroVictorias / PartidasJugadas) * 100 WHERE idUser = ?`;
                                 conn.query(sqlPorcentaje, [idUsuario], (err, result) => {
                                     if (err) {
                                         reject(err);
@@ -50,23 +50,23 @@ module.exports = {
         });
     },
     
-    updateEstadistiquesLose: function(killsPartida, deathsPartida, assistsPartida, user){
+    updateEstadistiquesLose: function(killsPartida, user){
         var sqlUser = `SELECT idUser FROM Usuario WHERE username = ?`;
         return new Promise((resolve, reject) =>{
-            conn.query(sqlUser, [user], (err, rows) => {
+            conn.query(sqlUser, [user.UserLose], (err, rows) => {
                 if (err) {
                     reject(err);
                 } else {
                     if (rows.length > 0) {
                         var idUsuario = rows[0].idUser;
                         var sql = `UPDATE Estadisticas SET PartidasJugadas = PartidasJugadas + 1, Kills = Kills + ? WHERE idUser = ?`;
-                        var values = [killsPartida, deathsPartida, assistsPartida, idUsuario];
+                        var values = [killsPartida, idUsuario];
                         conn.query(sql, values, (err, result) => {
                             if (err) {
                                 reject(err);
                             } else {
                                 // Actualizar porcentaje de victorias
-                                var sqlPorcentaje = `UPDATE PorcentageVictorias SET Porcentaje = (NumeroVictorias / PartidasJugadas) * 100 WHERE idUser = ?`;
+                                var sqlPorcentaje = `UPDATE Estadisticas SET PorcentageVictorias = (NumeroVictorias / PartidasJugadas) * 100 WHERE idUser = ?`;
                                 conn.query(sqlPorcentaje, [idUsuario], (err, result) => {
                                     if (err) {
                                         reject(err);
