@@ -224,7 +224,7 @@ app.post("/register", async (req, res) => {
         console.log(formattedDate)
 
         //Afegir usuari a inventari
-        var inventari = { usuario: user, skins: [] }
+        var inventari = { usuario: user, skins: [], activo: ""}
         createInventari(client, inventari);
 
 
@@ -400,7 +400,7 @@ app.get("/crearSala", (req, res) => {
     var sala = {
         salaId: generateRandomString(6),
         users: [usuari],
-        skins: [skin]
+        skins: [skin],
     };
     sales.push(sala);
     res.send(JSON.stringify(sala));

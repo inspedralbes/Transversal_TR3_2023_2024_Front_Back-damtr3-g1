@@ -115,7 +115,7 @@ async function insertOrUpdateSkin(client, usuario, skinId) {
             // Si el usuario ya existe, actualiza el array de skins
             await collection.updateOne(
                 { usuario },
-                { $addToSet: { skins: skinId } } // $addToSet asegura que no se añadan duplicados
+                { $addToSet: { skins: skinId } }// $addToSet asegura que no se añadan duplicados
             );
         } else {
             // Si el usuario no existe, crea un nuevo documento con el array de skins
