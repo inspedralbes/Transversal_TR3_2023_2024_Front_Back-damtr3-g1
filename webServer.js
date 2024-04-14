@@ -135,14 +135,32 @@ app.post('/editMap', uploadMap.single('image'), (req, res) => {
     }
 });
 
-app.post('/editSkin', uploadSkin.array('images', 4), (req, res) => {
+app.post('/editSkin', uploadSkin.array('images', 4), async (req, res) => {
     try {
-        res.status(200).json({ message: 'Imagen subida con éxito' });
+        const id = req.body.id;
+        const skinPngSkin = await getSkinById(client, id); // Obtener el pngSkin de la skin por ID
+
+        const existingImages = fs.readdirSync(folderPath);
+
+        // Eliminar las imágenes existentes que no coinciden con ninguna de las imágenes en skinPngSkin
+        existingImages.forEach(image => {
+            // Verificar si la imagen no coincide con ninguno de los nombres de las imágenes en skinPngSkin
+            if (!Object.values(skinPngSkin).includes(image)) {
+                fs.unlink(path.join(folderPath, image), err => {
+                    if (err) throw err;
+                    console.log(`Imagen ${image} eliminada con éxito`);
+                });
+            }
+        });
+
+        res.status(200).json({ message: 'Imagen subida y antigua imagen eliminada con éxito' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error al subir la nueva imagen' });
+        res.status(500).json({ message: 'Error al subir la nueva imagen o eliminar la antigua' });
     }
 });
+
+
 
 app.post('/editBroadcast', uploadBroadcast.single('image'), (req, res) => {
     try {

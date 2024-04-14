@@ -348,7 +348,7 @@ export async function editMapimg(imageFile, oldImageName) {
     }
 }
 
-export async function editSkinimg(imageFiles) {
+export async function editSkinimg(imageFiles, id) {
     try {
         let formData = new FormData();
         for (const key in imageFiles) {
@@ -356,6 +356,7 @@ export async function editSkinimg(imageFiles) {
                 formData.append('images', imageFiles[key]);
             }
         }
+        formData.append('id', id)
 
         const response = await fetch(`http://localhost:3170/editSkin`, {
             method: 'POST',

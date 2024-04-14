@@ -756,7 +756,7 @@ export default {
             this.skinEditado.pngSkin.izq !== nombresImagenesAntiguas.izq ||
             this.skinEditado.pngSkin.derecha !== nombresImagenesAntiguas.derecha)
         ) {
-          await editSkinimg(this.skinEditado.pngSkin);
+          await editSkinimg(this.skinEditado.pngSkin, this.skinEditado._id);
         }
 
         this.getProductos();
