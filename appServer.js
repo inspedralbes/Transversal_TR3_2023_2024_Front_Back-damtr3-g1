@@ -261,6 +261,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/unirSala", (req, res) => {
     var user = req.body.user;
+    var skin = req.body.nom_skin;
     var salaUnir = req.body.sala;
     var trobat = false;
     sales.forEach(sala => {
@@ -274,6 +275,7 @@ app.post("/unirSala", (req, res) => {
             if (!existe) {
                 console.log("USUARIO NO EXISTE")
                 sala.users.push(user);
+                sala.skins.push(skin);
                 io.emit("newUser", req.body);
             } else {
                 console.log("USUARIO EXISTE")
@@ -383,11 +385,17 @@ app.get("/getInventari/:user", async (req, res) => {
 
 //CrearSala
 app.get("/crearSala", (req, res) => {
+
     var usuari = req.query.user;
     console.log(usuari);
+
+    var skin = req.query.skin;
+    console.log(skin);
+
     var sala = {
         salaId: generateRandomString(6),
-        users: [usuari]
+        users: [usuari],
+        skins: [skin]
     };
     sales.push(sala);
     res.send(JSON.stringify(sala));
@@ -557,6 +565,10 @@ io.on('connection', (socket) => {
 
     socket.on('startGame', (dades) => {
         io.emit('startGame', dades);
+    })
+
+    socket.on('partida_acabada', (dades) => {
+        io.emit('partida_acabada', dades);
     })
 
     socket.on("sesionCerrada", () => {
