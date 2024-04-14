@@ -1,12 +1,12 @@
-export const GraphHoras = () => import('../..\\components\\GraphHoras.vue' /* webpackChunkName: "components/graph-horas" */).then(c => wrapFunctional(c.default || c))
-export const GraphKda = () => import('../..\\components\\GraphKda.vue' /* webpackChunkName: "components/graph-kda" */).then(c => wrapFunctional(c.default || c))
-export const GraphKills = () => import('../..\\components\\GraphKills.vue' /* webpackChunkName: "components/graph-kills" */).then(c => wrapFunctional(c.default || c))
-export const GraphMediaMontoGastado = () => import('../..\\components\\GraphMediaMontoGastado.vue' /* webpackChunkName: "components/graph-media-monto-gastado" */).then(c => wrapFunctional(c.default || c))
-export const GraphMontoGastado = () => import('../..\\components\\GraphMontoGastado.vue' /* webpackChunkName: "components/graph-monto-gastado" */).then(c => wrapFunctional(c.default || c))
-export const GraphPartidas = () => import('../..\\components\\GraphPartidas.vue' /* webpackChunkName: "components/graph-partidas" */).then(c => wrapFunctional(c.default || c))
-export const NuxtLogo = () => import('../..\\components\\NuxtLogo.vue' /* webpackChunkName: "components/nuxt-logo" */).then(c => wrapFunctional(c.default || c))
-export const Tutorial = () => import('../..\\components\\Tutorial.vue' /* webpackChunkName: "components/tutorial" */).then(c => wrapFunctional(c.default || c))
-export const VuetifyLogo = () => import('../..\\components\\VuetifyLogo.vue' /* webpackChunkName: "components/vuetify-logo" */).then(c => wrapFunctional(c.default || c))
+export { default as GraphHoras } from '../..\\components\\GraphHoras.vue'
+export { default as GraphKda } from '../..\\components\\GraphKda.vue'
+export { default as GraphKills } from '../..\\components\\GraphKills.vue'
+export { default as GraphMediaMontoGastado } from '../..\\components\\GraphMediaMontoGastado.vue'
+export { default as GraphMontoGastado } from '../..\\components\\GraphMontoGastado.vue'
+export { default as GraphPartidas } from '../..\\components\\GraphPartidas.vue'
+export { default as NuxtLogo } from '../..\\components\\NuxtLogo.vue'
+export { default as Tutorial } from '../..\\components\\Tutorial.vue'
+export { default as VuetifyLogo } from '../..\\components\\VuetifyLogo.vue'
 
 // nuxt/nuxt.js#8607
 function wrapFunctional(options) {

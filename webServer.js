@@ -103,7 +103,7 @@ app.post('/uploadMap', uploadMap.single('image'), (req, res) => {
     }
 });
 
-app.post('/uploadSkin', uploadSkin.single('image'), (req, res) => {
+app.post('/uploadSkin', uploadSkin.array('images', 4), (req, res) => {
     try {
         res.status(200).json({ message: 'Imagen subida con éxito' });
     } catch (error) {
@@ -135,9 +135,9 @@ app.post('/editMap', uploadMap.single('image'), (req, res) => {
     }
 });
 
-app.post('/editSkin', uploadSkin.single('image'), (req, res) => {
+app.post('/editSkin', uploadSkin.array('images', 4), (req, res) => {
     try {
-        const oldImageName = req.body.oldImageName;
+        const oldImages = req.body.oldImages;
         fs.unlink(path.join(folderPath, oldImageName), err => {
             if (err) throw err;
             console.log('Imagen antigua eliminada con éxito');

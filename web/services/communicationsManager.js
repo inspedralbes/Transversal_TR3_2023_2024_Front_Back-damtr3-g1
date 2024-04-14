@@ -1,6 +1,6 @@
-//r6pixel.duckdns.org
+//localhost
 export async function login(user, pwd) {
-    const response = await fetch(`http://r6pixel.duckdns.org:3170/loginWeb`, {
+    const response = await fetch(`http://localhost:3170/loginWeb`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ "user": user, "pwd": pwd }),
@@ -10,7 +10,7 @@ export async function login(user, pwd) {
 }
 
 export async function createMap(map) {
-    const response = await fetch(`http://r6pixel.duckdns.org:3170/mapa`, {
+    const response = await fetch(`http://localhost:3170/mapa`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(map),
@@ -21,7 +21,7 @@ export async function createMap(map) {
 }
 
 export async function createBroadcastNews(news) {
-    const response = await fetch(`http://r6pixel.duckdns.org:3170/createBroadcastNews`, {
+    const response = await fetch(`http://localhost:3170/createBroadcastNews`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(news),
@@ -32,7 +32,7 @@ export async function createBroadcastNews(news) {
 }
 
 export async function createPersonaje(personaje) {
-    const response = await fetch(`http://r6pixel.duckdns.org:3170/personaje`, {
+    const response = await fetch(`http://localhost:3170/personaje`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(personaje),
@@ -43,7 +43,7 @@ export async function createPersonaje(personaje) {
 }
 
 export async function arma(arma) {
-    const response = await fetch(`http://r6pixel.duckdns.org:3170/arma`, {
+    const response = await fetch(`http://localhost:3170/arma`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(arma),
@@ -54,7 +54,7 @@ export async function arma(arma) {
 }
 
 export async function crearSkin(skin) {
-    const response = await fetch(`http://r6pixel.duckdns.org:3170/skin`, {
+    const response = await fetch(`http://localhost:3170/skin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(skin),
@@ -66,7 +66,7 @@ export async function crearSkin(skin) {
 
 export async function deleteMap(id) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/deletemapa/${id}`, {
+        const response = await fetch(`http://localhost:3170/deletemapa/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -80,7 +80,7 @@ export async function deleteMap(id) {
 
 export async function deletePersonaje(id) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/deletepersonaje/${id}`, {
+        const response = await fetch(`http://localhost:3170/deletepersonaje/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -94,7 +94,7 @@ export async function deletePersonaje(id) {
 
 export async function deleteArma(id) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/deletearma/${id}`, {
+        const response = await fetch(`http://localhost:3170/deletearma/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -108,7 +108,7 @@ export async function deleteArma(id) {
 
 export async function deleteSkin(id) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/deleteskin/${id}`, {
+        const response = await fetch(`http://localhost:3170/deleteskin/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -122,7 +122,7 @@ export async function deleteSkin(id) {
 
 export async function deleteBroadcastNews(id) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/deleteBroadcastNews/${id}`, {
+        const response = await fetch(`http://localhost:3170/deleteBroadcastNews/${id}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -136,7 +136,7 @@ export async function deleteBroadcastNews(id) {
 
 export async function updateMap(id, map) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/updatemapa/${id}`, {
+        const response = await fetch(`http://localhost:3170/updatemapa/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(map),
@@ -151,7 +151,7 @@ export async function updateMap(id, map) {
 
 export async function updatePersonaje(id, personaje) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/updatepersonaje/${id}`, {
+        const response = await fetch(`http://localhost:3170/updatepersonaje/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(personaje),
@@ -166,7 +166,7 @@ export async function updatePersonaje(id, personaje) {
 
 export async function updateArma(id, arma) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/updatearma/${id}`, {
+        const response = await fetch(`http://localhost:3170/updatearma/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(arma),
@@ -181,7 +181,7 @@ export async function updateArma(id, arma) {
 
 export async function updateSkin(id, skin) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/updateskin/${id}`, {
+        const response = await fetch(`http://localhost:3170/updateskin/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(skin),
@@ -196,7 +196,7 @@ export async function updateSkin(id, skin) {
 
 export async function updateBroadcastNews(id, news) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/updateBroadcastNews/${id}`, {
+        const response = await fetch(`http://localhost:3170/updateBroadcastNews/${id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(news),
@@ -211,7 +211,7 @@ export async function updateBroadcastNews(id, news) {
 
 export async function getMapa() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getMapa`);
+        const response = await fetch(`http://localhost:3170/getMapa`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -222,7 +222,7 @@ export async function getMapa() {
 
 export async function getPersonaje() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getPersonaje`);
+        const response = await fetch(`http://localhost:3170/getPersonaje`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -233,7 +233,7 @@ export async function getPersonaje() {
 
 export async function getArma() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getArma`);
+        const response = await fetch(`http://localhost:3170/getArma`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -244,7 +244,7 @@ export async function getArma() {
 
 export async function getSkin() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getSkin`);
+        const response = await fetch(`http://localhost:3170/getSkin`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -255,7 +255,7 @@ export async function getSkin() {
 
 export async function getAssets() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getAssets`);
+        const response = await fetch(`http://localhost:3170/getAssets`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -266,7 +266,7 @@ export async function getAssets() {
 
 export async function getBroadcastNews() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getBroadcastNews`);
+        const response = await fetch(`http://localhost:3170/getBroadcastNews`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -280,7 +280,7 @@ export async function uploadMapimg(imageFile) {
         let formData = new FormData();
         formData.append('image', imageFile);
 
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/uploadMap`, {
+        const response = await fetch(`http://localhost:3170/uploadMap`, {
             method: 'POST',
             body: formData
         });
@@ -296,9 +296,9 @@ export async function uploadMapimg(imageFile) {
 export async function uploadSkinimg(imageFile) {
     try {
         let formData = new FormData();
-        formData.append('image', imageFile);
+        formData.append('images', imageFile);
 
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/uploadSkin`, {
+        const response = await fetch(`http://localhost:3170/uploadSkin`, {
             method: 'POST',
             body: formData
         });
@@ -316,7 +316,7 @@ export async function uploadBroadcastImg(imageFile) {
         let formData = new FormData();
         formData.append('image', imageFile);
 
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/uploadBroadcast`, {
+        const response = await fetch(`http://localhost:3170/uploadBroadcast`, {
             method: 'POST',
             body: formData
         });
@@ -335,7 +335,7 @@ export async function editMapimg(imageFile, oldImageName) {
         formData.append('image', imageFile);
         formData.append('oldImageName', oldImageName);
 
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/editMap`, {
+        const response = await fetch(`http://localhost:3170/editMap`, {
             method: 'POST',
             body: formData
         });
@@ -354,7 +354,7 @@ export async function editSkinimg(imageFile, oldImageName) {
         formData.append('image', imageFile);
         formData.append('oldImageName', oldImageName);
 
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/editSkin`, {
+        const response = await fetch(`http://localhost:3170/editSkin`, {
             method: 'POST',
             body: formData
         });
@@ -373,7 +373,7 @@ export async function editBroadcastimg(imageFile, oldImageName) {
         formData.append('image', imageFile);
         formData.append('oldImageName', oldImageName);
 
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/editBroadcast`, {
+        const response = await fetch(`http://localhost:3170/editBroadcast`, {
             method: 'POST',
             body: formData
         });
@@ -389,7 +389,7 @@ export async function editBroadcastimg(imageFile, oldImageName) {
 // SELECT LOS USUARIOS
 export async function getUsuarios() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getUsuarios`);
+        const response = await fetch(`http://localhost:3170/getUsuarios`);
         const result = await response.json();
         return result;
     } catch (error) {
@@ -401,7 +401,7 @@ export async function getUsuarios() {
 // SELECT A LAS ESTADISTICAS DE LOS USUARIOS
 export async function getEstadisticas(id) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getEstadisticas/${id}`, {
+        const response = await fetch(`http://localhost:3170/getEstadisticas/${id}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -416,7 +416,7 @@ export async function getEstadisticas(id) {
 // SELECT A LOS BENEFICIOS
 export async function getBeneficios() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getCompras`, {
+        const response = await fetch(`http://localhost:3170/getCompras`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -431,7 +431,7 @@ export async function getBeneficios() {
 // UPDATE CLIENTES
 export async function updateCliente(datosActualizadosCliente) {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/updateCliente`, {
+        const response = await fetch(`http://localhost:3170/updateCliente`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(datosActualizadosCliente)
@@ -447,7 +447,7 @@ export async function updateCliente(datosActualizadosCliente) {
 // DETENER SERVER ODOO
 export async function detenerOdoo() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/detenerOdoo`, {
+        const response = await fetch(`http://localhost:3170/detenerOdoo`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -464,7 +464,7 @@ export async function detenerOdoo() {
 // ARRANCAR SERVER ODOO
 export async function arrancarOdoo() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/arrancarOdoo`, {
+        const response = await fetch(`http://localhost:3170/arrancarOdoo`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -481,7 +481,7 @@ export async function arrancarOdoo() {
 // VER ESTADO ODOO
 export async function getOdooStatus() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/checkarOdoo`, {
+        const response = await fetch(`http://localhost:3170/checkarOdoo`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -496,7 +496,7 @@ export async function getOdooStatus() {
 // VER ESTADO game server
 export async function getGameStatus() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/checkarGame`, {
+        const response = await fetch(`http://localhost:3170/checkarGame`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -510,7 +510,7 @@ export async function getGameStatus() {
 
 export async function detenerGame() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/detenerGame`, {
+        const response = await fetch(`http://localhost:3170/detenerGame`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -527,7 +527,7 @@ export async function detenerGame() {
 // ARRANCAR SERVER Game
 export async function arrancarGame() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/arrancarGame`, {
+        const response = await fetch(`http://localhost:3170/arrancarGame`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -543,7 +543,7 @@ export async function arrancarGame() {
 
 export async function syncOdoo() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/syncOdoo`, {
+        const response = await fetch(`http://localhost:3170/syncOdoo`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -558,7 +558,7 @@ export async function syncOdoo() {
 // SYNC CLIENTES ODOO
 export async function syncOdooClient() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/syncClientOdoo
+        const response = await fetch(`http://localhost:3170/syncClientOdoo
         `, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -573,8 +573,8 @@ export async function syncOdooClient() {
 
 export async function getImg(path) {
     try {
-        // console.log("Haciendo solicitud a:", `http://r6pixel.duckdns.org:3170/getImgBroadcast/${path}`);
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getImgBroadcast/${path}`);
+        // console.log("Haciendo solicitud a:", `http://localhost:3170/getImgBroadcast/${path}`);
+        const response = await fetch(`http://localhost:3170/getImgBroadcast/${path}`);
         //console.log("Respuesta de la solicitud:", response);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -588,7 +588,7 @@ export async function getImg(path) {
 
 export async function getImgGraph() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getImgGraph`);
+        const response = await fetch(`http://localhost:3170/getImgGraph`);
         //console.log("Respuesta de la solicitud:", response);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -602,7 +602,7 @@ export async function getImgGraph() {
 
 export async function getImgGraphBeneficios() {
     try {
-        const response = await fetch(`http://r6pixel.duckdns.org:3170/getImgGraphBenefits`);
+        const response = await fetch(`http://localhost:3170/getImgGraphBenefits`);
         //console.log("Respuesta de la solicitud:", response);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
