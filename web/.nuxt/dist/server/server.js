@@ -4745,7 +4745,7 @@ async function setContext(app, context) {
   // If context not defined, create it
   if (!app.context) {
     app.context = {
-      isStatic: false,
+      isStatic: true,
       isDev: false,
       isHMR: false,
       app,
@@ -5284,10 +5284,10 @@ function shouldScrollToTop(route) {
 
 
 
-const _74657318 = () => interopDefault(__webpack_require__.e(/* import() | pages/dashboard */ 10).then(__webpack_require__.bind(null, 236)));
-const _d0e7c0a2 = () => interopDefault(__webpack_require__.e(/* import() | pages/home */ 11).then(__webpack_require__.bind(null, 235)));
-const _1598d1b8 = () => interopDefault(__webpack_require__.e(/* import() | pages/procesos */ 13).then(__webpack_require__.bind(null, 234)));
-const _a395cc9c = () => interopDefault(__webpack_require__.e(/* import() | pages/index */ 12).then(__webpack_require__.bind(null, 237)));
+const _781c8c0a = () => interopDefault(__webpack_require__.e(/* import() | pages/dashboard */ 10).then(__webpack_require__.bind(null, 236)));
+const _7f3153c8 = () => interopDefault(__webpack_require__.e(/* import() | pages/home */ 11).then(__webpack_require__.bind(null, 235)));
+const _fe375d5e = () => interopDefault(__webpack_require__.e(/* import() | pages/procesos */ 13).then(__webpack_require__.bind(null, 234)));
+const _89932e8e = () => interopDefault(__webpack_require__.e(/* import() | pages/index */ 12).then(__webpack_require__.bind(null, 237)));
 const emptyFn = () => {};
 external_vue_default.a.use(external_vue_router_default.a);
 const routerOptions = {
@@ -5298,19 +5298,19 @@ const routerOptions = {
   scrollBehavior: router_scrollBehavior,
   routes: [{
     path: "/dashboard",
-    component: _74657318,
+    component: _781c8c0a,
     name: "dashboard"
   }, {
     path: "/home",
-    component: _d0e7c0a2,
+    component: _7f3153c8,
     name: "home"
   }, {
     path: "/procesos",
-    component: _1598d1b8,
+    component: _fe375d5e,
     name: "procesos"
   }, {
     path: "/",
-    component: _a395cc9c,
+    component: _89932e8e,
     name: "index"
   }],
   fallback: false
@@ -5484,7 +5484,7 @@ var error_component = Object(componentNormalizer["a" /* default */])(
   false,
   injectStyles,
   "35e10596",
-  "b68e26fa"
+  "77f06e2c"
   
 )
 
@@ -5749,7 +5749,7 @@ var nuxt_loading_component = Object(componentNormalizer["a" /* default */])(
   false,
   nuxt_loading_injectStyles,
   null,
-  "545d3e5b"
+  "f267267c"
   
 )
 
@@ -6742,7 +6742,7 @@ var DashboardLayout_component = Object(componentNormalizer["a" /* default */])(
   false,
   DashboardLayout_injectStyles,
   null,
-  "78e44b0e"
+  "0afda220"
   
 )
 
@@ -6843,7 +6843,7 @@ var HomeLayout_component = Object(componentNormalizer["a" /* default */])(
   false,
   HomeLayout_injectStyles,
   null,
-  "2f35a51e"
+  "ead91dd2"
   
 )
 
@@ -6886,7 +6886,7 @@ var LoginLayout_component = Object(componentNormalizer["a" /* default */])(
   false,
   LoginLayout_injectStyles,
   "acd13ac0",
-  "5365128e"
+  "63c0c5b5"
   
 )
 
@@ -6983,7 +6983,7 @@ var ProcesosLayout_component = Object(componentNormalizer["a" /* default */])(
   false,
   ProcesosLayout_injectStyles,
   null,
-  "fe879c32"
+  "1ff15960"
   
 )
 
@@ -7012,7 +7012,7 @@ var default_component = Object(componentNormalizer["a" /* default */])(
   false,
   null,
   null,
-  "80cb125e"
+  "27d5fc38"
   
 )
 
@@ -7097,6 +7097,9 @@ const layouts = {
     },
     isFetching() {
       return this.nbFetching > 0;
+    },
+    isPreview() {
+      return Boolean(this.$options.previewData);
     }
   },
   methods: {
