@@ -1,0 +1,30 @@
+[
+  {
+    "name": "dashboard",
+    "path": "/dashboard",
+    "component": "D:\\\\Usuaris\\\\alum-01\\\\franc\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\dashboard.vue",
+    "chunkName": "pages/dashboard",
+    "_name": "_74657318"
+  },
+  {
+    "name": "home",
+    "path": "/home",
+    "component": "D:\\\\Usuaris\\\\alum-01\\\\franc\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\home.vue",
+    "chunkName": "pages/home",
+    "_name": "_d0e7c0a2"
+  },
+  {
+    "name": "procesos",
+    "path": "/procesos",
+    "component": "D:\\\\Usuaris\\\\alum-01\\\\franc\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\procesos.vue",
+    "chunkName": "pages/procesos",
+    "_name": "_1598d1b8"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "D:\\\\Usuaris\\\\alum-01\\\\franc\\\\Transversal_TR3_2023_2024_Front_Back-damtr3-g1\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_a395cc9c"
+  }
+]

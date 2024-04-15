@@ -1,0 +1,60 @@
+
+USUARIO
+BEGIN
+    INSERT INTO Estadisticas
+    VALUES (NEW.idUser, 0,0,0,0,1);
+END
+
+
+
+
+
+ESTADISTICAS
+BEGIN
+    SET NEW.KDA = (NEW.kills + NEW.assists) / IF(NEW.deaths = 0, 1, NEW.deaths);
+    SET NEW.WinRate = (NEW.wins/NEW.PartidasJugadas)*100; 
+END
+
+
+CREATES
+CREATE TABLE IF NOT EXISTS Usuario (
+    idUser INTEGER AUTO_INCREMENT,
+    username TEXT UNIQUE,
+    password TEXT,
+    mail TEXT,
+    fechaNacimiento DATE,
+    monedas INTEGER,
+    gemas INTEGER,
+    admin BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS Partida_User (
+    idPartida INTEGER AUTO_INCREMENT,
+    idUser INTEGER,
+    kills INTEGER,
+    muertes INTEGER,
+    victoria_derrota ENUM('victoria', 'derrota'),
+    Puntos INTEGER,
+    Equipo ENUM('azul', 'rojo'),
+    PRIMARY KEY(idPartida,idUser),
+    FOREIGN KEY (idUser) REFERENCES Usuario (idUser)
+);
+
+CREATE TABLE IF NOT EXISTS Estadisticas(
+idEstadisticas INTEGER,
+idUser INTEGER,
+PartidasJugadas INTEGER,
+NumeroVictorias INTEGER,
+PorcentageVictorias INTEGER,
+Kills INTEGER,
+Asistenias INTEGER,
+Muertes INTEGER,
+KDA FLOAT,
+Experiencia INTEGER,
+Nivel INTEGER,
+Horas_Jugadas FLOAT,
+Ultima_Conexion DATE,
+monto_gastado FLOAT,
+PRIMARY KEY(idEstadisticas,idUser),
+FOREIGN KEY (idUser) REFERENCES Usuario (idUser)
+);

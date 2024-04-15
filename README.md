@@ -1,69 +1,19 @@
-# tr3Nuxt
+Entar SSH
 
-## Build Setup
+Descargar la SSH-key que hay en el repositorio rama main
 
-```bash
-# install dependencies
-$ npm install
+Una vez descargado abrir CMD(preferiblemente Linux, Git Bash sirve como cmd con comandos de linux para windows) en modo administrador y moverse a la ubicación de la SSH-key
 
-# serve with hot reload at r6pixel.duckdns.org:3000
-$ npm run dev
+Ejecutar estos comandos:
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+eval $(ssh-agent -s)
 
-# generate static project
-$ npm run generate
-```
+chmod 600 ssh-key-2024-03-18.key
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+ssh-add ssh-key-2024-03-18.key
 
-## Special Directories
+ssh ubuntu@89.168.118.150
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+-------------------------------------------------------------------
 
-### `assets`
-
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
-
-### `components`
-
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
-
-### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
-
-### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+EL REPOSITORI EN ORACLE ESTÀ EN EL SEGÜENT PATH: /home/ubuntu/Transversal_TR3_2023_2024_Front_Back-damtr3-g1
