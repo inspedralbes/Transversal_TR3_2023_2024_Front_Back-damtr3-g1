@@ -4,8 +4,64 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d1c4ea01-d7eb-4c8f-860d-819aba752dd8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="d1c4ea01-d7eb-4c8f-860d-819aba752dd8" name="Changes" comment=".">
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/client/93bcb9e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/client/9ed2fba.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/client/d4c3ec1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/client.manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/client.manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-horas.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-horas.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-horas.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-horas.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-kda.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-kda.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-kda.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-kda.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-kills.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-kills.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-kills.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-kills.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-media-monto-gastado.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-media-monto-gastado.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-media-monto-gastado.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-media-monto-gastado.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-monto-gastado.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-monto-gastado.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-monto-gastado.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-monto-gastado.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-partidas.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-partidas.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-partidas.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/graph-partidas.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/nuxt-logo.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/nuxt-logo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/nuxt-logo.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/nuxt-logo.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/tutorial.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/tutorial.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/tutorial.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/tutorial.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/vuetify-logo.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/vuetify-logo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/components/vuetify-logo.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/components/vuetify-logo.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/index.spa.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/index.spa.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/dashboard.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/dashboard.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/home.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/home.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/index.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/index.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/procesos.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/procesos.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/procesos.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/pages/procesos.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/dist/server/server.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/dist/server/server.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/router.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/.nuxt/routes.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/.nuxt/routes.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/200.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/200.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/1542e88.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/24481f5.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/2d01893.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/592e6a1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/6e20997.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/81ad594.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/9a896d6.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/9dd1131.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/LICENSES" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/_nuxt/LICENSES" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/a188b6c.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/b354849.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/dc690c0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/f8d7fee.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/fe7cd7e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/_nuxt/fed0050.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/dashboard/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/dashboard/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/home/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/home/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dist/procesos/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dist/procesos/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,19 +75,20 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2evrnRHBeoNdvP1RyDjYJKWDYFw" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "C:/Users/rexru/Documents/Grau/Transversal_TR3_2023_2024_Front_Back-damtr3-g1"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/rexru/Documents/Grau/Transversal_TR3_2023_2024_Front_Back-damtr3-g1&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -41,6 +98,36 @@
       <option name="presentableId" value="Default" />
       <updated>1712796059408</updated>
     </task>
+    <task id="LOCAL-00001" summary=".">
+      <created>1713163305786</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1713163305786</updated>
+    </task>
+    <task id="LOCAL-00002" summary=".">
+      <created>1713163636645</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1713163636645</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="." />
+    <option name="LAST_COMMIT_MESSAGE" value="." />
   </component>
 </project>

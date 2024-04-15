@@ -56,7 +56,7 @@ module.exports = {
     
 
     insertUsuari: function(user, pwd, mail, fechaN, monedas, fecha_altaUser){
-        const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, fecha_altaUser) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas + ', "' + fecha_altaUser + '")';
+        const sql = 'INSERT INTO Usuario (username, password, mail, fechaNacimiento, monedas, fecha_altaUser, admin) VALUES("' + user + '", "' + pwd + '", "' + mail + '", "' + fechaN + '", ' + monedas + ', "' + fecha_altaUser + '", 0)';
         console.log(sql)
         return new Promise((resolve, reject) =>{
             conn.query(sql, (err, result) => {
